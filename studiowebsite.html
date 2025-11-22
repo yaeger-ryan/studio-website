@@ -217,6 +217,30 @@
             overflow-y: auto;
         }
 
+        /* LOCATION WIDGET STYLES */
+        .geo-widget {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-bottom: 30px; 
+            padding-left: 14px;
+            border-left: 2px solid #333;
+            position: relative;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .geo-widget:hover { opacity: 1; }
+        .geo-dot {
+            width: 6px; height: 6px; background: var(--accent-solid);
+            border-radius: 50%; position: absolute; left: -4px; top: 3px;
+            box-shadow: 0 0 8px var(--accent-solid);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
+        .geo-label { display: block; color: var(--accent-solid); font-weight: bold; margin-bottom: 6px; }
+        .geo-coord { display: block; color: #777; font-size: 10px; margin-bottom: 2px; }
+
+
         .nav-group { margin-bottom: 50px; flex-shrink: 0; }
         .nav-label { font-family: var(--font-disp); font-size: var(--fs-label); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #fff; border-bottom: 2px solid #333; padding-bottom: 12px; margin-bottom: 20px; display: block; }
         .nav-link { display: block; color: var(--text-mute); text-decoration: none; margin-bottom: 12px; font-size: var(--fs-nav-link); font-weight: 500; transition: all 0.2s; cursor: pointer; }
@@ -503,7 +527,14 @@
             <main class="panel-viewer" id="viewer"></main>
 
             <nav class="panel-nav">
-                <div class="nav-group" style="margin-top: 40px;">
+                <div class="geo-widget">
+                    <div class="geo-dot"></div>
+                    <span class="geo-label">LOC // FITCHBURG, WI</span>
+                    <span class="geo-coord">43.07473214483808</span>
+                    <span class="geo-coord">-89.38417171728847</span>
+                </div>
+
+                <div class="nav-group">
                     <span class="nav-label">Practice</span>
                     <p class="nav-text">Solo design practice.<br>Focused on clarity.<br>Built to last.</p>
                 </div>
@@ -540,12 +571,23 @@
         <div class="modal-card">
             <div class="modal-close" onclick="toggleModal()">[ CLOSE ESC ]</div>
             <div class="modal-h1">LET'S BUILD<br>THE FUTURE.</div>
-            <form onsubmit="event.preventDefault(); alert('Sent!'); toggleModal();">
-                <input class="modal-input" type="text" placeholder="NAME" required>
-                <input class="modal-input" type="email" placeholder="EMAIL" required>
-                <textarea class="modal-input" rows="3" placeholder="PROJECT DETAILS..."></textarea>
-                <button class="modal-btn">INITIALIZE PROJECT</button>
+            
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+            <form action="https://docs.google.com/forms/d/e/1FAIpQLSfmfhpO2guMRdCDY_rQBDKapyc2FdS2MkHdtDGcBmrH-3Cd9g/formResponse" 
+                  method="post" 
+                  target="hidden_iframe" 
+                  onsubmit="alert('TRANSMISSION RECEIVED. WE WILL BE IN TOUCH.'); toggleModal();">
+                
+                <input class="modal-input" type="text" name="entry.642603346" placeholder="NAME" required>
+                
+                <input class="modal-input" type="email" name="entry.119825428" placeholder="EMAIL" required>
+                
+                <textarea class="modal-input" rows="3" name="entry.1122882745" placeholder="PROJECT DETAILS..."></textarea>
+                
+                <button class="modal-btn" type="submit">INITIALIZE PROJECT</button>
             </form>
+
         </div>
     </div>
 
