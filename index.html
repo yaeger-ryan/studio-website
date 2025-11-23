@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YAEGER STUDIO</title>
+    <title>YAEGER STUDIO // V2</title>
     <style>
         /* --- 1. RESET & TYPOGRAPHY --- */
         :root {
@@ -28,7 +28,7 @@
             /* TYPOGRAPHY */
             --fs-label: clamp(12px, 1vw, 14px); 
             --fs-nav-link: clamp(16px, 1.4vw, 20px); 
-            --fs-body: clamp(15px, 1.1vw, 18px);       
+            --fs-body: clamp(15px, 1.1vw, 18px);        
             --fs-list-title: clamp(22px, 2.2vw, 32px);
             --fs-list-cat: clamp(11px, 0.9vw, 13px);
             --fs-h1: clamp(40px, 6vw, 110px);
@@ -50,7 +50,7 @@
             transition: text-shadow 0.1s ease-out; 
         }
 
-        /* --- SMOOTH CHANNEL SWITCH (Replaces Harsh Glitch) --- */
+        /* --- SMOOTH CHANNEL SWITCH --- */
         @keyframes signal-refresh {
             0% { opacity: 1; filter: brightness(1) blur(0px); transform: scaleY(1); }
             10% { opacity: 0.8; filter: brightness(2) blur(2px); transform: scaleY(0.98); }
@@ -169,7 +169,7 @@
             position: fixed; inset: 0; pointer-events: none; z-index: 1;
             display: grid; grid-template-columns: repeat(12, 1fr);
             opacity: 0.15;
-            transition: opacity 0.1s, filter 0.1s; /* Reactive Pulse */
+            transition: opacity 0.1s, filter 0.1s, transform 0.1s; /* Reactive Pulse */
         }
         .line { border-right: 1px solid #333; height: 100%; transition: border-color 0.1s; }
         .line:last-child { border: none; }
@@ -251,6 +251,8 @@
             transition: opacity 0.6s ease, transform 0.6s var(--ease-spatial);
             background: var(--bg); min-height: 100%;
             transform-origin: center center; will-change: transform;
+            /* Fix blur on skew */
+            backface-visibility: hidden;
         }
         .case-study.visible { opacity: 1; transform: translateY(0); }
 
@@ -463,7 +465,7 @@
     <div class="app-view" id="appView">
         <div class="grid-wrapper">
             <div class="panel-index">
-                <div id="brand-canvas" onclick="window.location.reload()"></div>
+                <div id="brand-canvas" title="CLICK AND HOLD FOR VORTEX MODE"></div>
                 <div class="index-scroll-container">
                     <div class="index-header">Selected Works (09)</div>
                     <div id="project-list"></div>
@@ -522,7 +524,8 @@
                     <div class="nav-copyright">© 2025 YAEGER STUDIO</div>
                     <div class="konami-hint">
                         <span>↑ ↑ ↓ ↓ ← → ← → B A</span>
-                        <span>[ KEYS 1-4: MUTE | SPACE: DROP ]</span>
+                        <span>[ 1-4: MUTE | SPACE: DROP ]</span>
+                        <span>[ G: GRID | I: INVERT ]</span>
                         <span>[ XY PAD: FILTER SWEEP ]</span>
                     </div>
                 </div>
@@ -645,6 +648,14 @@
             const y = e.clientY / window.innerHeight;
             latEl.innerText = (43.0747 + (y * 0.0001)).toFixed(6);
             lonEl.innerText = (-89.3841 + (x * 0.0001)).toFixed(6);
+            
+            // Subtle Grid Breathing
+            if(window.innerWidth > 1024) {
+                const grid = document.getElementById('bg-grid');
+                const moveX = (e.clientX - window.innerWidth/2) * 0.01;
+                const moveY = (e.clientY - window.innerHeight/2) * 0.01;
+                grid.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            }
         });
 
         setInterval(() => {
@@ -672,7 +683,7 @@
         }
         setTimeout(initMagneticButtons, 500);
 
-        // --- KINETIC SCROLL EFFECT ---
+        // --- KINETIC SCROLL EFFECT (TAMED) ---
         let currentScroll = 0; let targetScroll = 0; let skew = 0;
         const scrollViewer = document.querySelector('.panel-viewer');
         if (scrollViewer) {
@@ -686,7 +697,8 @@
                 let speed = diff * 0.15;
                 currentScroll += diff * 0.15;
                 if(Math.abs(speed) > 0.1 && window.innerWidth > 1024) {
-                    skew = Math.min(Math.max(speed * 0.1, -2), 2);
+                    // Less intense skew logic
+                    skew = Math.min(Math.max(speed * 0.03, -0.5), 0.5); 
                     activeContent.style.transform = `translateY(0) skewY(${skew}deg)`;
                 } else {
                     activeContent.style.transform = `translateY(0) skewY(0deg)`;
@@ -714,38 +726,75 @@
         }
 
 
-        // --- ADVANCED SYNTH DECK (SEQUENCER & FX) ---
+        // --- ADVANCED SYNTH DECK V2 (STEREO + DISTORTION) ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let isPlaying = false;
         let sequencerInterval;
         let analyser = audioCtx.createAnalyser();
         let masterGain = audioCtx.createGain();
-        let masterFilter = audioCtx.createBiquadFilter(); // GLOBAL FILTER FX
+        let masterFilter = audioCtx.createBiquadFilter(); 
+        let distortion = audioCtx.createWaveShaper();
         
+        // Stereo Echo
+        let delayL = audioCtx.createDelay();
+        let delayR = audioCtx.createDelay();
+        let delayFb = audioCtx.createGain();
+        let stereoPanner = audioCtx.createStereoPanner();
+
+        // DSP Chain Setup
         masterFilter.type = "lowpass";
-        masterFilter.frequency.value = 20000; // Start open
+        masterFilter.frequency.value = 20000;
         masterFilter.Q.value = 1;
-        
-        masterGain.connect(masterFilter);
+
+        // Soft Distortion Curve
+        function makeDistortionCurve(amount) {
+            let k = typeof amount === 'number' ? amount : 50,
+            n_samples = 44100,
+            curve = new Float32Array(n_samples),
+            deg = Math.PI / 180,
+            i = 0,
+            x;
+            for ( ; i < n_samples; ++i ) {
+                x = i * 2 / n_samples - 1;
+                curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+            }
+            return curve;
+        }
+        distortion.curve = makeDistortionCurve(20);
+        distortion.oversample = '4x';
+
+        // Delay Setup
+        delayL.delayTime.value = 0.25; // 1/8 note approx
+        delayR.delayTime.value = 0.375; // Dotted 8th approx
+        delayFb.gain.value = 0.3;
+
+        // Routing: Source -> Dist -> Filter -> Master -> Analyser -> Dest
+        // Also Send Master -> Delay -> Master
+        masterGain.connect(distortion);
+        distortion.connect(masterFilter);
         masterFilter.connect(analyser);
         analyser.connect(audioCtx.destination);
-        analyser.fftSize = 256;
         
-        const tempo = 115; // BPM (Driving Synthwave)
-        const noteDuration = 60 / tempo / 4; // 16th notes
+        // Delay Loop
+        masterFilter.connect(delayL);
+        delayL.connect(delayR);
+        delayR.connect(delayFb);
+        delayFb.connect(delayL);
+        delayR.connect(analyser); // Return to out
+
+        analyser.fftSize = 1024; // Higher res for waveform
+        
+        const tempo = 115; 
+        const noteDuration = 60 / tempo / 4; 
         let step = 0;
         
-        // 16-STEP PATTERNS
-        // 1 = Hit, 0 = Silence
-        const kickPattern = [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]; // Four on floor
-        const snarePattern= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]; // Backbeat
-        const hatPattern  = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]; // 8ths
-        const bassPattern = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]; // Offbeat 16ths
+        const kickPattern = [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]; 
+        const snarePattern= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]; 
+        const hatPattern  = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]; 
+        const bassPattern = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]; 
         
-        // PROGRESSION: F min -> Db Maj -> Eb Maj -> C min
         const bassNotes = [43.65, 69.30, 77.78, 65.41]; 
         
-        // STATE
         const stems = { 1: true, 2: true, 3: true, 4: true };
         let dropActive = false;
 
@@ -760,11 +809,11 @@
             if(!isPlaying) return;
             dropActive = true;
             masterFilter.frequency.setValueAtTime(masterFilter.frequency.value, audioCtx.currentTime);
-            masterFilter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.2); // Filter sweep down
+            masterFilter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.2); 
             setTimeout(() => {
                 dropActive = false;
-                masterFilter.frequency.exponentialRampToValueAtTime(20000, audioCtx.currentTime + 0.1); // Slam back open
-            }, 800); // Drop duration
+                masterFilter.frequency.exponentialRampToValueAtTime(20000, audioCtx.currentTime + 0.1); 
+            }, 800); 
         }
         
         window.toggleAudio = function() {
@@ -800,7 +849,7 @@
         }
 
         function playStep() {
-            if(dropActive) return; // Silence during drop
+            if(dropActive) return; 
             const t = audioCtx.currentTime;
             const patternIndex = step % 16;
             
@@ -809,7 +858,7 @@
             if(stems[3] && hatPattern[patternIndex]) { playHiHat(t); flashIndicator(3); }
             
             if(stems[4] && bassPattern[patternIndex]) {
-                const noteIdx = Math.floor(step / 64) % 4; // Change chord every 4 bars
+                const noteIdx = Math.floor(step / 64) % 4; 
                 playBass(t, bassNotes[noteIdx]);
                 flashIndicator(4);
             }
@@ -825,7 +874,7 @@
             gain.gain.setValueAtTime(1, t);
             gain.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
             osc.connect(gain);
-            gain.connect(masterGain); // Use Master Bus
+            gain.connect(masterGain); 
             osc.start(t); osc.stop(t + 0.5);
             
             // GRID PULSE
@@ -879,7 +928,7 @@
             const filter = audioCtx.createBiquadFilter();
             filter.type = "lowpass";
             filter.frequency.setValueAtTime(600, t);
-            filter.frequency.exponentialRampToValueAtTime(100, t + 0.2); // Acid pluck
+            filter.frequency.exponentialRampToValueAtTime(100, t + 0.2); 
             const gain = audioCtx.createGain();
             gain.gain.setValueAtTime(0.4, t);
             gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
@@ -892,49 +941,62 @@
         vizCanvas.addEventListener('mousemove', (e) => {
             if(!isPlaying) return;
             const rect = vizCanvas.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width; // 0 to 1
-            const y = (e.clientY - rect.top) / rect.height; // 0 to 1
+            const x = (e.clientX - rect.left) / rect.width; 
+            const y = (e.clientY - rect.top) / rect.height; 
             
-            // Map X to Frequency (100Hz to 15000Hz)
             const minLog = Math.log(100); const maxLog = Math.log(15000);
             const freq = Math.exp(minLog + (x * (maxLog - minLog)));
             masterFilter.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.1);
             
-            // Map Y to Resonance (0 to 15)
             const q = (1 - y) * 15;
             masterFilter.Q.setTargetAtTime(q, audioCtx.currentTime, 0.1);
         });
         
         vizCanvas.addEventListener('mouseleave', () => {
-            // Reset filter
             masterFilter.frequency.setTargetAtTime(20000, audioCtx.currentTime, 0.5);
             masterFilter.Q.setTargetAtTime(1, audioCtx.currentTime, 0.5);
         });
 
+        // --- UPGRADED VISUALIZER (OSCILLOSCOPE) ---
         function drawVisualizer() {
             if(!isPlaying) return;
             requestAnimationFrame(drawVisualizer);
             const ctx = vizCanvas.getContext('2d');
+            
+            // Use Time Domain Data for Waveform instead of Freq
             const bufferLength = analyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
-            analyser.getByteFrequencyData(dataArray);
+            analyser.getByteTimeDomainData(dataArray);
             
-            ctx.clearRect(0, 0, vizCanvas.width, vizCanvas.height);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Trails
+            ctx.fillRect(0, 0, vizCanvas.width, vizCanvas.height);
             
-            const barWidth = (vizCanvas.width / bufferLength) * 2.5;
-            let barHeight; let x = 0; let sum = 0;
-            
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#FF00C8';
+            ctx.beginPath();
+
+            const sliceWidth = vizCanvas.width * 1.0 / bufferLength;
+            let x = 0;
+
             for(let i = 0; i < bufferLength; i++) {
-                barHeight = dataArray[i] / 2;
-                sum += dataArray[i];
-                ctx.fillStyle = `rgb(255, 0, 200)`; 
-                ctx.fillRect(x, vizCanvas.height - barHeight, barWidth, barHeight);
-                x += barWidth + 1;
+                const v = dataArray[i] / 128.0;
+                const y = v * vizCanvas.height / 2;
+
+                if(i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+
+                x += sliceWidth;
             }
+
+            ctx.lineTo(vizCanvas.width, vizCanvas.height / 2);
+            ctx.stroke();
             
+            // Update Cursor glow based on volume
+            let sum = 0;
+            for(let i = 0; i < bufferLength; i++) sum += Math.abs(dataArray[i] - 128);
             const avg = sum / bufferLength;
-            const pulseIntensity = Math.min(avg / 100, 1); 
-            document.getElementById('cursor').style.boxShadow = `0 0 ${10 + (pulseIntensity * 30)}px rgba(255, 0, 200, ${0.3 + (pulseIntensity * 0.5)})`;
+            const pulseIntensity = Math.min(avg / 10, 1); 
+            document.getElementById('cursor').style.boxShadow = `0 0 ${10 + (pulseIntensity * 50)}px rgba(255, 0, 200, ${0.3 + (pulseIntensity * 0.5)})`;
         }
 
 
@@ -1043,7 +1105,7 @@
             draw();
         }
 
-        // --- THREE.JS PARTICLE ANIMATION ---
+        // --- THREE.JS PARTICLE ANIMATION V2 (VORTEX ADDITION) ---
         function initParticleText() {
             const container = document.getElementById('brand-canvas');
             let w = container.offsetWidth; let h = container.offsetHeight;
@@ -1055,6 +1117,7 @@
             container.appendChild(renderer.domElement);
 
             let particles, geometry;
+            let isVortexing = false;
 
             function createParticles() {
                 if(particles) scene.remove(particles);
@@ -1122,7 +1185,11 @@
                 const vW = vH * camera.aspect;
                 mouse.x *= (vW / 2); mouse.y *= (vH / 2); 
             });
-            container.addEventListener('mouseleave', () => { mouse.set(9999, 9999); });
+            container.addEventListener('mouseleave', () => { mouse.set(9999, 9999); isVortexing = false; });
+            
+            // CLICK TO ACTIVATE VORTEX
+            container.addEventListener('mousedown', () => { isVortexing = true; });
+            container.addEventListener('mouseup', () => { isVortexing = false; });
 
             function animate() {
                 requestAnimationFrame(animate);
@@ -1139,19 +1206,31 @@
                     const ox = orgAttr.getX(i), oy = orgAttr.getY(i);
                     const dx = localMouseX - px, dy = localMouseY - py;
                     const dist = Math.sqrt(dx*dx + dy*dy);
-                    const radius = 60; 
-                    if (dist < radius) {
-                        const force = (radius - dist) / radius;
+                    
+                    if (isVortexing) {
+                        // VORTEX MODE: Suck particles in
                         const angle = Math.atan2(dy, dx);
-                        posAttr.setX(i, px - Math.cos(angle) * force * 2.5);
-                        posAttr.setY(i, py - Math.sin(angle) * force * 2.5);
-                        colAttr.setXYZ(i, targetR, targetG, targetB);
+                        const force = 300 / (dist + 0.1); 
+                        posAttr.setX(i, px + Math.cos(angle) * force);
+                        posAttr.setY(i, py + Math.sin(angle) * force);
+                         colAttr.setXYZ(i, 1, 0, 0.5); // Pink shift
                     } else {
-                        posAttr.setX(i, px + (ox - px) * 0.15);
-                        posAttr.setY(i, py + (oy - py) * 0.15);
-                        const r = colAttr.getX(i), g = colAttr.getY(i), b = colAttr.getZ(i);
-                        if(r<1.0 || g<1.0 || b<1.0) {
-                             colAttr.setXYZ(i, r+(1-r)*0.05, g+(1-g)*0.05, b+(1-b)*0.05);
+                        // NORMAL MODE: Repel slightly or Return
+                        const radius = 60; 
+                        if (dist < radius) {
+                            const force = (radius - dist) / radius;
+                            const angle = Math.atan2(dy, dx);
+                            posAttr.setX(i, px - Math.cos(angle) * force * 2.5);
+                            posAttr.setY(i, py - Math.sin(angle) * force * 2.5);
+                            colAttr.setXYZ(i, targetR, targetG, targetB);
+                        } else {
+                            // Return home
+                            posAttr.setX(i, px + (ox - px) * 0.15);
+                            posAttr.setY(i, py + (oy - py) * 0.15);
+                            const r = colAttr.getX(i), g = colAttr.getY(i), b = colAttr.getZ(i);
+                            if(r<1.0 || g<1.0 || b<1.0) {
+                                 colAttr.setXYZ(i, r+(1-r)*0.05, g+(1-g)*0.05, b+(1-b)*0.05);
+                            }
                         }
                     }
                 }
