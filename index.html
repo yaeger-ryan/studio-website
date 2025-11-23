@@ -612,10 +612,12 @@
             
             <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
-            <form action="https://docs.google.com/forms/d/e/1FAIpQLSfmfhpO2guMRdCDY_rQBDKapyc2FdS2MkHdtDGcBmrH-3Cd9g/formResponse" 
-                  method="post" 
-                  target="hidden_iframe" 
-                  onsubmit="alert('TRANSMISSION RECEIVED. WE WILL BE IN TOUCH.'); toggleModal();">
+            <form action="[https://docs.google.com/forms/d/e/1FAIpQLSfmfhpO2guMRdCDY_rQBDKapyc2FdS2MkHdtDGcBmrH-3Cd9g/formResponse](https://docs.google.com/forms/d/e/1FAIpQLSfmfhpO2guMRdCDY_rQBDKapyc2FdS2MkHdtDGcBmrH-3Cd9g/formResponse)" 
+      method="post" 
+      target="hidden_iframe" 
+      onsubmit="submitted=true; window.location.href = '/success.html';">
+
+*Note: Because we are using `target="hidden_iframe"`, the form submits in the background. The `onsubmit` script immediately redirects the user to your cool new success page, creating a seamless experience.*
                 
                 <input class="modal-input" type="text" name="entry.642603346" placeholder="NAME" required>
                 
