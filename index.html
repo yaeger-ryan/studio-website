@@ -37,8 +37,9 @@
 
         * { box-sizing: border-box; outline: none; }
         html, body { margin: 0; padding: 0; background: var(--bg); min-height: 100vh; width: 100vw; }
-        body { color: var(--text-main); font-family: var(--font-mono); overflow-x: hidden; }
+        body { color: var(--text-main); font-family: var(--font-mono); overflow-x: hidden; cursor: default; }
         
+        /* Custom Scrollbar for the main viewer and new scroll container */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
@@ -80,7 +81,8 @@
             z-index: 10; background: transparent;
             height: 100vh; 
             position: sticky; top: 0;
-            overflow-y: auto;
+            /* FIX: Prevent the main panel from scrolling so canvas stays put */
+            overflow: hidden; 
             padding-top: var(--pad-m); 
         }
 
@@ -90,8 +92,21 @@
             height: 160px; 
             margin: 0 0 20px 0;
             cursor: pointer;
-            position: relative; z-index: 20; flex-shrink: 0;
+            position: relative; z-index: 20; 
+            flex-shrink: 0; /* Ensures it never shrinks */
         }
+
+        /* NEW: Scroll Container for the List Only */
+        .index-scroll-container {
+            flex-grow: 1; /* Takes up remaining space */
+            overflow-y: auto; /* Internal scroll */
+            display: flex;
+            flex-direction: column;
+        }
+        /* Add scrollbar styling to this internal container */
+        .index-scroll-container::-webkit-scrollbar { width: 6px; }
+        .index-scroll-container::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .index-scroll-container::-webkit-scrollbar-thumb:hover { background: var(--accent-solid); }
 
         .index-header {
             padding: 20px var(--pad-m);
@@ -165,34 +180,21 @@
             width: 100%; height: auto; display: block;
             margin-bottom: 20px; 
             border: 1px solid #333;
-            
-            /* Default: Full color, slight dim for atmosphere (NO saturation shifts) */
             filter: brightness(0.9);
-            
-            /* Animation: Quick, mechanical movement */
             transition: all 0.2s var(--ease-mech);
             position: relative;
         }
 
         /* HOVER STATE: "Blueprint Shift" */
         .cs-hero:hover, .cs-img-s:hover {
-            /* 1. Crispness: Full Brightness + Slight Contrast bump (No Saturation) */
             filter: brightness(1.0) contrast(1.05);
-            
-            /* 2. The Shift: Move Up and Left */
             transform: translate(-6px, -6px);
-            
-            /* 3. The Selection Border: White hot */
             border-color: #fff;
-            
-            /* 4. The "Ghost" Shadow: Hard Edge Magenta
-               This creates the illusion of the image lifting off a colored plate */
             box-shadow: 
-                2px 2px 0 0 #050505, /* Tiny gap of bg color to separate */
-                6px 6px 0 0 var(--accent-solid); /* The Hard Magenta Shadow */
-                
+                2px 2px 0 0 #050505, 
+                6px 6px 0 0 var(--accent-solid);
             z-index: 10; 
-            cursor: crosshair; /* Tactical Selection Cursor */
+            cursor: pointer;
         }
 
         .cs-caption { font-size: var(--fs-list-cat); color: #666; text-transform: uppercase; margin-bottom: 60px; text-align: right; margin-top: 60px; border-top: 1px solid #333; padding-top: 20px; }
@@ -215,7 +217,31 @@
             z-index: 10; background: transparent;
             height: 100vh; position: sticky; top: 0;
             overflow-y: auto;
+            cursor: default;
         }
+
+        /* Base Nav Link Styles */
+        .nav-link { 
+            display: block; 
+            color: var(--text-mute); 
+            text-decoration: none; 
+            margin-bottom: 12px; 
+            font-size: var(--fs-nav-link); 
+            font-weight: 500; 
+            transition: all 0.2s; 
+            cursor: pointer; 
+        }
+
+        .nav-link:hover { 
+            color: #fff; 
+            transform: translateX(10px); 
+            text-shadow: 0 0 10px var(--accent-solid); 
+        }
+        
+        /* Unified Pointer for all interactive elements */
+        .btn-start, .modal-close, .legal-link, .project-header, #brand-canvas { 
+            cursor: pointer !important; 
+        } 
 
         /* LOCATION WIDGET STYLES */
         .geo-widget {
@@ -243,8 +269,7 @@
 
         .nav-group { margin-bottom: 50px; flex-shrink: 0; }
         .nav-label { font-family: var(--font-disp); font-size: var(--fs-label); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #fff; border-bottom: 2px solid #333; padding-bottom: 12px; margin-bottom: 20px; display: block; }
-        .nav-link { display: block; color: var(--text-mute); text-decoration: none; margin-bottom: 12px; font-size: var(--fs-nav-link); font-weight: 500; transition: all 0.2s; cursor: pointer; }
-        .nav-link:hover { color: #fff; transform: translateX(10px); text-shadow: 0 0 10px var(--accent-solid); }
+        
         .nav-text { font-size: var(--fs-body); color: var(--text-mute); line-height: 1.6; }
 
         .btn-start {
@@ -286,6 +311,15 @@
                 border-right: none; border-bottom: 1px solid var(--line); 
                 overflow: visible; position: relative;
                 padding-top: 40px;
+                display: block; /* Reset flex display for mobile to allow normal flow */
+            }
+            
+            /* FIX: Reset the scroll container on mobile so it doesn't trap content */
+            .index-scroll-container {
+                display: block;
+                overflow: visible;
+                flex: none;
+                height: auto;
             }
             
             .panel-nav { 
@@ -430,13 +464,15 @@
             text-decoration: none;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: color 0.2s;
+            transition: all 0.2s;
             cursor: pointer;
             width: fit-content;
         }
 
         .legal-link:hover {
-            color: var(--accent-solid);
+            color: #fff; 
+            transform: translateX(5px); 
+            text-shadow: 0 0 10px var(--accent-solid);
         }
 
         /* Legal Viewer Content */
@@ -519,8 +555,10 @@
             <div class="panel-index">
                 <div id="brand-canvas" onclick="window.location.reload()"></div>
                 
-                <div class="index-header">Selected Works (09)</div>
-                <div id="project-list"></div>
+                <div class="index-scroll-container">
+                    <div class="index-header">Selected Works (09)</div>
+                    <div id="project-list"></div>
+                </div>
                 
             </div>
 
@@ -547,7 +585,7 @@
                 </div>
                 <div class="nav-group">
                     <span class="nav-label">Contact</span>
-                    <a href="mailto:studio@ryanyaeger.design" class="nav-link">studio@ryanyaeger.design</a>
+                    <a href="mailto:studio@ryanyaeger.design" class="nav-link" target="_blank">studio@ryanyaeger.design</a>
                     <a href="https://www.linkedin.com/in/ryanyaeger/" target="_blank" class="nav-link">LinkedIn</a>
                 </div>
                 
