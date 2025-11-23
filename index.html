@@ -47,7 +47,18 @@
         body {
             animation: crt-turn-on 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
             will-change: transform, opacity, filter, text-shadow;
-            transition: text-shadow 0.1s ease-out; /* Smooth out the RGB split */
+            transition: text-shadow 0.1s ease-out; 
+        }
+
+        /* --- SMOOTH CHANNEL SWITCH (Replaces Harsh Glitch) --- */
+        @keyframes signal-refresh {
+            0% { opacity: 1; filter: brightness(1) blur(0px); transform: scaleY(1); }
+            10% { opacity: 0.8; filter: brightness(2) blur(2px); transform: scaleY(0.98); }
+            50% { opacity: 0.9; filter: brightness(1.5); transform: scaleY(1.01); }
+            100% { opacity: 1; filter: brightness(1) blur(0px); transform: scaleY(1); }
+        }
+        .glitching {
+            animation: signal-refresh 0.2s ease-out;
         }
 
         /* --- SONAR CLICK EFFECT --- */
@@ -105,12 +116,6 @@
             opacity: 0; 
         }
         .cursor-follower.active { width: 50px; height: 50px; } 
-        
-        /* BEAT PULSE CLASS - UPDATED to be less distracting */
-        .cursor-follower.beat-pulse {
-            /* No border change to keep it clean */
-            /* The JS will now control box-shadow for a subtle glow instead of scale */
-        }
 
         /* --- MATRIX OVERLAY --- */
         #matrix-overlay {
@@ -164,9 +169,14 @@
             position: fixed; inset: 0; pointer-events: none; z-index: 1;
             display: grid; grid-template-columns: repeat(12, 1fr);
             opacity: 0.15;
+            transition: opacity 0.1s, filter 0.1s; /* Reactive Pulse */
         }
-        .line { border-right: 1px solid #333; height: 100%; }
+        .line { border-right: 1px solid #333; height: 100%; transition: border-color 0.1s; }
         .line:last-child { border: none; }
+        
+        /* Audio Reactive Grid State */
+        .grid-lines.pulse-beat { opacity: 0.6; filter: drop-shadow(0 0 10px var(--accent-solid)); }
+        .grid-lines.pulse-beat .line { border-color: rgba(255, 0, 200, 0.3); }
 
         /* --- 3. LAYOUT GRID --- */
         .app-view { width: 100%; min-height: 100vh; position: relative; z-index: 2; }
@@ -308,16 +318,26 @@
             background: rgba(0,0,0,0.3);
             border: 1px solid #333;
             margin-top: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
             opacity: 0.5;
             transition: opacity 0.3s;
+            cursor: crosshair; /* Indicates interaction */
         }
         #viz-canvas.active { opacity: 1; border-color: var(--accent-solid); box-shadow: 0 0 10px rgba(255,0,200,0.2); }
+
+        .stem-controls {
+            display: flex; gap: 4px; margin-bottom: 20px;
+        }
+        .stem-indicator {
+            flex: 1; height: 4px; background: #333; transition: all 0.05s;
+        }
+        .stem-indicator.active { background: #555; } /* Ready state */
+        .stem-indicator.firing { background: var(--accent-solid); box-shadow: 0 0 10px var(--accent-solid); height: 6px; transform: translateY(-1px); } /* Hit state */
 
         .btn-audio {
             font-family: var(--font-mono); font-size: 10px; color: var(--accent-solid);
             background: transparent; border: 1px solid var(--accent-solid);
-            padding: 8px; margin-bottom: 20px; cursor: pointer; width: 100%;
+            padding: 8px; margin-bottom: 5px; cursor: pointer; width: 100%;
             text-transform: uppercase; letter-spacing: 1px;
             transition: 0.3s; text-align: center;
         }
@@ -345,7 +365,7 @@
             font-family: var(--font-mono); font-size: 9px; color: #333; 
             margin-top: 10px; letter-spacing: 2px; text-transform: uppercase;
             opacity: 0.5; transition: all 0.3s; cursor: help;
-            display: flex; flex-direction: column; /* Stacked for better fit */
+            display: flex; flex-direction: column; 
             gap: 6px;
         }
         .konami-hint span { display: block; }
@@ -438,7 +458,7 @@
     <div class="light-sweep"></div>
     <canvas id="matrix-overlay"></canvas>
 
-    <div class="grid-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+    <div class="grid-lines" id="bg-grid"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
 
     <div class="app-view" id="appView">
         <div class="grid-wrapper">
@@ -462,8 +482,16 @@
                 </div>
                 
                 <!-- AUDIO CONTROLS -->
-                <button class="btn-audio magnetic-target" id="btn-audio-toggle" onclick="toggleAudio()">[ INITIALIZE SYNTHWAVE ]</button>
-                <canvas id="viz-canvas" width="300" height="60"></canvas>
+                <button class="btn-audio magnetic-target" id="btn-audio-toggle" onclick="toggleAudio()">[ INITIALIZE SYNTH DECK ]</button>
+                <!-- The viz-canvas is now an interactive filter pad -->
+                <canvas id="viz-canvas" width="300" height="60" title="XY FILTER PAD: DRAG TO MODIFY SOUND"></canvas>
+                
+                <div class="stem-controls">
+                    <div class="stem-indicator active" id="stem-1" title="Kick (1)"></div>
+                    <div class="stem-indicator active" id="stem-2" title="Snare (2)"></div>
+                    <div class="stem-indicator active" id="stem-3" title="Hi-Hat (3)"></div>
+                    <div class="stem-indicator active" id="stem-4" title="Bass (4)"></div>
+                </div>
 
                 <div class="nav-group">
                     <span class="nav-label">Practice</span>
@@ -494,7 +522,8 @@
                     <div class="nav-copyright">© 2025 YAEGER STUDIO</div>
                     <div class="konami-hint">
                         <span>↑ ↑ ↓ ↓ ← → ← → B A</span>
-                        <span>[ G: GRID | I: INVERT | TYPE: HACK ]</span>
+                        <span>[ KEYS 1-4: MUTE | SPACE: DROP ]</span>
+                        <span>[ XY PAD: FILTER SWEEP ]</span>
                     </div>
                 </div>
             </nav>
@@ -530,17 +559,14 @@
 
         // --- CUSTOM CURSOR FOLLOWER ---
         const cursor = document.getElementById('cursor');
-        
-        // VELOCITY GLITCH VARIABLES
-        let lastX = 0;
-        let lastY = 0;
+        let lastX = 0; let lastY = 0;
         
         document.addEventListener('mousemove', (e) => {
             cursor.style.opacity = '1';
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
 
-            // DATA TRAIL EFFECT
+            // DATA TRAIL
             if(Math.random() > 0.8) {
                 const trail = document.createElement('div');
                 trail.className = 'data-particle';
@@ -551,15 +577,13 @@
                 setTimeout(() => trail.remove(), 1000);
             }
             
-            // --- NEW: VELOCITY GLITCH (RGB SPLIT) ---
+            // VELOCITY RGB SPLIT
             const speed = Math.sqrt(Math.pow(e.clientX - lastX, 2) + Math.pow(e.clientY - lastY, 2));
             lastX = e.clientX;
             lastY = e.clientY;
 
             if (speed > 40) {
-                // Simple RGB Split effect on body using text-shadow
-                // We limit this to text-shadow to avoid heavy layout thrashing
-                const rOffset = Math.min(speed * 0.05, 5); // Cap at 5px
+                const rOffset = Math.min(speed * 0.05, 5); 
                 const bOffset = Math.min(speed * -0.05, -5);
                 document.body.style.textShadow = `${rOffset}px 0 0 rgba(255,0,0,0.7), ${bOffset}px 0 0 rgba(0,255,255,0.7)`;
             } else {
@@ -577,29 +601,41 @@
             setTimeout(() => sonar.remove(), 600);
         });
 
-        // --- NEW FEATURE: HACKER TYPING MODE ---
+        // --- GLOBAL KEYDOWN (SYNTH CONTROLS) ---
         document.addEventListener('keydown', (e) => {
-             // Ignore functional keys to prevent visual spam on shortcuts
-             if(e.ctrlKey || e.altKey || e.metaKey || e.key.length > 1) return;
+             // Ignore if typing in modal
+             if(document.querySelector('.modal-wrapper.active')) return;
+             if(e.ctrlKey || e.altKey || e.metaKey) return;
 
-             const char = e.key;
-             const x = cursor.style.left;
-             const y = cursor.style.top;
+             // --- SYNTH CONTROLS (1-4) ---
+             if(['1','2','3','4'].includes(e.key)) {
+                 toggleStem(e.key);
+                 return;
+             }
+             
+             // --- SPACEBAR (DROP/FILL) ---
+             if(e.code === 'Space') {
+                 e.preventDefault();
+                 triggerDrop();
+                 return;
+             }
 
-             const el = document.createElement('div');
-             el.className = 'key-particle';
-             el.style.left = x;
-             el.style.top = y;
-             el.innerText = `[${char.toUpperCase()}]`;
-             document.body.appendChild(el);
-             
-             setTimeout(() => el.remove(), 800);
-             
-             // Play tiny sound
-             playSound('hover');
+             // --- HACKER TYPING EFFECT ---
+             if(e.key.length === 1) {
+                 const char = e.key;
+                 const x = cursor.style.left;
+                 const y = cursor.style.top;
+                 const el = document.createElement('div');
+                 el.className = 'key-particle';
+                 el.style.left = x; el.style.top = y;
+                 el.innerText = `[${char.toUpperCase()}]`;
+                 document.body.appendChild(el);
+                 setTimeout(() => el.remove(), 800);
+                 playSound('hover');
+             }
         });
 
-        // --- LIVE TELEMETRY (HUD) ---
+        // --- LIVE TELEMETRY ---
         const latEl = document.getElementById('lat');
         const lonEl = document.getElementById('lon');
         const clockEl = document.getElementById('system-clock');
@@ -613,15 +649,7 @@
 
         setInterval(() => {
             const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', {
-                timeZone: 'America/Chicago',
-                hour12: false,
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            const ms = now.getMilliseconds().toString().padStart(3, '0');
-            clockEl.innerText = `${timeString}:${ms}`;
+            clockEl.innerText = `${now.toLocaleTimeString('en-US', { hour12: false })}:${now.getMilliseconds().toString().padStart(3, '0')}`;
         }, 50);
 
 
@@ -644,27 +672,19 @@
         }
         setTimeout(initMagneticButtons, 500);
 
-        // --- KINETIC SCROLL EFFECT (Fixed Target) ---
-        let currentScroll = 0;
-        let targetScroll = 0;
-        let skew = 0;
+        // --- KINETIC SCROLL EFFECT ---
+        let currentScroll = 0; let targetScroll = 0; let skew = 0;
         const scrollViewer = document.querySelector('.panel-viewer');
-        
         if (scrollViewer) {
-            scrollViewer.addEventListener('scroll', () => {
-                targetScroll = scrollViewer.scrollTop;
-            });
+            scrollViewer.addEventListener('scroll', () => { targetScroll = scrollViewer.scrollTop; });
         }
 
         function animateScroll() {
             const activeContent = document.querySelector('.case-study.visible');
-            
             if (activeContent) {
                 let diff = targetScroll - currentScroll;
                 let speed = diff * 0.15;
-                
                 currentScroll += diff * 0.15;
-                
                 if(Math.abs(speed) > 0.1 && window.innerWidth > 1024) {
                     skew = Math.min(Math.max(speed * 0.1, -2), 2);
                     activeContent.style.transform = `translateY(0) skewY(${skew}deg)`;
@@ -674,28 +694,19 @@
             }
             requestAnimationFrame(animateScroll);
         }
-        
-        if(window.innerWidth > 1024) {
-            animateScroll();
-        }
+        if(window.innerWidth > 1024) animateScroll();
 
         // --- HOLOGRAPHIC TILT EFFECT ---
         function attachTiltEffect() {
             const images = document.querySelectorAll('.cs-hero, .cs-img-s');
-            
             images.forEach(img => {
                 img.addEventListener('mousemove', (e) => {
                     const rect = img.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    // Calculate rotation (max 10 degrees)
+                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
                     const xRot = ((y / rect.height) - 0.5) * 10; 
                     const yRot = ((x / rect.width) - 0.5) * -10;
-                    
                     img.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
                 });
-                
                 img.addEventListener('mouseleave', () => {
                     img.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
                 });
@@ -703,45 +714,76 @@
         }
 
 
-        // --- PROCEDURAL AUDIO ENGINE (NO EXTERNAL FILES) ---
+        // --- ADVANCED SYNTH DECK (SEQUENCER & FX) ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let isPlaying = false;
         let sequencerInterval;
         let analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 256;
-        analyser.connect(audioCtx.destination);
+        let masterGain = audioCtx.createGain();
+        let masterFilter = audioCtx.createBiquadFilter(); // GLOBAL FILTER FX
         
-        const tempo = 110; // BPM
-        const noteDuration = 60 / tempo / 2; // 8th notes
+        masterFilter.type = "lowpass";
+        masterFilter.frequency.value = 20000; // Start open
+        masterFilter.Q.value = 1;
+        
+        masterGain.connect(masterFilter);
+        masterFilter.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        analyser.fftSize = 256;
+        
+        const tempo = 115; // BPM (Driving Synthwave)
+        const noteDuration = 60 / tempo / 4; // 16th notes
         let step = 0;
         
-        // Synthwave Progression: C2, Eb2, Bb1, F1
-        const bassNotes = [65.41, 77.78, 58.27, 43.65]; 
+        // 16-STEP PATTERNS
+        // 1 = Hit, 0 = Silence
+        const kickPattern = [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]; // Four on floor
+        const snarePattern= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0]; // Backbeat
+        const hatPattern  = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]; // 8ths
+        const bassPattern = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]; // Offbeat 16ths
+        
+        // PROGRESSION: F min -> Db Maj -> Eb Maj -> C min
+        const bassNotes = [43.65, 69.30, 77.78, 65.41]; 
+        
+        // STATE
+        const stems = { 1: true, 2: true, 3: true, 4: true };
+        let dropActive = false;
+
+        function toggleStem(key) {
+            stems[key] = !stems[key];
+            const el = document.getElementById(`stem-${key}`);
+            if(stems[key]) el.classList.add('active');
+            else el.classList.remove('active');
+        }
+        
+        function triggerDrop() {
+            if(!isPlaying) return;
+            dropActive = true;
+            masterFilter.frequency.setValueAtTime(masterFilter.frequency.value, audioCtx.currentTime);
+            masterFilter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.2); // Filter sweep down
+            setTimeout(() => {
+                dropActive = false;
+                masterFilter.frequency.exponentialRampToValueAtTime(20000, audioCtx.currentTime + 0.1); // Slam back open
+            }, 800); // Drop duration
+        }
         
         window.toggleAudio = function() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            
             const btn = document.getElementById('btn-audio-toggle');
             const viz = document.getElementById('viz-canvas');
             const cursor = document.getElementById('cursor');
             
             if(isPlaying) {
-                // STOP
                 clearInterval(sequencerInterval);
                 isPlaying = false;
-                btn.innerText = "[ INITIALIZE SYNTHWAVE ]";
-                btn.style.color = "#FF00C8";
-                btn.style.background = "transparent";
-                viz.classList.remove('active');
-                cursor.classList.remove('beat-pulse');
+                btn.innerText = "[ INITIALIZE SYNTH DECK ]";
+                btn.style.color = "#FF00C8"; btn.style.background = "transparent";
+                viz.classList.remove('active'); cursor.classList.remove('beat-pulse');
             } else {
-                // START
                 isPlaying = true;
                 btn.innerText = "|| SYSTEM AUDIO ACTIVE ||";
-                btn.style.background = "#FF00C8";
-                btn.style.color = "black";
-                viz.classList.add('active');
-                cursor.classList.add('beat-pulse');
+                btn.style.background = "#FF00C8"; btn.style.color = "black";
+                viz.classList.add('active'); cursor.classList.add('beat-pulse');
                 
                 step = 0;
                 sequencerInterval = setInterval(playStep, noteDuration * 1000);
@@ -749,16 +791,32 @@
             }
         };
 
+        function flashIndicator(id) {
+            const el = document.getElementById(`stem-${id}`);
+            if(stems[id]) {
+                el.classList.add('firing');
+                setTimeout(() => el.classList.remove('firing'), 100);
+            }
+        }
+
         function playStep() {
-            const time = audioCtx.currentTime;
-            if(step % 4 === 0) playKick(time);
-            if(step % 8 === 4) playSnare(time);
-            playHiHat(time);
-            const noteIdx = Math.floor(step / 32) % 4;
-            playBass(time, bassNotes[noteIdx]);
+            if(dropActive) return; // Silence during drop
+            const t = audioCtx.currentTime;
+            const patternIndex = step % 16;
+            
+            if(stems[1] && kickPattern[patternIndex]) { playKick(t); flashIndicator(1); }
+            if(stems[2] && snarePattern[patternIndex]) { playSnare(t); flashIndicator(2); }
+            if(stems[3] && hatPattern[patternIndex]) { playHiHat(t); flashIndicator(3); }
+            
+            if(stems[4] && bassPattern[patternIndex]) {
+                const noteIdx = Math.floor(step / 64) % 4; // Change chord every 4 bars
+                playBass(t, bassNotes[noteIdx]);
+                flashIndicator(4);
+            }
             step++;
         }
 
+        // --- SYNTHESIS FUNCTIONS ---
         function playKick(t) {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -767,44 +825,50 @@
             gain.gain.setValueAtTime(1, t);
             gain.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
             osc.connect(gain);
-            gain.connect(analyser);
-            osc.start(t);
-            osc.stop(t + 0.5);
+            gain.connect(masterGain); // Use Master Bus
+            osc.start(t); osc.stop(t + 0.5);
+            
+            // GRID PULSE
+            const grid = document.getElementById('bg-grid');
+            grid.classList.add('pulse-beat');
+            setTimeout(() => grid.classList.remove('pulse-beat'), 100);
         }
 
         function playSnare(t) {
             const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.2, audioCtx.sampleRate);
             const output = noiseBuffer.getChannelData(0);
-            for (let i = 0; i < noiseBuffer.length; i++) { output[i] = Math.random() * 2 - 1; }
+            for (let i = 0; i < noiseBuffer.length; i++) output[i] = Math.random() * 2 - 1;
             const noise = audioCtx.createBufferSource();
             noise.buffer = noiseBuffer;
-            const gain = audioCtx.createGain();
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = "highpass";
-            filter.frequency.value = 1000;
-            gain.gain.setValueAtTime(0.4, t);
-            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(analyser);
-            noise.start(t);
+            const noiseGain = audioCtx.createGain();
+            const noiseFilter = audioCtx.createBiquadFilter();
+            noiseFilter.type = "highpass"; noiseFilter.frequency.value = 1000;
+            noiseGain.gain.setValueAtTime(0.5, t);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+            noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(masterGain);
+            
+            // Body of snare
+            const osc = audioCtx.createOscillator();
+            const oscGain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(250, t); osc.frequency.exponentialRampToValueAtTime(100, t + 0.1);
+            oscGain.gain.setValueAtTime(0.3, t); oscGain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+            osc.connect(oscGain); oscGain.connect(masterGain);
+            
+            noise.start(t); osc.start(t);
         }
 
         function playHiHat(t) {
             const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.05, audioCtx.sampleRate);
             const output = noiseBuffer.getChannelData(0);
-            for (let i = 0; i < noiseBuffer.length; i++) { output[i] = Math.random() * 2 - 1; }
+            for (let i = 0; i < noiseBuffer.length; i++) output[i] = Math.random() * 2 - 1;
             const noise = audioCtx.createBufferSource();
             noise.buffer = noiseBuffer;
             const gain = audioCtx.createGain();
             const filter = audioCtx.createBiquadFilter();
-            filter.type = "highpass";
-            filter.frequency.value = 5000;
-            gain.gain.setValueAtTime(0.1, t);
+            filter.type = "highpass"; filter.frequency.value = 8000;
+            gain.gain.setValueAtTime(0.15, t);
             gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(analyser);
+            noise.connect(filter); filter.connect(gain); gain.connect(masterGain);
             noise.start(t);
         }
 
@@ -814,56 +878,63 @@
             osc.frequency.setValueAtTime(freq, t);
             const filter = audioCtx.createBiquadFilter();
             filter.type = "lowpass";
-            filter.frequency.setValueAtTime(300, t);
-            filter.frequency.linearRampToValueAtTime(100, t + 0.2);
+            filter.frequency.setValueAtTime(600, t);
+            filter.frequency.exponentialRampToValueAtTime(100, t + 0.2); // Acid pluck
             const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.3, t);
-            gain.gain.linearRampToValueAtTime(0, t + 0.3);
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(analyser);
-            osc.start(t);
-            osc.stop(t + 0.3);
+            gain.gain.setValueAtTime(0.4, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+            osc.connect(filter); filter.connect(gain); gain.connect(masterGain);
+            osc.start(t); osc.stop(t + 0.3);
         }
+
+        // --- XY FILTER PAD INTERACTION ---
+        const vizCanvas = document.getElementById('viz-canvas');
+        vizCanvas.addEventListener('mousemove', (e) => {
+            if(!isPlaying) return;
+            const rect = vizCanvas.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width; // 0 to 1
+            const y = (e.clientY - rect.top) / rect.height; // 0 to 1
+            
+            // Map X to Frequency (100Hz to 15000Hz)
+            const minLog = Math.log(100); const maxLog = Math.log(15000);
+            const freq = Math.exp(minLog + (x * (maxLog - minLog)));
+            masterFilter.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.1);
+            
+            // Map Y to Resonance (0 to 15)
+            const q = (1 - y) * 15;
+            masterFilter.Q.setTargetAtTime(q, audioCtx.currentTime, 0.1);
+        });
+        
+        vizCanvas.addEventListener('mouseleave', () => {
+            // Reset filter
+            masterFilter.frequency.setTargetAtTime(20000, audioCtx.currentTime, 0.5);
+            masterFilter.Q.setTargetAtTime(1, audioCtx.currentTime, 0.5);
+        });
 
         function drawVisualizer() {
             if(!isPlaying) return;
             requestAnimationFrame(drawVisualizer);
-            
-            const canvas = document.getElementById('viz-canvas');
-            const cursor = document.getElementById('cursor');
-            const ctx = canvas.getContext('2d');
+            const ctx = vizCanvas.getContext('2d');
             const bufferLength = analyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
-            
             analyser.getByteFrequencyData(dataArray);
             
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(0, 0, 0, 0)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, vizCanvas.width, vizCanvas.height);
             
-            const barWidth = (canvas.width / bufferLength) * 2.5;
-            let barHeight;
-            let x = 0;
-            let sum = 0;
+            const barWidth = (vizCanvas.width / bufferLength) * 2.5;
+            let barHeight; let x = 0; let sum = 0;
             
             for(let i = 0; i < bufferLength; i++) {
                 barHeight = dataArray[i] / 2;
                 sum += dataArray[i];
                 ctx.fillStyle = `rgb(255, 0, 200)`; 
-                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+                ctx.fillRect(x, vizCanvas.height - barHeight, barWidth, barHeight);
                 x += barWidth + 1;
             }
             
-            // REFINED CURSOR REACTIVE PULSE (SUBTLE GLOW)
-            // We calculate average volume to drive opacity/shadow instead of size
             const avg = sum / bufferLength;
-            const pulseIntensity = Math.min(avg / 100, 1); // 0.0 to 1.0
-            
-            // Apply Pulse Global (Removed 'active' check)
-            cursor.style.boxShadow = `0 0 ${10 + (pulseIntensity * 20)}px rgba(255, 0, 200, ${0.3 + (pulseIntensity * 0.5)})`;
-            // Optional: tiny scale bump
-            cursor.style.transform = `translate(-50%, -50%) scale(${1 + (pulseIntensity * 0.1)})`;
+            const pulseIntensity = Math.min(avg / 100, 1); 
+            document.getElementById('cursor').style.boxShadow = `0 0 ${10 + (pulseIntensity * 30)}px rgba(255, 0, 200, ${0.3 + (pulseIntensity * 0.5)})`;
         }
 
 
@@ -1475,6 +1546,12 @@
         function handleProjectClick(index) {
             const isMobile = window.innerWidth <= 1024;
             const wrappers = document.querySelectorAll('.project-wrapper');
+            
+            // --- TRIGGER SIGNAL GLITCH ON CLICK ---
+            const appView = document.getElementById('appView');
+            appView.classList.remove('glitching');
+            void appView.offsetWidth; // Force reflow
+            appView.classList.add('glitching');
             
             if(isMobile) {
                 const clickedRow = wrappers[index];
