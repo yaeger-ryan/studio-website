@@ -28,7 +28,7 @@
             /* TYPOGRAPHY */
             --fs-label: clamp(12px, 1vw, 14px); 
             --fs-nav-link: clamp(16px, 1.4vw, 20px); 
-            --fs-body: clamp(15px, 1.1vw, 18px);      
+            --fs-body: clamp(15px, 1.1vw, 18px);       
             --fs-list-title: clamp(22px, 2.2vw, 32px);
             --fs-list-cat: clamp(11px, 0.9vw, 13px);
             --fs-h1: clamp(40px, 6vw, 110px);
@@ -78,6 +78,19 @@
             0% { opacity: 1; transform: translateY(0); }
             100% { opacity: 0; transform: translateY(20px); }
         }
+        
+        /* --- KEY PRESS PARTICLE --- */
+        .key-particle {
+            position: fixed; pointer-events: none; z-index: 9998;
+            color: #fff; font-family: var(--font-mono); font-weight: bold;
+            font-size: 14px; opacity: 0;
+            text-shadow: 0 0 5px var(--accent-solid);
+            animation: keyFloat 0.8s ease-out forwards;
+        }
+        @keyframes keyFloat {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-30px) scale(1.5); }
+        }
 
         /* --- BLEND MODE CURSOR --- */
         .cursor-follower {
@@ -87,10 +100,15 @@
             pointer-events: none; z-index: 10000;
             mix-blend-mode: difference; 
             transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s, opacity 0.2s;
+            transition: width 0.1s, height 0.1s, opacity 0.2s;
             opacity: 0; 
         }
         .cursor-follower.active { width: 50px; height: 50px; } 
+        /* BEAT PULSE CLASS */
+        .cursor-follower.beat-pulse {
+            border: 2px solid var(--accent-solid);
+            background: rgba(255, 255, 255, 0.8);
+        }
 
         /* --- MATRIX OVERLAY --- */
         #matrix-overlay {
@@ -282,6 +300,27 @@
         .geo-coord { display: block; color: #777; font-size: 10px; margin-bottom: 2px; }
         .geo-time { display: block; color: #555; font-size: 9px; margin-top: 4px; }
 
+        /* --- AUDIO VISUALIZER --- */
+        #viz-canvas {
+            width: 100%; height: 60px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        #viz-canvas.active { opacity: 1; border-color: var(--accent-solid); box-shadow: 0 0 10px rgba(255,0,200,0.2); }
+
+        .btn-audio {
+            font-family: var(--font-mono); font-size: 10px; color: var(--accent-solid);
+            background: transparent; border: 1px solid var(--accent-solid);
+            padding: 8px; margin-bottom: 20px; cursor: pointer; width: 100%;
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.3s; text-align: center;
+        }
+        .btn-audio:hover { background: var(--accent-solid); color: black; box-shadow: 0 0 15px var(--accent-solid); }
+
         .nav-group { margin-bottom: 50px; flex-shrink: 0; }
         .nav-label { font-family: var(--font-disp); font-size: var(--fs-label); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #fff; border-bottom: 2px solid #333; padding-bottom: 12px; margin-bottom: 20px; display: block; }
         .nav-text { font-size: var(--fs-body); color: var(--text-mute); line-height: 1.6; }
@@ -417,6 +456,10 @@
                     <span class="geo-coord" id="lon">-89.3841</span>
                     <span class="geo-time" id="system-clock">00:00:00:000</span>
                 </div>
+                
+                <!-- AUDIO CONTROLS -->
+                <button class="btn-audio magnetic-target" id="btn-audio-toggle" onclick="toggleAudio()">[ INITIALIZE SYNTHWAVE ]</button>
+                <canvas id="viz-canvas" width="300" height="60"></canvas>
 
                 <div class="nav-group">
                     <span class="nav-label">Practice</span>
@@ -447,7 +490,7 @@
                     <div class="nav-copyright">© 2025 YAEGER STUDIO</div>
                     <div class="konami-hint">
                         <span>↑ ↑ ↓ ↓ ← → ← → B A</span>
-                        <span>[ PRESS 'G' FOR GRID | 'I' FOR INVERT ]</span>
+                        <span>[ TYPE ANYWHERE FOR HACKER MODE ]</span>
                     </div>
                 </div>
             </nav>
@@ -489,7 +532,7 @@
             cursor.style.top = e.clientY + 'px';
 
             // DATA TRAIL EFFECT
-            if(Math.random() > 0.7) {
+            if(Math.random() > 0.8) {
                 const trail = document.createElement('div');
                 trail.className = 'data-particle';
                 trail.style.left = e.clientX + 'px';
@@ -508,6 +551,28 @@
             sonar.style.top = e.clientY + 'px';
             document.body.appendChild(sonar);
             setTimeout(() => sonar.remove(), 600);
+        });
+
+        // --- NEW FEATURE: HACKER TYPING MODE ---
+        document.addEventListener('keydown', (e) => {
+             // Ignore functional keys to prevent visual spam on shortcuts
+             if(e.ctrlKey || e.altKey || e.metaKey || e.key.length > 1) return;
+
+             const char = e.key;
+             const x = cursor.style.left;
+             const y = cursor.style.top;
+
+             const el = document.createElement('div');
+             el.className = 'key-particle';
+             el.style.left = x;
+             el.style.top = y;
+             el.innerText = `[${char.toUpperCase()}]`;
+             document.body.appendChild(el);
+             
+             setTimeout(() => el.remove(), 800);
+             
+             // Play tiny sound
+             playSound('hover');
         });
 
         // --- LIVE TELEMETRY (HUD) ---
@@ -590,7 +655,7 @@
             animateScroll();
         }
 
-        // --- HOLOGRAPHIC TILT EFFECT (NEW) ---
+        // --- HOLOGRAPHIC TILT EFFECT ---
         function attachTiltEffect() {
             const images = document.querySelectorAll('.cs-hero, .cs-img-s');
             
@@ -614,8 +679,188 @@
         }
 
 
-        // --- AUDIO SYSTEM (REFINED) ---
+        // --- PROCEDURAL AUDIO ENGINE (NO EXTERNAL FILES) ---
+        // Generates Synthwave Bass & Drums entirely in code.
+        // Works 100% of the time. No CORS issues.
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let isPlaying = false;
+        let sequencerInterval;
+        let analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        analyser.connect(audioCtx.destination);
+        
+        const tempo = 110; // BPM
+        const noteDuration = 60 / tempo / 2; // 8th notes
+        let step = 0;
+        
+        // Synthwave Progression: C2, Eb2, Bb1, F1
+        const bassNotes = [65.41, 77.78, 58.27, 43.65]; 
+        
+        window.toggleAudio = function() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const btn = document.getElementById('btn-audio-toggle');
+            const viz = document.getElementById('viz-canvas');
+            const cursor = document.getElementById('cursor');
+            
+            if(isPlaying) {
+                // STOP
+                clearInterval(sequencerInterval);
+                isPlaying = false;
+                btn.innerText = "[ INITIALIZE SYNTHWAVE ]";
+                btn.style.color = "#FF00C8";
+                btn.style.background = "transparent";
+                viz.classList.remove('active');
+                cursor.classList.remove('beat-pulse');
+            } else {
+                // START
+                isPlaying = true;
+                btn.innerText = "|| SYSTEM AUDIO ACTIVE ||";
+                btn.style.background = "#FF00C8";
+                btn.style.color = "black";
+                viz.classList.add('active');
+                cursor.classList.add('beat-pulse');
+                
+                step = 0;
+                sequencerInterval = setInterval(playStep, noteDuration * 1000);
+                drawVisualizer();
+            }
+        };
+
+        function playStep() {
+            const time = audioCtx.currentTime;
+            
+            // 1. KICK (On beats 0 and 2 of a 4-step bar)
+            if(step % 4 === 0) playKick(time);
+            
+            // 2. SNARE (On beat 2, weak on 4)
+            if(step % 8 === 4) playSnare(time);
+            
+            // 3. HI-HAT (Every step / 8th notes)
+            playHiHat(time);
+            
+            // 4. BASS (Rolling 8th notes)
+            // Change note every 32 steps (4 bars)
+            const noteIdx = Math.floor(step / 32) % 4;
+            playBass(time, bassNotes[noteIdx]);
+            
+            step++;
+        }
+
+        function playKick(t) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(150, t);
+            osc.frequency.exponentialRampToValueAtTime(0.01, t + 0.5);
+            gain.gain.setValueAtTime(1, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
+            osc.connect(gain);
+            gain.connect(analyser);
+            osc.start(t);
+            osc.stop(t + 0.5);
+        }
+
+        function playSnare(t) {
+            const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.2, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < noiseBuffer.length; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = noiseBuffer;
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = "highpass";
+            filter.frequency.value = 1000;
+            gain.gain.setValueAtTime(0.4, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(analyser);
+            noise.start(t);
+        }
+
+        function playHiHat(t) {
+            const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.05, audioCtx.sampleRate);
+            const output = noiseBuffer.getChannelData(0);
+            for (let i = 0; i < noiseBuffer.length; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = noiseBuffer;
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = "highpass";
+            filter.frequency.value = 5000;
+            gain.gain.setValueAtTime(0.1, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(analyser);
+            noise.start(t);
+        }
+
+        function playBass(t, freq) {
+            const osc = audioCtx.createOscillator();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, t);
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = "lowpass";
+            filter.frequency.setValueAtTime(300, t); // Open filter slightly
+            filter.frequency.linearRampToValueAtTime(100, t + 0.2); // Pluck effect
+            
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.3, t);
+            gain.gain.linearRampToValueAtTime(0, t + 0.3); // Short decay
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(analyser);
+            osc.start(t);
+            osc.stop(t + 0.3);
+        }
+
+        function drawVisualizer() {
+            if(!isPlaying) return;
+            requestAnimationFrame(drawVisualizer);
+            
+            const canvas = document.getElementById('viz-canvas');
+            const cursor = document.getElementById('cursor');
+            const ctx = canvas.getContext('2d');
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            
+            analyser.getByteFrequencyData(dataArray);
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const barWidth = (canvas.width / bufferLength) * 2.5;
+            let barHeight;
+            let x = 0;
+            
+            // Calculate average volume for cursor pulse
+            let sum = 0;
+            
+            for(let i = 0; i < bufferLength; i++) {
+                barHeight = dataArray[i] / 2;
+                sum += dataArray[i];
+                
+                ctx.fillStyle = `rgb(255, 0, 200)`; // Solid neon pink
+                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+                x += barWidth + 1;
+            }
+            
+            // CURSOR REACTIVE PULSE
+            const avg = sum / bufferLength;
+            if(cursor.classList.contains('active')) {
+                const scale = 1 + (avg / 100); 
+                cursor.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            }
+        }
+
+
         function playSound(type) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
@@ -1187,8 +1432,9 @@
                     clearInterval(scrambleInterval);
                 }
                 
-                iteration += 1 / 3;
-            }, 30);
+                // FASTER DECRYPTION: Increase by 2 chars per frame instead of 1/3
+                iteration += 3; // EVEN FASTER
+            }, 15); 
             
             target.dataset.interval = scrambleInterval;
         }
