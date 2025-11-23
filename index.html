@@ -46,7 +46,8 @@
         
         body {
             animation: crt-turn-on 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-            will-change: transform, opacity, filter;
+            will-change: transform, opacity, filter, text-shadow;
+            transition: text-shadow 0.1s ease-out; /* Smooth out the RGB split */
         }
 
         /* --- SONAR CLICK EFFECT --- */
@@ -100,14 +101,15 @@
             pointer-events: none; z-index: 10000;
             mix-blend-mode: difference; 
             transform: translate(-50%, -50%);
-            transition: width 0.1s, height 0.1s, opacity 0.2s;
+            transition: width 0.1s, height 0.1s, opacity 0.2s, box-shadow 0.05s;
             opacity: 0; 
         }
         .cursor-follower.active { width: 50px; height: 50px; } 
-        /* BEAT PULSE CLASS */
+        
+        /* BEAT PULSE CLASS - UPDATED to be less distracting */
         .cursor-follower.beat-pulse {
-            border: 2px solid var(--accent-solid);
-            background: rgba(255, 255, 255, 0.8);
+            /* No border change to keep it clean */
+            /* The JS will now control box-shadow for a subtle glow instead of scale */
         }
 
         /* --- MATRIX OVERLAY --- */
@@ -343,8 +345,10 @@
             font-family: var(--font-mono); font-size: 9px; color: #333; 
             margin-top: 10px; letter-spacing: 2px; text-transform: uppercase;
             opacity: 0.5; transition: all 0.3s; cursor: help;
-            display: flex; justify-content: space-between;
+            display: flex; flex-direction: column; /* Stacked for better fit */
+            gap: 6px;
         }
+        .konami-hint span { display: block; }
         .konami-hint:hover { color: var(--accent-solid); opacity: 1; text-shadow: 0 0 5px var(--accent-solid); }
 
         /* --- 7. MODAL --- */
@@ -490,7 +494,7 @@
                     <div class="nav-copyright">© 2025 YAEGER STUDIO</div>
                     <div class="konami-hint">
                         <span>↑ ↑ ↓ ↓ ← → ← → B A</span>
-                        <span>[ TYPE ANYWHERE FOR HACKER MODE ]</span>
+                        <span>[ G: GRID | I: INVERT | TYPE: HACK ]</span>
                     </div>
                 </div>
             </nav>
@@ -526,6 +530,11 @@
 
         // --- CUSTOM CURSOR FOLLOWER ---
         const cursor = document.getElementById('cursor');
+        
+        // VELOCITY GLITCH VARIABLES
+        let lastX = 0;
+        let lastY = 0;
+        
         document.addEventListener('mousemove', (e) => {
             cursor.style.opacity = '1';
             cursor.style.left = e.clientX + 'px';
@@ -540,6 +549,21 @@
                 trail.innerText = Math.random() > 0.5 ? ('0x' + Math.floor(Math.random()*255).toString(16).toUpperCase()) : (Math.floor(Math.random()*2));
                 document.body.appendChild(trail);
                 setTimeout(() => trail.remove(), 1000);
+            }
+            
+            // --- NEW: VELOCITY GLITCH (RGB SPLIT) ---
+            const speed = Math.sqrt(Math.pow(e.clientX - lastX, 2) + Math.pow(e.clientY - lastY, 2));
+            lastX = e.clientX;
+            lastY = e.clientY;
+
+            if (speed > 40) {
+                // Simple RGB Split effect on body using text-shadow
+                // We limit this to text-shadow to avoid heavy layout thrashing
+                const rOffset = Math.min(speed * 0.05, 5); // Cap at 5px
+                const bOffset = Math.min(speed * -0.05, -5);
+                document.body.style.textShadow = `${rOffset}px 0 0 rgba(255,0,0,0.7), ${bOffset}px 0 0 rgba(0,255,255,0.7)`;
+            } else {
+                document.body.style.textShadow = 'none';
             }
         });
 
@@ -680,8 +704,6 @@
 
 
         // --- PROCEDURAL AUDIO ENGINE (NO EXTERNAL FILES) ---
-        // Generates Synthwave Bass & Drums entirely in code.
-        // Works 100% of the time. No CORS issues.
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let isPlaying = false;
         let sequencerInterval;
@@ -729,21 +751,11 @@
 
         function playStep() {
             const time = audioCtx.currentTime;
-            
-            // 1. KICK (On beats 0 and 2 of a 4-step bar)
             if(step % 4 === 0) playKick(time);
-            
-            // 2. SNARE (On beat 2, weak on 4)
             if(step % 8 === 4) playSnare(time);
-            
-            // 3. HI-HAT (Every step / 8th notes)
             playHiHat(time);
-            
-            // 4. BASS (Rolling 8th notes)
-            // Change note every 32 steps (4 bars)
             const noteIdx = Math.floor(step / 32) % 4;
             playBass(time, bassNotes[noteIdx]);
-            
             step++;
         }
 
@@ -763,9 +775,7 @@
         function playSnare(t) {
             const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.2, audioCtx.sampleRate);
             const output = noiseBuffer.getChannelData(0);
-            for (let i = 0; i < noiseBuffer.length; i++) {
-                output[i] = Math.random() * 2 - 1;
-            }
+            for (let i = 0; i < noiseBuffer.length; i++) { output[i] = Math.random() * 2 - 1; }
             const noise = audioCtx.createBufferSource();
             noise.buffer = noiseBuffer;
             const gain = audioCtx.createGain();
@@ -783,9 +793,7 @@
         function playHiHat(t) {
             const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.05, audioCtx.sampleRate);
             const output = noiseBuffer.getChannelData(0);
-            for (let i = 0; i < noiseBuffer.length; i++) {
-                output[i] = Math.random() * 2 - 1;
-            }
+            for (let i = 0; i < noiseBuffer.length; i++) { output[i] = Math.random() * 2 - 1; }
             const noise = audioCtx.createBufferSource();
             noise.buffer = noiseBuffer;
             const gain = audioCtx.createGain();
@@ -806,13 +814,11 @@
             osc.frequency.setValueAtTime(freq, t);
             const filter = audioCtx.createBiquadFilter();
             filter.type = "lowpass";
-            filter.frequency.setValueAtTime(300, t); // Open filter slightly
-            filter.frequency.linearRampToValueAtTime(100, t + 0.2); // Pluck effect
-            
+            filter.frequency.setValueAtTime(300, t);
+            filter.frequency.linearRampToValueAtTime(100, t + 0.2);
             const gain = audioCtx.createGain();
             gain.gain.setValueAtTime(0.3, t);
-            gain.gain.linearRampToValueAtTime(0, t + 0.3); // Short decay
-            
+            gain.gain.linearRampToValueAtTime(0, t + 0.3);
             osc.connect(filter);
             filter.connect(gain);
             gain.connect(analyser);
@@ -839,25 +845,25 @@
             const barWidth = (canvas.width / bufferLength) * 2.5;
             let barHeight;
             let x = 0;
-            
-            // Calculate average volume for cursor pulse
             let sum = 0;
             
             for(let i = 0; i < bufferLength; i++) {
                 barHeight = dataArray[i] / 2;
                 sum += dataArray[i];
-                
-                ctx.fillStyle = `rgb(255, 0, 200)`; // Solid neon pink
+                ctx.fillStyle = `rgb(255, 0, 200)`; 
                 ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
                 x += barWidth + 1;
             }
             
-            // CURSOR REACTIVE PULSE
+            // REFINED CURSOR REACTIVE PULSE (SUBTLE GLOW)
+            // We calculate average volume to drive opacity/shadow instead of size
             const avg = sum / bufferLength;
-            if(cursor.classList.contains('active')) {
-                const scale = 1 + (avg / 100); 
-                cursor.style.transform = `translate(-50%, -50%) scale(${scale})`;
-            }
+            const pulseIntensity = Math.min(avg / 100, 1); // 0.0 to 1.0
+            
+            // Apply Pulse Global (Removed 'active' check)
+            cursor.style.boxShadow = `0 0 ${10 + (pulseIntensity * 20)}px rgba(255, 0, 200, ${0.3 + (pulseIntensity * 0.5)})`;
+            // Optional: tiny scale bump
+            cursor.style.transform = `translate(-50%, -50%) scale(${1 + (pulseIntensity * 0.1)})`;
         }
 
 
@@ -869,7 +875,6 @@
             gain.connect(audioCtx.destination);
 
             if (type === 'hover') {
-                // Blip - Triangle wave, very fast
                 osc.type = 'triangle';
                 osc.frequency.setValueAtTime(800, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.05);
@@ -877,7 +882,6 @@
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
                 osc.start(); osc.stop(audioCtx.currentTime + 0.05);
             } else { 
-                // Click - Sine wave, distinct thud
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(150, audioCtx.currentTime);
                 osc.frequency.exponentialRampToValueAtTime(50, audioCtx.currentTime + 0.1);
