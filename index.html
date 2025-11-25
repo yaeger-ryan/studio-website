@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YAEGER STUDIO // V2</title>
+    <title>YAEGER STUDIO // V2.5</title>
     <style>
         /* --- 1. RESET & TYPOGRAPHY --- */
         :root {
@@ -233,7 +233,11 @@
         }
         
         .p-title { font-family: var(--font-disp); font-weight: 800; font-size: var(--fs-list-title); margin-bottom: 8px; color: white; transition: color 0.2s; }
-        .project-wrapper:hover .p-title { background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .project-wrapper:hover .p-title { 
+            background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            /* SUBTLE RGB SPLIT EFFECT */
+            text-shadow: 2px 0 0 rgba(255,0,0,0.3), -2px 0 0 rgba(0,255,255,0.3);
+        }
         .p-cat { font-size: var(--fs-list-cat); text-transform: uppercase; color: var(--text-mute); letter-spacing: 1px; }
 
         .mobile-details { display: none; padding: 0 var(--pad-m) 40px var(--pad-m); border-top: 1px solid #222; background: #0a0a0a; overflow: hidden; }
@@ -726,63 +730,57 @@
         }
 
 
-        // --- ADVANCED SYNTH DECK V2 (STEREO + DISTORTION) ---
+        // --- ADVANCED SYNTH DECK V3 (COMPRESSOR + CLEAN DELAY) ---
+        // FIX: "Low Hum" -> Added DynamicsCompressor + Gate
+        // FIX: "Weird Reverb" -> Added Highpass Filter to Delay Loop
+        
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let isPlaying = false;
         let sequencerInterval;
         let analyser = audioCtx.createAnalyser();
-        let masterGain = audioCtx.createGain();
-        let masterFilter = audioCtx.createBiquadFilter(); 
-        let distortion = audioCtx.createWaveShaper();
         
-        // Stereo Echo
-        let delayL = audioCtx.createDelay();
-        let delayR = audioCtx.createDelay();
-        let delayFb = audioCtx.createGain();
-        let stereoPanner = audioCtx.createStereoPanner();
+        // MASTER CHAIN
+        let masterGain = audioCtx.createGain();
+        let compressor = audioCtx.createDynamicsCompressor();
+        let masterFilter = audioCtx.createBiquadFilter(); 
+        
+        // DELAY (DUB) CHAIN
+        let delayNode = audioCtx.createDelay();
+        let delayFeedback = audioCtx.createGain();
+        let delayFilter = audioCtx.createBiquadFilter(); 
 
-        // DSP Chain Setup
+        // ROUTING
+        masterGain.connect(masterFilter);
+        masterFilter.connect(compressor); 
+        compressor.connect(analyser);
+        analyser.connect(audioCtx.destination);
+
+        // DELAY ROUTING
+        masterFilter.connect(delayNode);
+        delayNode.connect(delayFilter);
+        delayFilter.connect(delayFeedback);
+        delayFeedback.connect(delayNode); // Loop
+        delayFeedback.connect(compressor); // Return to Master
+
+        // SETTINGS
+        masterGain.gain.value = 0.5;
+        
+        compressor.threshold.value = -24;
+        compressor.ratio.value = 12;
+        compressor.attack.value = 0.003;
+        compressor.release.value = 0.25;
+
         masterFilter.type = "lowpass";
         masterFilter.frequency.value = 20000;
         masterFilter.Q.value = 1;
 
-        // Soft Distortion Curve
-        function makeDistortionCurve(amount) {
-            let k = typeof amount === 'number' ? amount : 50,
-            n_samples = 44100,
-            curve = new Float32Array(n_samples),
-            deg = Math.PI / 180,
-            i = 0,
-            x;
-            for ( ; i < n_samples; ++i ) {
-                x = i * 2 / n_samples - 1;
-                curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
-            }
-            return curve;
-        }
-        distortion.curve = makeDistortionCurve(20);
-        distortion.oversample = '4x';
+        // Delay: Dotted 8th Note at 115BPM
+        delayNode.delayTime.value = 0.391; 
+        delayFeedback.gain.value = 0.4; 
+        delayFilter.frequency.value = 1000; // Cuts mud (Highpass)
+        delayFilter.type = 'highpass';
 
-        // Delay Setup
-        delayL.delayTime.value = 0.25; // 1/8 note approx
-        delayR.delayTime.value = 0.375; // Dotted 8th approx
-        delayFb.gain.value = 0.3;
-
-        // Routing: Source -> Dist -> Filter -> Master -> Analyser -> Dest
-        // Also Send Master -> Delay -> Master
-        masterGain.connect(distortion);
-        distortion.connect(masterFilter);
-        masterFilter.connect(analyser);
-        analyser.connect(audioCtx.destination);
-        
-        // Delay Loop
-        masterFilter.connect(delayL);
-        delayL.connect(delayR);
-        delayR.connect(delayFb);
-        delayFb.connect(delayL);
-        delayR.connect(analyser); // Return to out
-
-        analyser.fftSize = 1024; // Higher res for waveform
+        analyser.fftSize = 1024; 
         
         const tempo = 115; 
         const noteDuration = 60 / tempo / 4; 
@@ -808,8 +806,11 @@
         function triggerDrop() {
             if(!isPlaying) return;
             dropActive = true;
+            // Frequency sweep down
+            masterFilter.frequency.cancelScheduledValues(audioCtx.currentTime);
             masterFilter.frequency.setValueAtTime(masterFilter.frequency.value, audioCtx.currentTime);
             masterFilter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.2); 
+            
             setTimeout(() => {
                 dropActive = false;
                 masterFilter.frequency.exponentialRampToValueAtTime(20000, audioCtx.currentTime + 0.1); 
@@ -825,11 +826,18 @@
             if(isPlaying) {
                 clearInterval(sequencerInterval);
                 isPlaying = false;
+                // FADE OUT (Prevents Click)
+                masterGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+                
                 btn.innerText = "[ INITIALIZE SYNTH DECK ]";
                 btn.style.color = "#FF00C8"; btn.style.background = "transparent";
                 viz.classList.remove('active'); cursor.classList.remove('beat-pulse');
             } else {
                 isPlaying = true;
+                // FADE IN
+                masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+                masterGain.gain.setTargetAtTime(0.5, audioCtx.currentTime, 0.1);
+
                 btn.innerText = "|| SYSTEM AUDIO ACTIVE ||";
                 btn.style.background = "#FF00C8"; btn.style.color = "black";
                 viz.classList.add('active'); cursor.classList.add('beat-pulse');
@@ -853,6 +861,7 @@
             const t = audioCtx.currentTime;
             const patternIndex = step % 16;
             
+            // NOTE: Connecting to masterGain which goes to Compressor
             if(stems[1] && kickPattern[patternIndex]) { playKick(t); flashIndicator(1); }
             if(stems[2] && snarePattern[patternIndex]) { playSnare(t); flashIndicator(2); }
             if(stems[3] && hatPattern[patternIndex]) { playHiHat(t); flashIndicator(3); }
@@ -865,7 +874,7 @@
             step++;
         }
 
-        // --- SYNTHESIS FUNCTIONS ---
+        // --- SYNTHESIS FUNCTIONS (ROUTED CORRECTLY) ---
         function playKick(t) {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -874,7 +883,7 @@
             gain.gain.setValueAtTime(1, t);
             gain.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
             osc.connect(gain);
-            gain.connect(masterGain); 
+            gain.connect(masterGain); // Connect to main bus
             osc.start(t); osc.stop(t + 0.5);
             
             // GRID PULSE
@@ -896,7 +905,6 @@
             noiseGain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
             noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(masterGain);
             
-            // Body of snare
             const osc = audioCtx.createOscillator();
             const oscGain = audioCtx.createGain();
             osc.frequency.setValueAtTime(250, t); osc.frequency.exponentialRampToValueAtTime(100, t + 0.1);
@@ -936,7 +944,7 @@
             osc.start(t); osc.stop(t + 0.3);
         }
 
-        // --- XY FILTER PAD INTERACTION ---
+        // --- XY FILTER PAD INTERACTION (UPGRADED) ---
         const vizCanvas = document.getElementById('viz-canvas');
         vizCanvas.addEventListener('mousemove', (e) => {
             if(!isPlaying) return;
@@ -948,13 +956,16 @@
             const freq = Math.exp(minLog + (x * (maxLog - minLog)));
             masterFilter.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.1);
             
-            const q = (1 - y) * 15;
+            // COOL FACTOR: Y-Axis controls Resonance & Echo Feedback
+            const q = (1 - y) * 20; // Scream
             masterFilter.Q.setTargetAtTime(q, audioCtx.currentTime, 0.1);
+            delayFeedback.gain.setTargetAtTime((1 - y) * 0.8, audioCtx.currentTime, 0.1); // Dub Delay
         });
         
         vizCanvas.addEventListener('mouseleave', () => {
             masterFilter.frequency.setTargetAtTime(20000, audioCtx.currentTime, 0.5);
             masterFilter.Q.setTargetAtTime(1, audioCtx.currentTime, 0.5);
+            delayFeedback.gain.setTargetAtTime(0.4, audioCtx.currentTime, 0.5);
         });
 
         // --- UPGRADED VISUALIZER (OSCILLOSCOPE) ---
