@@ -542,13 +542,17 @@
         <div class="modal-card">
             <div class="modal-close" onclick="toggleModal()">[ CLOSE ESC ]</div>
             <div class="modal-h1">LET'S BUILD<br>THE FUTURE.</div>
-            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-            <form action="https://docs.google.com/forms/d/e/1FAIpQLSfmfhpO2guMRdCDY_rQBDKapyc2FdS2MkHdtDGcBmrH-3Cd9g/formResponse" method="post" target="hidden_iframe" onsubmit="submitted=true; window.location.href = '/success.html';">
+            
+            <!-- FIXED FORM LOGIC -->
+            <script>let submitted = false;</script>
+            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) {window.location.href='/success.html';}"></iframe>
+            <form action="https://docs.google.com/forms/d/e/1FAIpQLSfmfhpO2guMRdCDY_rQBDKapyc2FdS2MkHdtDGcBmrH-3Cd9g/formResponse" method="post" target="hidden_iframe" onsubmit="submitted=true;">
                 <input class="modal-input" type="text" name="entry.642603346" placeholder="NAME" required>
                 <input class="modal-input" type="email" name="entry.119825428" placeholder="EMAIL" required>
                 <textarea class="modal-input" rows="3" name="entry.1122882745" placeholder="PROJECT DETAILS..."></textarea>
                 <button class="modal-btn" type="submit">INITIALIZE PROJECT</button>
             </form>
+
         </div>
     </div>
 
