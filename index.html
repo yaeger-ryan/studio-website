@@ -234,16 +234,6 @@
         .nav-label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.25em; color: #fff; border-bottom: 1px dashed var(--line); padding-bottom: 12px; margin-bottom: 20px; display: block; }
         .nav-text { font-family: var(--font-body); font-size: var(--fs-body); color: #94A3B8; line-height: 2; font-weight: 300; }
 
-        .btn-start { 
-            margin-top: auto; width: 100%; padding: 30px; border: 1px dashed var(--line); background: transparent; 
-            color: white; font-family: var(--font-mono); font-size: var(--fs-button); font-weight: 400; 
-            text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.4s ease-out; flex-shrink: 0; 
-        }
-        .btn-start:hover { 
-            background: var(--accent-solid); color: white; border: 1px solid var(--accent-solid); 
-            box-shadow: 0 0 30px rgba(176, 38, 255, 0.35); 
-        }
-        
         .nav-footer { margin-top: auto; padding-top: 40px; border-top: 1px solid var(--line); }
         .nav-copyright { font-family: var(--font-mono); font-size: 10px; color: #555; letter-spacing: 1px; margin-top: 40px; }
 
@@ -292,28 +282,6 @@
         
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         @keyframes scroll-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-
-
-        /* --- 9. MODAL (MOBILE FIXED) --- */
-        .modal-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; z-index: 1000; pointer-events: none; }
-        .modal-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, rgba(20, 20, 20, 0.9) 0%, #000 100%); opacity: 0; transition: opacity 0.5s ease; }
-        .modal-wrapper.active .modal-bg { opacity: 1; }
-        .modal-wrapper.active { pointer-events: auto; }
-        
-        /* Updated Modal Card using fluid clamps */
-        .modal-card { width: 95%; max-width: 700px; background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: clamp(30px, 5vw, 60px); position: relative; opacity: 0; transform: scale(0.8) translateY(50px); transition: transform 0.5s var(--ease-spatial), opacity 0.5s ease; max-height: 95vh; overflow-y: auto; border-radius: 8px; }
-        .modal-wrapper.active .modal-card { opacity: 1; transform: scale(1) translateY(0); box-shadow: 0 0 100px rgba(176, 38, 255, 0.15); border: 1px solid var(--accent-solid); }
-        
-        .modal-close { position: absolute; top: clamp(15px, 4vw, 30px); right: clamp(15px, 4vw, 30px); color: #666; font-family: var(--font-mono); font-size: clamp(10px, 2vw, 12px); cursor: pointer; letter-spacing: 2px; transition: 0.3s; z-index: 10; }
-        .modal-close:hover { color: white; }
-        
-        .modal-h1 { font-family: var(--font-disp); font-size: clamp(32px, 8vw, 60px); font-weight: 800; color: white; line-height: 0.9; margin-bottom: clamp(20px, 5vw, 40px); text-transform: uppercase; margin-top: clamp(15px, 3vw, 0px); }
-        
-        .modal-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--line); padding: clamp(12px, 3vw, 20px) 0; margin-bottom: clamp(12px, 3vw, 20px); font-family: var(--font-mono); font-size: clamp(14px, 4vw, 18px); color: white; transition: 0.3s; font-weight: 300; border-radius: 0; -webkit-appearance: none; }
-        .modal-input:focus { border-color: var(--accent-solid); outline: none; }
-        
-        .modal-btn { width: 100%; padding: clamp(15px, 4vw, 25px); background: var(--accent-grad); color: white; font-weight: bold; font-family: var(--font-mono); font-size: clamp(13px, 3vw, 16px); border: none; cursor: pointer; margin-top: clamp(10px, 3vw, 20px); text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; border-radius: 0; -webkit-appearance: none; }
-        .modal-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px var(--accent-solid); }
 
         /* Copy Email Feedback */
         .copy-feedback { font-size: 11px; color: var(--accent-solid); margin-left: 10px; opacity: 0; transition: opacity 0.3s; font-weight: bold; font-family: var(--font-mono); }
@@ -416,8 +384,6 @@
                     <a href="https://www.linkedin.com/in/ryanyaeger/" target="_blank" class="nav-link">LinkedIn</a>
                 </div>
                 
-                <button class="btn-start fade-up delay-4" onclick="toggleModal()">Start a Project</button>
-                
                 <div class="nav-footer fade-up delay-4">
                     <div class="legal-list">
                         <a class="legal-link" onclick="loadLegal('privacy')">Privacy Policy</a>
@@ -508,23 +474,6 @@
                     <span>ARMOR ALL</span><span class="dot">•</span>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Contact Modal -->
-    <div class="modal-wrapper" id="modal">
-        <div class="modal-bg" onclick="toggleModal()"></div>
-        <div class="modal-card">
-            <div class="modal-close" onclick="toggleModal()">[ CLOSE ESC ]</div>
-            <div class="modal-h1">LET'S BUILD<br>THE FUTURE.</div>
-            <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-            <form action="https://docs.google.com/forms/d/e/1FAIpQLSfmfhpO2guMRdCDY_rQBDKapyc2FdS2MkHdtDGcBmrH-3Cd9g/formResponse" method="post" target="hidden_iframe" onsubmit="submitted=true; window.location.href = '/success.html';">
-                <input class="modal-input" type="text" name="entry.642603346" placeholder="NAME" required>
-                <input class="modal-input" type="email" name="entry.119825428" placeholder="EMAIL" required>
-                <textarea class="modal-input" rows="3" name="entry.1122882745" placeholder="PROJECT DETAILS..."></textarea>
-                <textarea class="hidden" name="entry.2045981755" style="display:none;">Yaeger Studio Portfolio Inquiry</textarea>
-                <button class="modal-btn" type="submit">INITIALIZE PROJECT</button>
-            </form>
         </div>
     </div>
 
@@ -1587,7 +1536,7 @@
                     </div>
                 </div>
             `;
-            if (isMobile) toggleModal();
+            if (isMobile) alert("Please view services on a desktop screen.");
             else { viewerEl.innerHTML = serviceHTML; viewerEl.scrollTop = 0; }
         }
 
@@ -1630,20 +1579,7 @@
                 viewerEl.scrollTop = 0;
             }
         }
-
-        window.toggleModal = () => {
-            const app = document.getElementById('appView');
-            const modal = document.getElementById('modal');
-            modal.classList.toggle('active');
-            app.classList.toggle('zoomed-out');
-        }
         
-        // Modal Esc Listener
-        document.addEventListener('keydown', (e) => {
-            const modal = document.getElementById('modal');
-            if(e.key === 'Escape' && modal.classList.contains('active')) toggleModal();
-        });
-
         // Initialize First Project (Delayed to sync with the shutter animation opening)
         if(window.innerWidth > 1024) {
             setTimeout(() => handleProjectClick(0), 1200);
