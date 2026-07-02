@@ -294,19 +294,25 @@
         @keyframes scroll-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
 
 
-        /* --- 9. MODAL --- */
+        /* --- 9. MODAL (MOBILE FIXED) --- */
         .modal-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; z-index: 1000; pointer-events: none; }
         .modal-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, rgba(20, 20, 20, 0.9) 0%, #000 100%); opacity: 0; transition: opacity 0.5s ease; }
         .modal-wrapper.active .modal-bg { opacity: 1; }
         .modal-wrapper.active { pointer-events: auto; }
-        .modal-card { width: 90%; max-width: 700px; background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 60px; position: relative; opacity: 0; transform: scale(0.8) translateY(50px); transition: transform 0.5s var(--ease-spatial), opacity 0.5s ease; }
+        
+        /* Updated Modal Card using fluid clamps */
+        .modal-card { width: 95%; max-width: 700px; background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: clamp(30px, 5vw, 60px); position: relative; opacity: 0; transform: scale(0.8) translateY(50px); transition: transform 0.5s var(--ease-spatial), opacity 0.5s ease; max-height: 95vh; overflow-y: auto; border-radius: 8px; }
         .modal-wrapper.active .modal-card { opacity: 1; transform: scale(1) translateY(0); box-shadow: 0 0 100px rgba(176, 38, 255, 0.15); border: 1px solid var(--accent-solid); }
-        .modal-close { position: absolute; top: 30px; right: 30px; color: #666; font-family: var(--font-mono); font-size: 12px; cursor: pointer; letter-spacing: 2px; transition: 0.3s; }
+        
+        .modal-close { position: absolute; top: clamp(15px, 4vw, 30px); right: clamp(15px, 4vw, 30px); color: #666; font-family: var(--font-mono); font-size: clamp(10px, 2vw, 12px); cursor: pointer; letter-spacing: 2px; transition: 0.3s; z-index: 10; }
         .modal-close:hover { color: white; }
-        .modal-h1 { font-family: var(--font-disp); font-size: 60px; font-weight: 800; color: white; line-height: 0.9; margin-bottom: 40px; text-transform: uppercase; }
-        .modal-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--line); padding: 20px 0; margin-bottom: 20px; font-family: var(--font-mono); font-size: 18px; color: white; transition: 0.3s; font-weight: 300; }
+        
+        .modal-h1 { font-family: var(--font-disp); font-size: clamp(32px, 8vw, 60px); font-weight: 800; color: white; line-height: 0.9; margin-bottom: clamp(20px, 5vw, 40px); text-transform: uppercase; margin-top: clamp(15px, 3vw, 0px); }
+        
+        .modal-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--line); padding: clamp(12px, 3vw, 20px) 0; margin-bottom: clamp(12px, 3vw, 20px); font-family: var(--font-mono); font-size: clamp(14px, 4vw, 18px); color: white; transition: 0.3s; font-weight: 300; border-radius: 0; -webkit-appearance: none; }
         .modal-input:focus { border-color: var(--accent-solid); outline: none; }
-        .modal-btn { width: 100%; padding: 25px; background: var(--accent-grad); color: white; font-weight: bold; font-family: var(--font-mono); border: none; cursor: pointer; margin-top: 20px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        
+        .modal-btn { width: 100%; padding: clamp(15px, 4vw, 25px); background: var(--accent-grad); color: white; font-weight: bold; font-family: var(--font-mono); font-size: clamp(13px, 3vw, 16px); border: none; cursor: pointer; margin-top: clamp(10px, 3vw, 20px); text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; border-radius: 0; -webkit-appearance: none; }
         .modal-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px var(--accent-solid); }
 
         /* Copy Email Feedback */
@@ -516,7 +522,7 @@
                 <input class="modal-input" type="text" name="entry.642603346" placeholder="NAME" required>
                 <input class="modal-input" type="email" name="entry.119825428" placeholder="EMAIL" required>
                 <textarea class="modal-input" rows="3" name="entry.1122882745" placeholder="PROJECT DETAILS..."></textarea>
-                <textarea class="hidden" name="entry.2045981755">Yaeger Studio Portfolio Inquiry</textarea>
+                <textarea class="hidden" name="entry.2045981755" style="display:none;">Yaeger Studio Portfolio Inquiry</textarea>
                 <button class="modal-btn" type="submit">INITIALIZE PROJECT</button>
             </form>
         </div>
@@ -583,8 +589,6 @@
             textArea.remove();
         };
 
-        // --- DYNAMIC SWITCH CLIC & SWIPE LOGICS INCLUDED BELOW ---
-
         function showCopiedFeedback() {
             const feedbackEl = document.getElementById('copyText');
             feedbackEl.classList.add('show');
@@ -604,6 +608,10 @@
             const header = document.createElement('div');
             header.className = 'project-header';
             header.innerHTML = `<span class="p-title">${p.title}</span><span class="p-cat">${p.cat}</span>`;
+            
+            // Fix 1: Attach click event ONLY to the header instead of the whole row!
+            // This prevents clicking on interior buttons (like mobile variation buttons) from collapsing the accordion.
+            header.onclick = () => handleProjectClick(index);
 
             const mobileContent = document.createElement('div');
             mobileContent.className = 'mobile-details';
@@ -611,7 +619,6 @@
             
             row.appendChild(header);
             row.appendChild(mobileContent);
-            row.onclick = () => handleProjectClick(index);
             listEl.appendChild(row);
         });
 
@@ -641,40 +648,13 @@
 
         // --- SINGLE UNIFIED HTML TEMPLATE TO SAVE SPACE ---
         function generateCaseStudyHTML(p, index) {
-            // Serve custom UI strictly for the first project (One In a Mill Spices)
-            if (index === 0) {
-                return generateOIAMTemplate(p);
-            }
-
-            // Serve custom UI for the 2nd project (Giusti Organic Balsamic)
-            if (index === 1) {
-                return generateGiustiTemplate(p);
-            }
-
-            // Serve custom UI for the 3rd project (Ouster Cold Plunge)
-            if (index === 2) {
-                return generateOusterTemplate(p);
-            }
-
-            // Serve custom UI for the 4th project (Boat Juice Luxury Kit)
-            if (index === 3) {
-                return generateBoatJuiceTemplate(p);
-            }
-
-            // Serve custom UI for the 5th project (Shout Bilingual Campaign)
-            if (index === 4) {
-                return generateShoutTemplate(p);
-            }
-
-            // Serve custom UI for the 6th project (Stellar Risk AI)
-            if (index === 5) {
-                return generateStellarTemplate(p);
-            }
-
-            // Serve custom UI for the 7th project (Selected Marks)
-            if (index === 6) {
-                return generateSelectedMarksTemplate(p);
-            }
+            if (index === 0) return generateOIAMTemplate(p);
+            if (index === 1) return generateGiustiTemplate(p);
+            if (index === 2) return generateOusterTemplate(p);
+            if (index === 3) return generateBoatJuiceTemplate(p);
+            if (index === 4) return generateShoutTemplate(p);
+            if (index === 5) return generateStellarTemplate(p);
+            if (index === 6) return generateSelectedMarksTemplate(p);
 
             const projectNum = String(index + 1).padStart(2, '0');
             return `
@@ -713,17 +693,18 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- 1. TOP METADATA & SWITCHER -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 01/07 // CLIENT: ONE IN A MILL // DELIVERABLES: PDP GALLERY</div>
-                    <div class="flex gap-3 font-mono text-[11px] tracking-widest">
-                        <button onclick="switchOIAM('zaatar')" id="btn-zaatar" class="oiam-btn px-4 py-2 border border-[#b026ff] text-white bg-[#b026ff]/20 opacity-100 transition-all duration-300">ZA'ATAR</button>
-                        <button onclick="switchOIAM('sumac')" id="btn-sumac" class="oiam-btn px-4 py-2 border border-zinc-700 text-zinc-300 bg-zinc-800 opacity-70 hover:opacity-100 transition-all duration-300">SUMAC</button>
-                        <button onclick="switchOIAM('shawarma')" id="btn-shawarma" class="oiam-btn px-4 py-2 border border-zinc-700 text-zinc-300 bg-zinc-800 opacity-70 hover:opacity-100 transition-all duration-300">SHAWARMA</button>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white w-full md:w-auto">PROJECT NO. 01/07 // CLIENT: ONE IN A MILL // DELIVERABLES: PDP GALLERY</div>
+                    
+                    <!-- Fix 2: Applied flex-wrap and responsive sizing for mobile interaction limits -->
+                    <div class="flex flex-wrap gap-2 md:gap-3 font-mono text-[10px] md:text-[11px] tracking-widest w-full md:w-auto mt-2 md:mt-0">
+                        <button onclick="switchOIAM('zaatar')" id="btn-zaatar" class="oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-[#b026ff] text-white bg-[#b026ff]/20 opacity-100 transition-all duration-300">ZA'ATAR</button>
+                        <button onclick="switchOIAM('sumac')" id="btn-sumac" class="oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-zinc-700 text-zinc-300 bg-zinc-800 opacity-70 hover:opacity-100 transition-all duration-300">SUMAC</button>
+                        <button onclick="switchOIAM('shawarma')" id="btn-shawarma" class="oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-zinc-700 text-zinc-300 bg-zinc-800 opacity-70 hover:opacity-100 transition-all duration-300">SHAWARMA</button>
                     </div>
                 </div>
 
                 <!-- 2. CORE HERO COMPONENT (35/65 Split) -->
                 <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
-                    <!-- Left Cell: 35% -->
                     <div class="w-full lg:w-[35%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-white aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
                             <img id="oiam-img-01" src="./images/oiam-zaatar-01.jpg" alt="Compliance Asset" class="w-full h-full object-cover">
@@ -731,7 +712,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ COMPLIANCE // INDEX_01 ]</div>
                     </div>
                     
-                    <!-- Right Cell: 65% -->
                     <div class="w-full lg:w-[65%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-zinc-900 lg:max-h-[500px] h-full flex items-center justify-center p-6 lg:p-12 overflow-hidden">
                             <img id="oiam-img-06" src="./images/oiam-zaatar-06.jpg" alt="Hero Asset" class="w-full h-full object-contain max-h-[500px]">
@@ -755,18 +735,11 @@
                 <!-- 4. MOBILE VIEWPORT GRID -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
                     <div class="flex flex-col gap-3">
-                        <!-- Mobile Shell -->
                         <div class="overflow-hidden relative h-[500px] w-[250px] bg-black rounded-[2rem] border-[4px] border-zinc-800 mx-auto shadow-2xl flex flex-col">
-                            <!-- Notch -->
                             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#050505] rounded-b-2xl z-20 border border-zinc-800 border-t-0"></div>
-                            
-                            <!-- Safe Area Status Bar -->
                             <div class="w-full h-[40px] bg-[#050505] relative z-10 shrink-0"></div>
-                            
-                            <!-- Screen (Image Top) -->
                             <img id="oiam-img-02" src="./images/oiam-zaatar-02.jpg" alt="Mobile Viewport A" class="w-full aspect-square object-cover relative z-10">
                             
-                            <!-- Skeleton UI (Bottom) -->
                             <div class="p-5 flex-1 flex flex-col relative z-10 bg-black pt-6">
                                 <div class="w-3/4 h-3 bg-zinc-800 rounded mb-2"></div>
                                 <div class="w-1/2 h-3 bg-zinc-800 rounded mb-6"></div>
@@ -781,18 +754,11 @@
                     </div>
                     
                     <div class="flex flex-col gap-3">
-                        <!-- Mobile Shell -->
                         <div class="overflow-hidden relative h-[500px] w-[250px] bg-black rounded-[2rem] border-[4px] border-zinc-800 mx-auto shadow-2xl flex flex-col">
-                            <!-- Notch -->
                             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#050505] rounded-b-2xl z-20 border border-zinc-800 border-t-0"></div>
-                            
-                            <!-- Safe Area Status Bar -->
                             <div class="w-full h-[40px] bg-[#050505] relative z-10 shrink-0"></div>
+                            <img id="oiam-img-03" src="./images/oiam-zaatar-03.jpg" alt="Mobile Viewport B" class="w-full aspect-square object-cover relative z-10">
                             
-                            <!-- Screen (Image Top) -->
-                            <img id="img-03" src="./images/oiam-zaatar-03.jpg" alt="Mobile Viewport B" class="w-full aspect-square object-cover relative z-10">
-                            
-                            <!-- Skeleton UI (Bottom) -->
                             <div class="p-5 flex-1 flex flex-col relative z-10 bg-black pt-6">
                                 <div class="w-3/4 h-3 bg-zinc-800 rounded mb-2"></div>
                                 <div class="w-1/2 h-3 bg-zinc-800 rounded mb-6"></div>
@@ -831,7 +797,7 @@
                     </div>
                     <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
                         <div class="border border-white/10 aspect-square bg-[#0a0a0a] p-3">
-                            <img id="img-07" src="./images/oiam-zaatar-07.jpg" class="w-full h-full object-cover">
+                            <img id="oiam-img-07" src="./images/oiam-zaatar-07.jpg" class="w-full h-full object-cover">
                         </div>
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ ASSET_07 ]</div>
                     </div>
@@ -866,7 +832,6 @@
 
                 <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
                 <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
-                    <!-- Left Cell: 35% -->
                     <div class="w-full lg:w-[35%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-white aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
                             <img src="./images/giusti-organic-01.jpg" alt="Compliance Asset" class="w-full h-full object-cover">
@@ -874,7 +839,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ COMPLIANCE // INDEX_01 ]</div>
                     </div>
                     
-                    <!-- Right Cell: 65% -->
                     <div class="w-full lg:w-[65%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-zinc-900 lg:max-h-[500px] h-full flex items-center justify-center p-6 lg:p-12 overflow-hidden">
                             <img src="./images/giusti-organic-02.jpg" alt="Hero Asset" class="w-full h-full object-contain max-h-[500px]">
@@ -970,7 +934,6 @@
 
                 <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
                 <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
-                    <!-- Left Cell: 35% -->
                     <div class="w-full lg:w-[35%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-white aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
                             <img src="./images/ouster-cold-plunge-01.jpg" alt="Compliance Asset" class="w-full h-full object-cover">
@@ -978,7 +941,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ COMPLIANCE // INDEX_01 ]</div>
                     </div>
                     
-                    <!-- Right Cell: 65% -->
                     <div class="w-full lg:w-[65%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-[#111111] lg:max-h-[500px] h-full flex items-center justify-center p-6 lg:p-12 overflow-hidden">
                             <img src="./images/ouster-cold-plunge-02.jpg" alt="Hero Asset" class="w-full h-full object-contain max-h-[500px]">
@@ -1014,7 +976,6 @@
 
                 <!-- 3. DUAL-VIEWPORT RESPONSIVE A+ MODULE -->
                 <div class="flex flex-col lg:flex-row gap-10 mb-20 items-center lg:items-stretch">
-                    <!-- Left Column (Desktop Viewport - 60%) -->
                     <div class="w-full lg:w-[60%] flex flex-col gap-3">
                         <div class="w-full h-[500px] border border-zinc-800/60 bg-black rounded-lg overflow-hidden relative shadow-2xl">
                             <img src="./images/ouster-cold-plunge-a+-desktop.jpg" alt="Interactive A+ Desktop" class="w-full h-auto absolute top-0 left-0 animate-ouster-desktop-scroll">
@@ -1022,13 +983,9 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mt-2">[ DESKTOP SHELF MODULE // INTERACTIVE A+ ]</div>
                     </div>
 
-                    <!-- Right Column (Mobile Viewport - 40%) -->
                     <div class="w-full lg:w-[40%] flex flex-col gap-3">
-                        <!-- Mobile Shell -->
                         <div class="w-[260px] h-[500px] mx-auto bg-[#0A0A0A] border-[3px] border-zinc-700 rounded-[2rem] overflow-hidden relative shadow-[0_0_30px_rgba(0,0,0,0.8)] flex flex-col">
-                            <!-- Safe Area Inset -->
                             <div class="h-[35px] w-full bg-[#0A0A0A] shrink-0 relative z-20"></div>
-                            <!-- Screen (Animated Scroll) -->
                             <div class="w-full flex-1 relative overflow-hidden bg-black">
                                 <img src="./images/ouster-cold-plunge-a+-mobile.jpg" alt="Responsive A+ Mobile" class="absolute w-full h-auto left-0 top-0 animate-ouster-mobile-scroll" style="animation-delay: -3s;">
                             </div>
@@ -1070,7 +1027,6 @@
 
                 <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
                 <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
-                    <!-- Left Cell: 35% -->
                     <div class="w-full lg:w-[35%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-white aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
                             <img src="./images/boat-juice-luxury-01.jpg" alt="Compliance Asset" class="w-full h-full object-cover">
@@ -1078,7 +1034,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ COMPLIANCE // INDEX_01 ]</div>
                     </div>
                     
-                    <!-- Right Cell: 65% -->
                     <div class="w-full lg:w-[65%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-[#111111] lg:max-h-[500px] h-full flex items-center justify-center p-6 lg:p-12 overflow-hidden">
                             <img src="./images/boat-juice-luxury-04.jpg" alt="Hero Asset" class="w-full h-full object-contain max-h-[500px]">
@@ -1087,7 +1042,6 @@
                     </div>
                 </div>
 
-                <!-- 2. CORE PROJECT INTRO TEXT -->
                 <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
                 <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
                     The design challenge for the Boat Juice Luxury Kit centered on transforming a multi-product marine maintenance bundle into a premium lifestyle offering. The objective required organizing a complex assortment of structural assets into a unified digital unboxing experience, ensuring the collection looked like a curated luxury kit rather than a cluttered assortment of commercial cleaning supplies.
@@ -1103,18 +1057,11 @@
                 <!-- 4. MOBILE VIEWPORT WIREFRAMES -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
                     <div class="flex flex-col gap-3">
-                        <!-- Mobile Shell A -->
                         <div class="overflow-hidden relative h-[500px] w-[250px] bg-black rounded-[2rem] border-[4px] border-zinc-800 mx-auto shadow-2xl flex flex-col">
-                            <!-- Notch -->
                             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#050505] rounded-b-2xl z-20 border border-zinc-800 border-t-0"></div>
-                            
-                            <!-- Safe Area Status Bar -->
                             <div class="w-full h-[40px] bg-[#050505] relative z-10 shrink-0"></div>
-                            
-                            <!-- Screen (Image Top) -->
                             <img src="./images/boat-juice-luxury-02.jpg" alt="Mobile Viewport A" class="w-full aspect-square object-cover relative z-10">
                             
-                            <!-- Skeleton UI (Bottom) -->
                             <div class="p-5 flex-1 flex flex-col relative z-10 bg-black pt-6">
                                 <div class="w-3/4 h-3 bg-zinc-800 rounded mb-2"></div>
                                 <div class="w-1/2 h-3 bg-zinc-800 rounded mb-6"></div>
@@ -1129,18 +1076,11 @@
                     </div>
                     
                     <div class="flex flex-col gap-3">
-                        <!-- Mobile Shell B -->
                         <div class="overflow-hidden relative h-[500px] w-[250px] bg-black rounded-[2rem] border-[4px] border-zinc-800 mx-auto shadow-2xl flex flex-col">
-                            <!-- Notch -->
                             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#050505] rounded-b-2xl z-20 border border-zinc-800 border-t-0"></div>
-                            
-                            <!-- Safe Area Status Bar -->
                             <div class="w-full h-[40px] bg-[#050505] relative z-10 shrink-0"></div>
-                            
-                            <!-- Screen (Image Top) -->
                             <img src="./images/boat-juice-luxury-03.jpg" alt="Mobile Viewport B" class="w-full aspect-square object-cover relative z-10">
                             
-                            <!-- Skeleton UI (Bottom) -->
                             <div class="p-5 flex-1 flex flex-col relative z-10 bg-black pt-6">
                                 <div class="w-3/4 h-3 bg-zinc-800 rounded mb-2"></div>
                                 <div class="w-1/2 h-3 bg-zinc-800 rounded mb-6"></div>
@@ -1243,7 +1183,6 @@
                 <!-- 1. HERO BILINGUAL SPLIT (50/50 SYMMETRICAL GRID) -->
                 <div class="mb-16 mt-8">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; align-items: stretch;">
-                        <!-- Left Cell (English) -->
                         <div class="flex flex-col gap-3">
                             <div style="background-color: #111111; border: 1px solid rgba(113, 113, 122, 0.2); padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; min-height: 350px;">
                                 <img src="./images/SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_EN.jpg" style="max-width: 100%; max-height: 250px; width: auto; height: auto; object-fit: contain;" alt="EN Medium Rectangle" />
@@ -1251,7 +1190,6 @@
                             <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white pt-1">[ LOCALIZATION_NODE // MEDIUM_RECTANGLE_EN_300X250 ]</div>
                         </div>
                         
-                        <!-- Right Cell (French) -->
                         <div class="flex flex-col gap-3">
                             <div style="background-color: #111111; border: 1px solid rgba(113, 113, 122, 0.2); padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; min-height: 350px;">
                                 <img src="./images/SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_FR.jpg" style="max-width: 100%; max-height: 250px; width: auto; height: auto; object-fit: contain;" alt="FR Medium Rectangle" />
@@ -1261,7 +1199,6 @@
                     </div>
                 </div>
 
-                <!-- 2. CORE PROJECT INTRO TEXT -->
                 <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
                 <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
                     The project required developing a high-volume localized creative system for Shout's paid media infrastructure. The dual challenge demanded managing tight typographic space constraints across small display dimensions and coordinating dual-language messaging in English and French, all while safeguarding a high-impact, uniform visual presentation for a major global retail brand.
@@ -1370,7 +1307,6 @@
 
                 <!-- 1. THE HERO OUTCOME SPLIT (65% / 35% ASYMMETRICAL GRID) -->
                 <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
-                    <!-- Left Cell: 65% Width -->
                     <div class="w-full lg:w-[65%] flex flex-col gap-3">
                         <div class="border border-zinc-800/50 bg-[#111111] lg:max-h-[500px] h-full flex items-center justify-center p-6 lg:p-12 overflow-hidden">
                             <img src="./images/stellarrisk-finished-01.jpg" alt="Title Slide Finish" class="w-full h-full object-contain max-h-[500px]">
@@ -1378,7 +1314,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ SYSTEM EXECUTION // CORE_SLIDE_01_RENDER ]</div>
                     </div>
                     
-                    <!-- Right Cell: 35% Width -->
                     <div class="w-full lg:w-[35%] flex flex-col gap-3">
                         <div class="border border-zinc-800/50 bg-[#111111] aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
                             <img src="./images/stellarrisk-wireframe-01.jpg" alt="Title Slide Wireframe" class="w-full h-full object-contain max-h-[500px]">
@@ -1387,7 +1322,6 @@
                     </div>
                 </div>
 
-                <!-- 2. CORE PROJECT INTRO TEXT -->
                 <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
                 <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
                     The primary challenge for Stellar Risk AI required translating highly complex, technical artificial intelligence risk data into a clean, compelling presentation system. The ultimate objective focused on structuring dense data architectures into a clear financial narrative engineered to engage and secure buy-in from sophisticated venture capital investors.
@@ -1405,13 +1339,11 @@
                     <!-- ROW 2: PROBLEM STATEMENT / MARKET ANALYSIS -->
                     <div class="flex flex-col gap-3">
                         <div class="flex flex-col lg:flex-row items-stretch gap-6">
-                            <!-- Left Cell (65%) -->
                             <div class="w-full lg:w-[65%] flex flex-col gap-3">
                                 <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] h-full flex items-center justify-center p-4 overflow-hidden">
                                     <img src="./images/stellarrisk-finished-02.jpg" alt="Problem Slide Finish" class="w-full h-full object-contain">
                                 </div>
                             </div>
-                            <!-- Right Cell (35%) -->
                             <div class="w-full lg:w-[35%] flex flex-col gap-3">
                                 <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] flex items-center justify-center p-4">
                                     <img src="./images/stellarrisk-wireframe-02.jpg" alt="Problem Slide Wireframe" class="w-full h-full object-contain">
@@ -1424,13 +1356,11 @@
                     <!-- ROW 3: TECHNICAL HEATMAP / RISK DATA ENGINE -->
                     <div class="flex flex-col gap-3">
                         <div class="flex flex-col lg:flex-row items-stretch gap-6">
-                            <!-- Left Cell (65%) -->
                             <div class="w-full lg:w-[65%] flex flex-col gap-3">
                                 <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] h-full flex items-center justify-center p-4 overflow-hidden">
                                     <img src="./images/stellarrisk-finished-03.jpg" alt="Product Slide Finish" class="w-full h-full object-contain">
                                 </div>
                             </div>
-                            <!-- Right Cell (35%) -->
                             <div class="w-full lg:w-[35%] flex flex-col gap-3">
                                 <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] flex items-center justify-center p-4">
                                     <img src="./images/stellarrisk-wireframe-03.jpg" alt="Product Slide Wireframe" class="w-full h-full object-contain">
@@ -1443,13 +1373,11 @@
                     <!-- ROW 4: CLOSING FINANCIALS / THE FINANCIAL ASK -->
                     <div class="flex flex-col gap-3">
                         <div class="flex flex-col lg:flex-row items-stretch gap-6">
-                            <!-- Left Cell (65%) -->
                             <div class="w-full lg:w-[65%] flex flex-col gap-3">
                                 <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] h-full flex items-center justify-center p-4 overflow-hidden">
                                     <img src="./images/stellarrisk-finished-04.jpg" alt="Capital Ask Slide Finish" class="w-full h-full object-contain">
                                 </div>
                             </div>
-                            <!-- Right Cell (35%) -->
                             <div class="w-full lg:w-[35%] flex flex-col gap-3">
                                 <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] flex items-center justify-center p-4">
                                     <img src="./images/stellarrisk-wireframe-04.jpg" alt="Capital Ask Slide Wireframe" class="w-full h-auto object-contain">
@@ -1506,21 +1434,14 @@
 
                 <!-- 1. THE LOGOLOUNGE 14 AWARD CALLOUT (35% / 65% ASYMMETRICAL SPLIT) -->
                 <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-6 border-b border-zinc-800/60 pb-8 mb-8 items-stretch">
-                    <!-- Left Visual Cell (35% Width Equivalent) -->
                     <div class="md:col-span-4 w-full bg-[#111] border border-zinc-700/40 relative min-h-[350px]">
-                        <!-- Badge Callout top-right -->
                         <img src="./images/selected-mark-logolounge14-badge.jpg" class="absolute top-4 right-4 max-h-[60px] w-auto border-4 border-[#111] shadow-[0_0_20px_rgba(113,87,192,0.4)] z-10" alt="Official Badge">
-                        
-                        <!-- Hero Mark absolute-centered -->
                         <img src="./images/selected-mark-logolounge14-winner.png" class="max-h-[300px] w-auto max-w-[80%] mx-auto object-contain absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="Winner Mark">
-                        
-                        <!-- Metadata label centered at bottom -->
                         <div class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/85 px-1.5 py-0.5 border border-white/5 font-mono text-[9px] tracking-widest text-zinc-400 whitespace-nowrap">
                             [ ACCOLADE_VERIFICATION // LOGOLOUNGE_BOOK_14_SELECTION ]
                         </div>
                     </div>
                     
-                    <!-- Right Editorial Cell (65% Width Equivalent) -->
                     <div class="md:col-span-8 flex flex-col justify-center pl-0 md:pl-4">
                         <div class="text-xs uppercase tracking-[0.25em] text-zinc-400 font-mono mb-2 flex items-center gap-2">
                             <span>●</span> OFFICIAL SELECTION // INTERNATIONAL IDENTITY COMPENDIUM
@@ -1534,7 +1455,6 @@
                     </div>
                 </div>
 
-                <!-- 2. CORE PROJECT INTRO TEXT -->
                 <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
                 <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
                     A curated index of logotypes and identity marks developed across various commercial sectors. This collection explores geometric discipline, visual economy, and scalable vector architecture, anchored by the LogoLounge Book 14 juried winner.
@@ -1563,13 +1483,14 @@
             // Reset buttons
             const buttons = document.querySelectorAll('.oiam-btn');
             buttons.forEach(btn => {
-                btn.className = 'oiam-btn px-4 py-2 border border-zinc-700 text-zinc-300 bg-zinc-800 opacity-70 hover:opacity-100 transition-all duration-300';
+                // Keep the responsive button classes instead of resetting blindly
+                btn.className = 'oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-zinc-700 text-zinc-300 bg-zinc-800 opacity-70 hover:opacity-100 transition-all duration-300';
             });
 
             // Highlight active button
             const activeBtn = document.getElementById(`btn-${variant}`);
             if(activeBtn) {
-                activeBtn.className = 'oiam-btn px-4 py-2 border border-[#b026ff] text-white bg-[#b026ff]/20 opacity-100 transition-all duration-300';
+                activeBtn.className = 'oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-[#b026ff] text-white bg-[#b026ff]/20 opacity-100 transition-all duration-300';
             }
         };
 
