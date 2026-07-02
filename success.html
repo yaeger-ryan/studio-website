@@ -4,88 +4,235 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TRANSMISSION RECEIVED</title>
+    
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <!-- Adobe Fonts -->
+    <link rel="stylesheet" href="https://use.typekit.net/awp2eek.css">
+
+    <!-- Tailwind CSS (No Preflight) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            corePlugins: {
+                preflight: false,
+            }
+        }
+    </script>
+
     <style>
+        /* --- 1. RESET & VARIABLES --- */
         :root {
             --bg: #050505;
-            --line: #222;
+            --line: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
-            --accent-solid: #FF00C8;
-            --font-mono: 'Courier New', Courier, monospace;
+            --text-mute: #999;
+            --accent-solid: #b026ff;
+            --accent-grad: linear-gradient(135deg, #b026ff 0%, #7a1ba6 100%);
+            
+            --font-logo: 'maiola', 'Cormorant Garamond', 'Times New Roman', serif;
+            --font-disp: 'Syne', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --font-body: 'Inter', sans-serif;
+
+            --fs-button: clamp(12px, 1vw, 14px);
+            --ease-cinematic: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        ::selection { background: var(--accent-solid); color: #fff; text-shadow: none; }
+        ::-moz-selection { background: var(--accent-solid); color: #fff; text-shadow: none; }
+
+        * { box-sizing: border-box; outline: none; }
+        html, body { margin: 0; padding: 0; background: var(--bg); height: 100vh; width: 100vw; overflow: hidden; color: var(--text-main); font-family: var(--font-body); font-weight: 300; }
+
+        /* --- 2. LUXURY SHUTTER --- */
+        .monolith-shutter {
+            position: fixed; inset: 0; z-index: 9999;
+            pointer-events: none; display: flex; align-items: center; justify-content: center;
         }
         
-        * { box-sizing: border-box; }
-        body, html { margin: 0; padding: 0; background: var(--bg); height: 100%; width: 100%; overflow: hidden; color: var(--text-main); font-family: var(--font-mono); display: flex; align-items: center; justify-content: center; }
-
-        .grid-lines {
-            position: absolute; inset: 0; pointer-events: none; z-index: 0;
-            display: grid; grid-template-columns: repeat(12, 1fr);
-            opacity: 0.1;
+        .monolith-panel {
+            position: absolute; left: 0; width: 100vw; height: 50vh;
+            background: #050505; 
+            animation: shutterOpen 0.8s cubic-bezier(0.8, 0, 0.1, 1) forwards;
+            animation-delay: 0.4s;
         }
-        .line { border-right: 1px solid #fff; height: 100%; }
-        .line:last-child { border: none; }
-
-        .success-container {
-            z-index: 10; text-align: center; width: 90%; max-width: 600px;
-        }
-
-        .status-text {
-            font-size: 14px; letter-spacing: 4px; color: var(--accent-solid);
-            margin-bottom: 20px; text-transform: uppercase; display: block;
+        .monolith-panel.top { top: 0; transform-origin: top; }
+        .monolith-panel.bottom { bottom: 0; transform-origin: bottom; }
+        
+        @keyframes shutterOpen {
+            0% { transform: scaleY(1); }
+            100% { transform: scaleY(0); }
         }
 
-        .h1-large {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-size: clamp(40px, 6vw, 80px); font-weight: 900;
-            line-height: 0.9; text-transform: uppercase; margin: 0 0 40px 0;
+        /* --- 3. BACKGROUND ARCHITECTURE --- */
+        .ambient-orb {
+            position: fixed;
+            width: 70vw;
+            height: 70vw;
+            background: radial-gradient(circle, rgba(176, 38, 255, 0.05) 0%, transparent 60%);
+            top: 15%;
+            left: 15%;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: orbDrift 20s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes orbDrift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(5vw, 5vh) scale(1.1); }
         }
 
-        /* PROGRESS BAR */
+        /* --- 4. AVANT-GARDE ANIMATIONS --- */
+        
+        /* The Timeline Tracker */
+        .tracking-line {
+            position: absolute; top: 0; left: 0; width: 2px; height: 0%;
+            background: var(--accent-solid);
+            animation: drawLine 1.5s var(--ease-cinematic) forwards;
+            animation-delay: 0.8s;
+        }
+        @keyframes drawLine { to { height: 100%; } }
+
+        /* The Playhead Node */
+        .tracking-node {
+            position: absolute; left: -3.5px; top: 0; width: 9px; height: 9px;
+            background: var(--accent-solid);
+            box-shadow: 0 0 15px rgba(176,38,255,0.6);
+            opacity: 0;
+            animation: dropNode 2.5s var(--ease-cinematic) forwards;
+            animation-delay: 1.2s;
+        }
+        @keyframes dropNode {
+            0% { opacity: 0; transform: translateY(0) scale(0); }
+            15% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 1; transform: translateY(120px) scale(1); }
+        }
+
+        /* Cinematic Masks */
+        .text-mask { overflow: hidden; display: block; position: relative; }
+        .text-reveal-up {
+            display: block;
+            transform: translateY(105%);
+            animation: revealUp 1.2s var(--ease-cinematic) forwards;
+        }
+        @keyframes revealUp { to { transform: translateY(0); } }
+
+        /* Blur Fades */
+        .blur-in {
+            opacity: 0; filter: blur(25px); transform: scale(0.95);
+            animation: blurFade 1.6s var(--ease-cinematic) forwards;
+        }
+        @keyframes blurFade {
+            to { opacity: 1; filter: blur(0); transform: scale(1); }
+        }
+
+        /* Progress Bar Stream */
         .progress-wrapper {
-            width: 100%; height: 4px; background: #222;
-            margin-bottom: 40px; position: relative;
-            overflow: hidden;
+            width: 100%; max-width: 32rem; height: 2px; 
+            background: rgba(255, 255, 255, 0.05);
+            position: relative; overflow: hidden;
+            opacity: 0; animation: simpleFade 0.5s ease forwards;
         }
         .progress-bar {
             position: absolute; top: 0; left: 0; height: 100%; width: 0%;
             background: var(--accent-solid);
             box-shadow: 0 0 10px var(--accent-solid);
-            animation: load 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: loadStream 2s var(--ease-cinematic) forwards;
         }
 
-        @keyframes load { 0% { width: 0%; } 50% { width: 70%; } 100% { width: 100%; } }
-
-        .btn-return {
-            display: inline-block; padding: 20px 40px;
-            border: 1px solid #333; background: rgba(255,255,255,0.05);
-            color: white; text-decoration: none;
-            font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
-            transition: all 0.3s; cursor: pointer; opacity: 0;
-            animation: fadeIn 0.5s ease 1.5s forwards;
+        @keyframes simpleFade { to { opacity: 1; } }
+        @keyframes loadStream {
+            0% { width: 0%; }
+            40% { width: 65%; }
+            70% { width: 85%; }
+            100% { width: 100%; }
         }
-        .btn-return:hover { background: var(--accent-solid); border-color: var(--accent-solid); color: black; }
 
-        @keyframes fadeIn { to { opacity: 1; } }
+        /* --- 5. BUTTON --- */
+        .btn-return { 
+            padding: 24px 40px; border: 1px dashed var(--line); background: transparent; 
+            color: white; font-family: var(--font-mono); font-size: var(--fs-button); font-weight: 400; 
+            text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.4s var(--ease-cinematic);
+            text-decoration: none; display: inline-flex; align-items: center; gap: 12px;
+            position: relative; overflow: hidden;
+        }
+        
+        .btn-return::before {
+            content: ''; position: absolute; inset: 0; background: var(--accent-solid);
+            transform: translateX(-101%); transition: transform 0.4s var(--ease-cinematic); z-index: 0;
+        }
+
+        .btn-return:hover::before { transform: translateX(0); }
+        
+        .btn-return:hover { 
+            border-color: var(--accent-solid); 
+            box-shadow: 0 0 30px rgba(176, 38, 255, 0.25); color: white;
+            transform: translateX(5px);
+        }
+        
+        .btn-return span, .btn-return svg { position: relative; z-index: 10; transition: transform 0.3s ease; }
+        .btn-return:hover svg { transform: translateX(-4px); }
 
     </style>
 </head>
 <body>
 
-    <div class="grid-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+    <!-- AMBIENT LIGHTING -->
+    <div class="ambient-orb"></div>
+    
+    <div class="light-sweep"></div>
 
-    <div class="success-container">
-        <span class="status-text">STATUS: CONFIRMED</span>
-        <h1 class="h1-large">TRANSMISSION<br>RECEIVED.</h1>
-        
-        <div class="progress-wrapper">
-            <div class="progress-bar"></div>
+    <!-- SHUTTER -->
+    <div class="monolith-shutter">
+        <div class="monolith-panel top"></div>
+        <div class="monolith-panel bottom"></div>
+    </div>
+
+    <!-- SUCCESS CONTENT -->
+    <div class="h-screen w-full flex items-center justify-center relative z-10 px-6 sm:px-12">
+        <div class="max-w-5xl w-full flex flex-col items-start pl-8 sm:pl-16 relative py-12">
+            
+            <!-- Architectural Timeline Line & Node -->
+            <div class="tracking-line"></div>
+            <div class="tracking-node"></div>
+
+            <div class="text-mask mb-6">
+                <div class="text-reveal-up font-mono text-[10px] sm:text-xs tracking-[0.2em] opacity-40 uppercase text-[var(--accent-solid)]" style="animation-delay: 1.0s;">
+                    [ STATUS: CONFIRMED ]
+                </div>
+            </div>
+            
+            <h1 class="font-[Syne] text-[clamp(40px,7vw,100px)] font-extrabold leading-[0.95] text-white blur-in tracking-tighter mb-8" style="animation-delay: 1.1s;">
+                TRANSMISSION<br>RECEIVED.
+            </h1>
+            
+            <div class="progress-wrapper mb-10" style="animation-delay: 1.3s;">
+                <div class="progress-bar" style="animation-delay: 1.4s;"></div>
+            </div>
+            
+            <div class="text-mask mb-12">
+                <p class="text-reveal-up font-[Inter] font-light text-[#94A3B8] leading-loose max-w-2xl text-[15px] sm:text-[18px]" style="animation-delay: 1.5s;">
+                    Your project inquiry has been securely logged in the system. We will review your artifacts and establish a connection shortly.
+                </p>
+            </div>
+            
+            <div class="blur-in" style="animation-delay: 1.7s;">
+                <a href="/" class="btn-return group">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>Return to Base</span>
+                </a>
+            </div>
+
         </div>
-
-        <p style="color: #888; margin-bottom: 40px; font-size: 14px; line-height: 1.6;">
-            Your project inquiry has been securely logged in the system.<br>
-            We will establish a connection shortly.
-        </p>
-
-        <a href="/" class="btn-return">Return to Base</a>
     </div>
 
 </body>
