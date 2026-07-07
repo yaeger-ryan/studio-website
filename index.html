@@ -517,6 +517,8 @@
             }
         ];
 
+        window.stellarUnlocked = false; // For NDA gate
+
         // --- COPY TO CLIPBOARD LOGIC ---
         window.copyEmail = () => {
             const email = "studio@ryanyaeger.design";
@@ -1222,6 +1224,24 @@
 
         // --- CUSTOM STELLARRISK AI COMPONENT ---
         function generateStellarTemplate(p) {
+            if (!window.stellarUnlocked) {
+                return `
+                <div class="w-full h-full min-h-[60vh] flex items-center justify-center fade-up delay-1">
+                    <div class="border border-zinc-800 bg-[#111111] p-10 max-w-md w-full flex flex-col gap-6 items-center text-center shadow-2xl">
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-2">[ SECURE TERMINAL ]</div>
+                        <h2 class="font-[Syne] text-3xl text-white uppercase font-bold tracking-tight mb-2">Project Under NDA</h2>
+                        <p class="font-[Inter] text-[#94A3B8] text-sm leading-relaxed mb-6 font-light">Access to the Stellar Risk AI case study requires an active authorization code.</p>
+                        
+                        <input type="password" id="nda-pwd" placeholder="ENTER CODE" class="w-full bg-[#050505] border border-zinc-800 text-white font-mono p-4 text-center focus:border-[#b026ff] transition-colors outline-none tracking-widest text-lg" onkeypress="if(event.key === 'Enter') checkStellarPwd()">
+                        
+                        <button onclick="checkStellarPwd()" class="w-full bg-[#b026ff]/20 text-white border border-[#b026ff] p-4 font-mono uppercase tracking-widest hover:bg-[#b026ff] transition-all duration-300 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)]">Authenticate</button>
+                        
+                        <div id="nda-error" class="text-[#ff2626] font-mono text-[10px] tracking-widest mt-2 hidden border border-[#ff2626]/30 bg-[#ff2626]/10 py-2 px-4 w-full uppercase">Invalid Authorization Code</div>
+                    </div>
+                </div>
+                `;
+            }
+
             const assets = [
                 "stellarrisk-finished-01.jpg",
                 "stellarrisk-finished-02.jpg",
@@ -1354,6 +1374,19 @@
             </div>
             `;
         }
+
+        window.checkStellarPwd = () => {
+            const input = document.getElementById('nda-pwd').value;
+            // Scrambled check using base64: "MjYyNg==" represents "2626"
+            if (btoa(input) === "MjYyNg==") {
+                window.stellarUnlocked = true;
+                // Re-render the active project (index 5 for Stellar Risk AI)
+                handleProjectClick(5);
+            } else {
+                document.getElementById('nda-error').style.display = 'block';
+                document.getElementById('nda-pwd').value = '';
+            }
+        };
 
         // --- CUSTOM SELECTED MARKS COMPONENT ---
         function generateSelectedMarksTemplate(p) {
