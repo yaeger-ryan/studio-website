@@ -172,12 +172,18 @@
 
         #project-list { width: 100%; }
         .project-wrapper { border-bottom: 1px solid var(--line); background: transparent; transition: background 0.3s; }
-        .project-header { padding: 30px var(--pad-m); cursor: pointer; display: flex; flex-direction: column; border-left: 2px solid transparent; transition: all 0.3s var(--ease-spatial); }
+        .project-header { padding: 30px var(--pad-m); cursor: pointer; display: flex; flex-direction: column; border-left: 2px solid transparent; transition: all 0.3s var(--ease-spatial); position: relative; overflow: hidden; }
         
         /* The "Hover Glow" */
         .project-wrapper:hover .project-header, .project-wrapper.active .project-header { 
             background: #121112; padding-left: calc(var(--pad-m) + 16px); border-left: 4px solid var(--accent-solid); 
         }
+
+        /* Hover GIF Background */
+        .project-hover-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.4s ease-out; z-index: 1; pointer-events: none; }
+        .project-hover-bg img { width: 100%; height: 100%; object-fit: cover; }
+        .project-hover-bg::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.66); }
+        .project-wrapper:hover .project-hover-bg, .project-wrapper.active .project-hover-bg { opacity: 1; }
         
         .p-title { font-family: var(--font-disp); font-weight: 800; font-size: var(--fs-list-title); margin-bottom: 8px; color: white; transition: color 0.2s; letter-spacing: -0.01em; }
         .project-wrapper:hover .p-title { background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -226,8 +232,6 @@
 
         .geo-widget { font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; margin-bottom: 30px; padding-left: 14px; border-left: 1px dashed var(--line); position: relative; opacity: 0.7; transition: opacity 0.3s; }
         .geo-widget:hover { opacity: 1; }
-        .geo-dot { width: 6px; height: 6px; background: var(--accent-solid); border-radius: 50%; position: absolute; left: -4px; top: 3px; box-shadow: 0 0 8px var(--accent-solid); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
         .geo-label { display: block; color: var(--text-mute); font-weight: 400; margin-bottom: 6px; line-height: 1.8; }
 
         .nav-group { margin-bottom: 50px; flex-shrink: 0; }
@@ -354,7 +358,6 @@
 
             <nav class="panel-nav">
                 <div class="geo-widget fade-up delay-2">
-                    <div class="geo-dot"></div>
                     <span class="geo-label">YAEGER STUDIO // EST. 2019 // MADISON, WI</span>
                 </div>
 
@@ -451,6 +454,7 @@
                     <span>ONE IN A MILL</span><span class="dot">•</span>
                     <span>LEGEND COOKWARE</span><span class="dot">•</span>
                     <span>ARMOR ALL</span><span class="dot">•</span>
+                    <span>ROAD RANGER</span><span class="dot">•</span>
                     
                     <span>OUSTER</span><span class="dot">•</span>
                     <span>GIUSTI</span><span class="dot">•</span>
@@ -458,6 +462,7 @@
                     <span>ONE IN A MILL</span><span class="dot">•</span>
                     <span>LEGEND COOKWARE</span><span class="dot">•</span>
                     <span>ARMOR ALL</span><span class="dot">•</span>
+                    <span>ROAD RANGER</span><span class="dot">•</span>
                     
                     <span>OUSTER</span><span class="dot">•</span>
                     <span>GIUSTI</span><span class="dot">•</span>
@@ -465,6 +470,7 @@
                     <span>ONE IN A MILL</span><span class="dot">•</span>
                     <span>LEGEND COOKWARE</span><span class="dot">•</span>
                     <span>ARMOR ALL</span><span class="dot">•</span>
+                    <span>ROAD RANGER</span><span class="dot">•</span>
                     
                     <span>OUSTER</span><span class="dot">•</span>
                     <span>GIUSTI</span><span class="dot">•</span>
@@ -472,6 +478,7 @@
                     <span>ONE IN A MILL</span><span class="dot">•</span>
                     <span>LEGEND COOKWARE</span><span class="dot">•</span>
                     <span>ARMOR ALL</span><span class="dot">•</span>
+                    <span>ROAD RANGER</span><span class="dot">•</span>
                 </div>
             </div>
         </div>
@@ -483,36 +490,43 @@
             { 
                 title: "One In a Mill Spices", cat: "PDP ART DIRECTION // DIGITAL SHELF", 
                 hero: "images/6866e388147fc63efb668e97_bbk-thumbnail-3.jpg", 
+                hoverGif: "images/oiam-spices.gif",
                 desc: "A bold, spice-forward visual identity and packaging system designed for high retail visibility."
             },
             { 
                 title: "Giusti Organic Balsamic", cat: "PDP ARCHITECTURE // DESKTOP SYSTEM", 
                 hero: "images/giusti-organic-02.jpg", 
+                hoverGif: "images/giusti-balsamic.gif",
                 desc: "A premium digital shelf architecture designed to communicate the rich heritage and quality of organic balsamic vinegar."
             },
             { 
                 title: "Ouster Cold Plunge", cat: "SYSTEM EXTENSION // PRODUCT ADAPTATION", 
                 hero: "images/6866e55e3b1db5d8cee152a2_ouster-watercare-thumb1.jpg", 
+                hoverGif: "images/ouster-cold-plunge.gif",
                 desc: "Ensuring clarity and trust for wellness products in a competitive digital marketplace."
             },
             { 
                 title: "Boat Juice Luxury Kit", cat: "PDP ARCHITECTURE // DISCOVERY GRAPHICS", 
                 hero: "images/6866e3c0dfda964c847854a9_boat-juice-luxury-kit-thumb-1.jpg", 
+                hoverGif: "images/boat-juice-luxury-kit.gif",
                 desc: "High-end product bundle presentation designed to elevate the unboxing experience."
             },
             { 
                 title: "Shout Bilingual System", cat: "HIGH-VOLUME CREATIVE // PAID MEDIA", 
                 hero: "images/6866e33ef9ae172e2739fddb_hww-thumbnail-work.jpg", 
+                hoverGif: "images/shout-towels.gif",
                 desc: "A cohesive and inclusive campaign bridging languages to build stronger community connections."
             },
             { 
                 title: "Stellar Risk AI", cat: "INVESTOR SYSTEM // CAPITAL DECK", 
                 hero: "images/6864531a31693aaa43ca28b0_armor-all-dock-image.jpg", 
+                hoverGif: "images/stellar-risk-AI.gif",
                 desc: "Futuristic and reliable visual language designed for an advanced artificial intelligence platform."
             },
             { 
                 title: "Selected Marks", cat: "LOGOTYPE INDEX // VECTOR CONTEXT", 
                 hero: "images/6866e420565576d89fbfe8b5_bscc-business-card-1-mockup-v2.jpg", 
+                hoverGif: "images/selected-marks.gif",
                 desc: "A curated collection of scalable, focused logo marks built for clarity across all mediums."
             }
         ];
@@ -558,7 +572,14 @@
             
             const header = document.createElement('div');
             header.className = 'project-header';
-            header.innerHTML = `<span class="p-title">${p.title}</span><span class="p-cat">${p.cat}</span>`;
+            header.innerHTML = `
+                <div class="project-hover-bg">
+                    <img src="${p.hoverGif}" alt="">
+                </div>
+                <div style="position: relative; z-index: 10; display: flex; flex-direction: column;">
+                    <span class="p-title">${p.title}</span><span class="p-cat">${p.cat}</span>
+                </div>
+            `;
             
             // Fix 1: Attach click event ONLY to the header instead of the whole row!
             // This prevents clicking on interior buttons (like mobile variation buttons) from collapsing the accordion.
