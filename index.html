@@ -363,7 +363,7 @@
 
                 <div class="nav-group fade-up delay-3">
                     <span class="nav-label">Practice</span>
-                    <p class="nav-text">Yaeger Studio is an independent design practice specializing in conversion focused ecommerce layouts, packaging systems, and digital shelf optimization.<br><br>Real work for real purpose.</p>
+                    <p class="nav-text">Yaeger Studio is an independent design practice focused on smart ecommerce design, premium packaging, and digital shelf optimization.<br><br>Real work for real purpose.</p>
                 </div>
                 <div class="nav-group fade-up delay-3">
                     <span class="nav-label">Services</span>
@@ -488,37 +488,37 @@
         // --- 1. PROJECTS DATA ---
         const projects = [
             { 
-                title: "One In a Mill Spices", cat: "PDP ART DIRECTION // DIGITAL SHELF", 
+                title: "Premium Spice Launch and Digital Shelf System", cat: "PDP ART DIRECTION // DIGITAL SHELF", 
                 hero: "images/6866e388147fc63efb668e97_bbk-thumbnail-3.jpg", 
                 hoverGif: "images/oiam-spices.gif",
                 desc: "A bold, spice-forward visual identity and packaging system designed for high retail visibility."
             },
             { 
-                title: "Giusti Organic Balsamic", cat: "PDP ARCHITECTURE // DESKTOP SYSTEM", 
+                title: "Premium Balsamic Digital Shelf Design", cat: "PDP ARCHITECTURE // DESKTOP SYSTEM", 
                 hero: "images/giusti-organic-02.jpg", 
                 hoverGif: "images/giusti-balsamic.gif",
                 desc: "A premium digital shelf architecture designed to communicate the rich heritage and quality of organic balsamic vinegar."
             },
             { 
-                title: "Ouster Cold Plunge", cat: "SYSTEM EXTENSION // PRODUCT ADAPTATION", 
+                title: "Cold Plunge Digital Shelf Design", cat: "SYSTEM EXTENSION // PRODUCT ADAPTATION", 
                 hero: "images/6866e55e3b1db5d8cee152a2_ouster-watercare-thumb1.jpg", 
                 hoverGif: "images/ouster-cold-plunge.gif",
                 desc: "Ensuring clarity and trust for wellness products in a competitive digital marketplace."
             },
             { 
-                title: "Boat Juice Luxury Kit", cat: "PDP ARCHITECTURE // DISCOVERY GRAPHICS", 
+                title: "Premium Marine Kit Digital Shelf Design", cat: "PDP ARCHITECTURE // DISCOVERY GRAPHICS", 
                 hero: "images/6866e3c0dfda964c847854a9_boat-juice-luxury-kit-thumb-1.jpg", 
                 hoverGif: "images/boat-juice-luxury-kit.gif",
                 desc: "High-end product bundle presentation designed to elevate the unboxing experience."
             },
             { 
-                title: "Shout Bilingual System", cat: "HIGH-VOLUME CREATIVE // PAID MEDIA", 
+                title: "Global Paid Media System", cat: "HIGH-VOLUME CREATIVE // PAID MEDIA", 
                 hero: "images/6866e33ef9ae172e2739fddb_hww-thumbnail-work.jpg", 
                 hoverGif: "images/shout-towels.gif",
                 desc: "A cohesive and inclusive campaign bridging languages to build stronger community connections."
             },
             { 
-                title: "Stellar Risk AI", cat: "INVESTOR SYSTEM // CAPITAL DECK", 
+                title: "Investor Pitch Deck Design", cat: "INVESTOR SYSTEM // CAPITAL DECK", 
                 hero: "images/6864531a31693aaa43ca28b0_armor-all-dock-image.jpg", 
                 hoverGif: "images/stellar-risk-AI.gif",
                 desc: "Futuristic and reliable visual language designed for an advanced artificial intelligence platform."
@@ -581,8 +581,6 @@
                 </div>
             `;
             
-            // Fix 1: Attach click event ONLY to the header instead of the whole row!
-            // This prevents clicking on interior buttons (like mobile variation buttons) from collapsing the accordion.
             header.onclick = () => handleProjectClick(index);
 
             const mobileContent = document.createElement('div');
@@ -628,32 +626,7 @@
             if (index === 5) return generateStellarTemplate(p);
             if (index === 6) return generateSelectedMarksTemplate(p);
 
-            const projectNum = String(index + 1).padStart(2, '0');
-            return `
-                <img src="${p.hero}" class="cs-hero fade-up delay-1" alt="${p.title}">
-                
-                <div class="cs-content-block fade-up delay-2">
-                    <div class="cs-meta">PROJECT NO. ${projectNum}/07 // CLIENT: ${p.title.toUpperCase()} // DELIVERABLES: ${p.cat.split('//')[0].trim()}</div>
-                    <h1 class="cs-h1">${p.title}</h1>
-                    <p class="cs-p">${p.desc}</p>
-                </div>
-                
-                <div class="cs-grid fade-up delay-3">
-                    <img src="${p.hero}" class="cs-img-s" alt="Detail 1">
-                    <img src="${p.hero}" class="cs-img-s" alt="Detail 2">
-                </div>
-                
-                <div class="cs-content-block fade-up delay-4">
-                    <div class="cs-meta">PHASE 02 // DESIGN EXECUTION</div>
-                    <h2 class="cs-h1" style="font-size:clamp(30px, 4vw, 60px); margin:0 0 30px 0; color:white;">VISUAL SYSTEMS</h2>
-                    <p class="cs-p" style="margin-bottom:0;">
-                        This project focused on clear hierarchy, scalable assets, and an immediate visual impact tailored precisely for its target audience.
-                    </p>
-                </div>
-                
-                <img src="${p.hero}" class="cs-hero fade-up delay-4" alt="Execution Final">
-                <div class="spacer-l"></div>
-            `;
+            return ``; // Fallback
         }
 
         // --- CUSTOM OIAM COMPONENT ---
@@ -665,9 +638,8 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- 1. TOP METADATA & SWITCHER -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white w-full md:w-auto">PROJECT NO. 01/07 // CLIENT: ONE IN A MILL // DELIVERABLES: PDP GALLERY</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white w-full md:w-auto">PROJECT NO. 01/07 // DELIVERABLES: PDP GALLERY</div>
                     
-                    <!-- Fix 2: Applied flex-wrap and responsive sizing for mobile interaction limits -->
                     <div class="flex flex-wrap gap-2 md:gap-3 font-mono text-[10px] md:text-[11px] tracking-widest w-full md:w-auto mt-2 md:mt-0">
                         <button onclick="switchOIAM('zaatar')" id="btn-zaatar" class="oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-[#b026ff] text-white bg-[#b026ff]/20 opacity-100 transition-all duration-300">ZA'ATAR</button>
                         <button onclick="switchOIAM('sumac')" id="btn-sumac" class="oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-zinc-700 text-zinc-300 bg-zinc-800 opacity-70 hover:opacity-100 transition-all duration-300">SUMAC</button>
@@ -692,17 +664,33 @@
                     </div>
                 </div>
 
-                <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    As a fresh entrant into the competitive luxury culinary space, One In a Mill required a complete digital architecture to launch their brand-new premium spice line. The mandate demanded comprehensive competitor market research, structural mockup creation, and a scalable digital shelf presence built completely from zero.
-                </p>
+                <!-- 3. PROJECT STORY BLOCK -->
+                <div class="mb-12 mt-8">
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // One In a Mill Spices</div>
+                    <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
 
-                <!-- 3. 1PX DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    Leveraging foundational design principles of symmetry, intentional negative space, and strict typographic hierarchy, the art direction transforms everyday culinary products into premium, authentic visual assets. By prioritizing geometric clarity and material authenticity, the resulting layouts instantly validate the product's high-tier market positioning.
-                </p>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
+                    <div class="md:col-span-3">
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Art Direction, Product Mockups, and Digital Shelf Design</p>
+                    </div>
+                    
+                    <div class="md:col-span-9 flex flex-col gap-12">
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">One In a Mill was a brand new player entering a crowded luxury spice market. They needed a way to stand out immediately, validate their premium price point, and build a digital presentation from scratch.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE SOLUTION ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">I researched the competition to find out exactly what high end buyers look for. From there I designed clean layouts and premium product mockups that make the spices look incredibly authentic on screen. I also built a reusable layout template so the brand can easily drop in new products as their spice line grows.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE OUTCOME ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">By making the spice ingredients and sourcing extremely easy to read, we eliminated customer confusion right at the source. This visual clarity led directly to higher conversion rates and a solid increase in online sales. On a personal level, this project proved that my biggest strength is taking complex product details and making them incredibly scannable for the everyday buyer.</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- 4. MOBILE VIEWPORT GRID -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
@@ -744,13 +732,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-center mt-3 text-white">[ MOBILE VIEWPORT B ]</div>
                     </div>
                 </div>
-
-                <!-- 4.5 DESIGN OUTCOME DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    Engineered a rigorous, repeatable PDP layout system that unifies the brand's digital shelf presence. This modular template secures an elevated e-commerce footprint and establishes a seamless, scalable framework for all future product expansions within the category.
-                </p>
 
                 <!-- 5. HORIZONTAL CAROUSEL -->
                 <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
@@ -799,7 +780,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 02/07 // CLIENT: GIUSTI // DELIVERABLES: DESKTOP SYSTEM</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 02/07 // DELIVERABLES: DESKTOP SYSTEM</div>
                 </div>
 
                 <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
@@ -819,17 +800,33 @@
                     </div>
                 </div>
 
-                <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The challenge centered on introducing an organic variant to Giusti's highly successful premium balsamic portfolio. The primary objective required establishing an elevated desktop layout system for this new product tier while strictly preserving the historic prestige and heritage visual cues of the legacy Italian brand.
-                </p>
+                <!-- 2. PROJECT STORY BLOCK -->
+                <div class="mb-12 mt-8">
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Giusti Organic Balsamic</div>
+                    <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
 
-                <!-- 2. 1PX DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The structural approach utilizes a rigorous desktop architecture that balances traditional artisanal typography with a minimalist grid. By framing the historic bottle design within an expansive, high-contrast digital workspace, the layout treats the product asset as a premium artifact. This systemic alignment introduces modern spatial clarity without sacrificing the brand's authentic heritage.
-                </p>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
+                    <div class="md:col-span-3">
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Ecommerce Design and Visual Concepting</p>
+                    </div>
+                    
+                    <div class="md:col-span-9 flex flex-col gap-12">
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">Giusti is a legacy Italian brand famous for its high end balsamic vinegar. When they decided to introduce a new organic product to their lineup, they needed a fresh ecommerce presence that felt modern without losing any of their rich historic prestige.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE SOLUTION ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">I designed a digital shelf layout that balances their traditional typography with clean open space. By placing the historic bottle in a high contrast environment, I treated the product like a museum artifact. This gave them a modern digital footprint that still honors their authentic roots.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE OUTCOME ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">The final delivery included premium layouts for their product detail pages and Amazon A Plus content. The project successfully proved that a deeply historic heritage brand can look incredibly sharp and modern on a digital shelf without losing its original soul.</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- 3. DESKTOP VIEWPORT FRAME -->
                 <div class="flex flex-col gap-3 mb-20">
@@ -838,13 +835,6 @@
                     </div>
                     <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mt-2">[ DESKTOP VIEWPORT // INTERACTIVE A+ MODULE ]</div>
                 </div>
-
-                <!-- 3.5 DESIGN OUTCOME DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The resulting design concept explores a refined digital shelf architecture optimized for desktop systems. The exploratory framework demonstrates a sophisticated path forward for high-end product variants, offering a pristine visual blueprint that successfully unifies historic brand narrative with modern e-commerce scalability.
-                </p>
 
                 <!-- 4. HORIZONTAL CAROUSEL -->
                 <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
@@ -901,7 +891,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 03/07 // CLIENT: OUSTER // DELIVERABLES: RESPONSIVE A+</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 03/07 // DELIVERABLES: RESPONSIVE A+</div>
                 </div>
 
                 <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
@@ -921,19 +911,35 @@
                     </div>
                 </div>
 
-                <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The objective required executing a comprehensive system extension for Ouster's specialized cold plunge water cleanser. The primary design challenge focused on adapting pre-existing corporate brand assets into localized product listings and A+ content blocks while ensuring the new layout retained the premium visual equity of the parent brand.
-                </p>
+                <!-- 2. PROJECT STORY BLOCK -->
+                <div class="mb-12 mt-8">
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Ouster Cold Plunge</div>
+                    <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
 
-                <!-- 1.5 DESIGN SYSTEM & SOLUTION DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
+                    <div class="md:col-span-3">
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Ecommerce Design and Layout Strategy</p>
+                    </div>
+                    
+                    <div class="md:col-span-9 flex flex-col gap-12">
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">Ouster needed to launch a specialized cold plunge water cleanser. They had existing brand assets but needed a way to translate them into a premium digital shelf experience that could communicate complex technical details without looking cluttered.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE SOLUTION ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">I took their existing visual identity and adapted it into clean product listings and modular Amazon A Plus content blocks. By organizing all their technical specifications into clear layouts, I elevated the entire look of the product to match their high end reputation.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE OUTCOME ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">The new layout immediately boosted how the product performed on the marketplace. Shortly after launch, the listing secured the highly coveted Overall Pick badge in a competitive category, proving that clear visual organization directly drives commercial success.</p>
+                        </div>
+                    </div>
+                </div>
 
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The implementation translates Ouster's pre-existing corporate brand assets into a highly disciplined, rigid grid framework. By deploying a systematic typographic hierarchy and modular A+ content blocks, the layout cleanly organizes complex technical product specifications while significantly elevating the brand's aesthetic standard on the digital shelf.
-                </p>
-
-                <!-- 2. TECHNICAL DIELINE DISPLAY (THE LABEL) -->
+                <!-- 3. TECHNICAL DIELINE DISPLAY (THE LABEL) -->
                 <div class="flex flex-col gap-3 mb-16">
                     <div class="w-full h-[250px] sm:h-[350px] overflow-hidden flex bg-[#0A0A0A] border-y border-zinc-800/60 relative">
                         <div class="flex h-full w-max animate-dieline-scroll">
@@ -946,7 +952,7 @@
                     <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ SYSTEM PACKAGING // TECHNICAL DIELINE PAN ]</div>
                 </div>
 
-                <!-- 3. DUAL-VIEWPORT RESPONSIVE A+ MODULE -->
+                <!-- 4. DUAL-VIEWPORT RESPONSIVE A+ MODULE -->
                 <div class="flex flex-col lg:flex-row gap-10 mb-20 items-center lg:items-stretch">
                     <div class="w-full lg:w-[60%] flex flex-col gap-3">
                         <div class="w-full h-[500px] border border-zinc-800/60 bg-black rounded-lg overflow-hidden relative shadow-2xl">
@@ -966,14 +972,7 @@
                     </div>
                 </div>
 
-                <!-- 3.5 ARCHITECTURAL RESULT DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The structured layout system directly optimized the product's digital marketplace performance. Following the rollout, the Ouster Cold Plunge system quickly scaled to secure the coveted Overall Pick designation within the competitive premium water purification category, demonstrating the commercial power of a unified design architecture.
-                </p>
-
-                <!-- 4. HORIZONTAL ASSET CAROUSEL -->
+                <!-- 5. HORIZONTAL ASSET CAROUSEL -->
                 <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
                     ${['03', '04', '05', '06', '07', '08', '09', '10', '11'].map(idx => `
                         <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
@@ -994,7 +993,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 04/07 // CLIENT: BOAT JUICE // DELIVERABLES: PDP SYSTEM</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 04/07 // DELIVERABLES: PDP SYSTEM</div>
                 </div>
 
                 <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
@@ -1014,19 +1013,35 @@
                     </div>
                 </div>
 
-                <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The design challenge for the Boat Juice Luxury Kit centered on transforming a multi-product marine maintenance bundle into a premium lifestyle offering. The objective required organizing a complex assortment of structural assets into a unified digital unboxing experience, ensuring the collection looked like a curated luxury kit rather than a cluttered assortment of commercial cleaning supplies.
-                </p>
+                <!-- 2. PROJECT STORY BLOCK -->
+                <div class="mb-12 mt-8">
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Boat Juice Luxury Kit</div>
+                    <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
 
-                <!-- 3. 1PX DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
+                    <div class="md:col-span-3">
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Ecommerce Design and Layout Strategy</p>
+                    </div>
+                    
+                    <div class="md:col-span-9 flex flex-col gap-12">
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">Boat Juice needed to turn a large bundle of marine maintenance products into a premium lifestyle kit. The challenge was organizing multiple items on screen so the collection looked like a high end curated box instead of a messy pile of cleaning supplies.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE SOLUTION ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">I designed a layout that gives every item in the bundle its own dedicated space to explain exactly what it does. I also created graphics that clearly communicate features like scent profiles helping buyers understand the physical details of the product right on their screen.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE OUTCOME ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">The final design turned a complex product bundle into a clean and easily scannable value proposition. By balancing heavy product details with clean open layouts the project successfully created a premium digital showcase that gets shoppers to actually stop and read.</p>
+                        </div>
+                    </div>
+                </div>
 
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The architectural solution deploys strict structural grids to systematically deconstruct the bundle on the product detail page. Each product within the kit is granted its own spatial quadrant to define its specific functional utility and value. Furthermore, the discovery graphics integrate sophisticated visual cues to elegantly communicate sensory product attributes, such as scent profiles, directly mapping tactile properties onto a digital workspace.
-                </p>
-
-                <!-- 4. MOBILE VIEWPORT WIREFRAMES -->
+                <!-- 3. MOBILE VIEWPORT WIREFRAMES -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
                     <div class="flex flex-col gap-3">
                         <div class="overflow-hidden relative h-[500px] w-[250px] bg-black rounded-[2rem] border-[4px] border-zinc-800 mx-auto shadow-2xl flex flex-col">
@@ -1067,14 +1082,7 @@
                     </div>
                 </div>
 
-                <!-- 4.5 DESIGN OUTCOME DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The resulting design system successfully translated a complex, multi-tiered bundle into an instantly scannable, high-converting value proposition. By balancing dense product specifications with minimalist spatial design, the layout system established an elite e-commerce showcase that redefines utility product presentation within the digital storefront.
-                </p>
-
-                <!-- 5. HORIZONTAL CAROUSEL -->
+                <!-- 4. HORIZONTAL CAROUSEL -->
                 <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
                     ${['05', '06', '07', '08', '09'].map(idx => `
                         <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
@@ -1092,40 +1100,23 @@
         // --- CUSTOM SHOUT COMPONENT ---
         function generateShoutTemplate(p) {
             const shoutAssets = [
-                "SHOUT-BILLBOARD-SHOP-NOW-TEXT_970X250_EN.jpg",
-                "SHOUT-BILLBOARD-SHOP-NOW-TEXT_970X250_FR.jpg",
-                "SHOUT-BILLBOARD-SHOP-NOW-TEXT-AVAILABLE-AT-TEXT_970X250_EN.jpg",
-                "SHOUT-BILLBOARD-SHOP-NOW-TEXT-AVAILABLE-AT-TEXT_970X250_FR.jpg",
-                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X600_FR_.jpg",
-                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_EN.jpg",
-                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_EN_.jpg",
-                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_FR.jpg",
-                "SHOUT-LEADERBOARD-SHOP-NOW-AVAILABLE-AT-LOGO_728X90_EN.jpg",
-                "SHOUT-LEADERBOARD-SHOP-NOW-AVAILABLE-AT-LOGO_728X90_FR.jpg",
-                "SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_EN.jpg",
-                "SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_FR.jpg",
-                "SHOUT-MEDIUM-RECTANGLE-AVAILABLE-AT-TEXT_300X250_EN.jpg",
-                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X250_EN_.jpg",
-                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X250_FR.jpg",
-                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_EN.jpg",
-                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_FR.jpg",
-                "SHOUT-MOBILE-DETAIL-AND-SEARCH-RESULTS-ASSET-ONLY_414X125_EN.jpg",
-                "SHOUT-MOBILE-DETAIL-AND-SEARCH-RESULTS-ASSET-ONLY_414X125_FR.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-ASSET-ONLY_320X50_EN_.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-ASSET-ONLY_320X50_FR.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-AVAILABLE-AT-TEXT_320X50_EN.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-AVAILABLE-AT-TEXT_320X50_FR.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-TABLET-ASSET-ONLY_728X90_EN.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-TABLET-ASSET-ONLY_728X90_FR.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-TABLET-AVAILABLE-AT-TEXT_728X90_EN.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-TABLET-AVAILABLE-AT-TEXT_728X90_FR.jpg",
-                "SHOUT-MOBILE-MEDIUM-RECTANGLE-ASSET-ONLY_300X250_EN.jpg",
-                "SHOUT-MOBILE-MEDIUM-RECTANGLE-ASSET-ONLY_300X250_FR.jpg",
-                "SHOUT-MOBILE-MEDIUM-RECTANGLE-AVAILABLE-AT-TEXT_300X250_FR.jpg",
-                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-AVAILABLE-AT-LOGO_160X600_EN.jpg",
-                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-AVAILABLE-AT-LOGO_160X600_FR.jpg",
-                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-BUTTON_160X600_EN.jpg",
-                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-BUTTON_160X600_FR.jpg"
+                "SHOUT-BILLBOARD-SHOP-NOW-TEXT_970X250_EN.jpg", "SHOUT-BILLBOARD-SHOP-NOW-TEXT_970X250_FR.jpg",
+                "SHOUT-BILLBOARD-SHOP-NOW-TEXT-AVAILABLE-AT-TEXT_970X250_EN.jpg", "SHOUT-BILLBOARD-SHOP-NOW-TEXT-AVAILABLE-AT-TEXT_970X250_FR.jpg",
+                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X600_FR_.jpg", "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_EN.jpg",
+                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_EN_.jpg", "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_FR.jpg",
+                "SHOUT-LEADERBOARD-SHOP-NOW-AVAILABLE-AT-LOGO_728X90_EN.jpg", "SHOUT-LEADERBOARD-SHOP-NOW-AVAILABLE-AT-LOGO_728X90_FR.jpg",
+                "SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_EN.jpg", "SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_FR.jpg",
+                "SHOUT-MEDIUM-RECTANGLE-AVAILABLE-AT-TEXT_300X250_EN.jpg", "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X250_EN_.jpg",
+                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X250_FR.jpg", "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_EN.jpg",
+                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_FR.jpg", "SHOUT-MOBILE-DETAIL-AND-SEARCH-RESULTS-ASSET-ONLY_414X125_EN.jpg",
+                "SHOUT-MOBILE-DETAIL-AND-SEARCH-RESULTS-ASSET-ONLY_414X125_FR.jpg", "SHOUT-MOBILE-LEADERBOARD-ASSET-ONLY_320X50_EN_.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-ASSET-ONLY_320X50_FR.jpg", "SHOUT-MOBILE-LEADERBOARD-AVAILABLE-AT-TEXT_320X50_EN.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-AVAILABLE-AT-TEXT_320X50_FR.jpg", "SHOUT-MOBILE-LEADERBOARD-TABLET-ASSET-ONLY_728X90_EN.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-TABLET-ASSET-ONLY_728X90_FR.jpg", "SHOUT-MOBILE-LEADERBOARD-TABLET-AVAILABLE-AT-TEXT_728X90_EN.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-TABLET-AVAILABLE-AT-TEXT_728X90_FR.jpg", "SHOUT-MOBILE-MEDIUM-RECTANGLE-ASSET-ONLY_300X250_EN.jpg",
+                "SHOUT-MOBILE-MEDIUM-RECTANGLE-ASSET-ONLY_300X250_FR.jpg", "SHOUT-MOBILE-MEDIUM-RECTANGLE-AVAILABLE-AT-TEXT_300X250_FR.jpg",
+                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-AVAILABLE-AT-LOGO_160X600_EN.jpg", "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-AVAILABLE-AT-LOGO_160X600_FR.jpg",
+                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-BUTTON_160X600_EN.jpg", "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-BUTTON_160X600_FR.jpg"
             ];
 
             const gridItems = shoutAssets.map(asset => {
@@ -1149,7 +1140,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 05/07 // CLIENT: SHOUT // DELIVERABLES: HIGH-VOLUME AD SYSTEM</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 05/07 // DELIVERABLES: HIGH-VOLUME AD SYSTEM</div>
                 </div>
 
                 <!-- 1. HERO BILINGUAL SPLIT (50/50 SYMMETRICAL GRID) -->
@@ -1171,21 +1162,36 @@
                     </div>
                 </div>
 
-                <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The project required developing a high-volume localized creative system for Shout's paid media infrastructure. The dual challenge demanded managing tight typographic space constraints across small display dimensions and coordinating dual-language messaging in English and French, all while safeguarding a high-impact, uniform visual presentation for a major global retail brand.
-                </p>
+                <!-- 2. PROJECT STORY BLOCK -->
+                <div class="mb-12 mt-8">
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Shout</div>
+                    <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
 
-                <!-- 3. 1PX DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The creative architecture implements context-specific layout scaling tailored to individual asset sizes and spatial restrictions. Each independent ad unit was meticulously crafted with precise language adjustments, localized calls to action, and predefined product imagery pairings. By engineering flexible typographic relationships within a fixed canvas boundary, the design handles varying text lengths between languages without fracturing the core visual hierarchy.
-                </p>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
+                    <div class="md:col-span-3">
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Paid Media Design and Layout Strategy</p>
+                    </div>
+                    
+                    <div class="md:col-span-9 flex flex-col gap-12">
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">Shout needed a massive amount of digital ads for their paid media channels in both English and French. The main hurdle was fitting two completely different languages into tight display spaces without making the layouts look cluttered or off brand.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE SOLUTION ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">I built a flexible layout system that easily adapts to different ad sizes. I designed the typography rules so that longer French words and localized buttons fit perfectly next to the product images keeping the brand looking sharp and uniform in any language.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE OUTCOME ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">The final delivery was an incredibly smooth handoff. Because the designs were built to handle changing text lengths from the very beginning the ad units required absolutely zero structural fixes and went live seamlessly across all their international markets.</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- 3. THE HIGH-VOLUME PRODUCTION MATRIX -->
                 <div class="flex flex-col gap-12 mb-16">
-                    <!-- ROW 1 -->
                     <div class="flex flex-col gap-3">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-white/10 bg-[#0a0a0a] p-4">
                             <div class="flex items-center justify-center border border-white/5 bg-[#121112] p-2 h-[120px]">
@@ -1198,7 +1204,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ MATRIX_INDEX_01 // PROGRAMMATIC_BILLBOARD_970x250_PAIR ]</div>
                     </div>
 
-                    <!-- ROW 2 -->
                     <div class="flex flex-col gap-3">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-white/10 bg-[#0a0a0a] p-4">
                             <div class="flex items-center justify-center border border-white/5 bg-[#121112] p-2 h-[450px]">
@@ -1211,7 +1216,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ MATRIX_INDEX_02 // DISPLAY_HALF_PAGE_300x600_PAIR ]</div>
                     </div>
 
-                    <!-- ROW 3 -->
                     <div class="flex flex-col gap-3">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-white/10 bg-[#0a0a0a] p-4">
                             <div class="flex items-center justify-center border border-white/5 bg-[#121112] p-2 h-[80px]">
@@ -1224,13 +1228,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ MATRIX_INDEX_03 // HORIZONTAL_LEADERBOARD_728x90_PAIR ]</div>
                     </div>
                 </div>
-
-                <!-- 1PX DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The meticulous layout system achieved a completely frictionless asset handoff and deployment process. By delivering structurally optimized, multi-market ad units that fully accommodated linguistic expansion from the outset, the final creative package required zero downstream technical revisions and scaled seamlessly across all intended international media channels.
-                </p>
 
                 <!-- 4. THE GLOBAL LEDGER -->
                 <div class="flex flex-col gap-3">
@@ -1264,14 +1261,8 @@
             }
 
             const assets = [
-                "stellarrisk-finished-01.jpg",
-                "stellarrisk-finished-02.jpg",
-                "stellarrisk-finished-03.jpg",
-                "stellarrisk-finished-04.jpg",
-                "stellarrisk-wireframe-01.jpg",
-                "stellarrisk-wireframe-02.jpg",
-                "stellarrisk-wireframe-03.jpg",
-                "stellarrisk-wireframe-04.jpg"
+                "stellarrisk-finished-01.jpg", "stellarrisk-finished-02.jpg", "stellarrisk-finished-03.jpg", "stellarrisk-finished-04.jpg",
+                "stellarrisk-wireframe-01.jpg", "stellarrisk-wireframe-02.jpg", "stellarrisk-wireframe-03.jpg", "stellarrisk-wireframe-04.jpg"
             ];
 
             const carouselItems = assets.map((asset, idx) => {
@@ -1292,7 +1283,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 06/07 // CLIENT: STELLAR RISK AI // DELIVERABLES: INVESTOR SYSTEM</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 06/07 // DELIVERABLES: INVESTOR SYSTEM</div>
                 </div>
 
                 <!-- 1. THE HERO OUTCOME SPLIT (65% / 35% ASYMMETRICAL GRID) -->
@@ -1312,21 +1303,36 @@
                     </div>
                 </div>
 
-                <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The primary challenge for Stellar Risk AI required translating highly complex, technical artificial intelligence risk data into a clean, compelling presentation system. The ultimate objective focused on structuring dense data architectures into a clear financial narrative engineered to engage and secure buy-in from sophisticated venture capital investors.
-                </p>
+                <!-- 2. PROJECT STORY BLOCK -->
+                <div class="mb-12 mt-8">
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Stellar Risk AI</div>
+                    <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
 
-                <!-- 3. 1PX DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    The creative process initiated with rigorous structural wireframes to map information layouts and establish data hierarchies before applying any visual styling. This foundational phase locked in content boundaries and spatial balances. Transitioning from these proven structural blueprints to the final high-fidelity design layer ensured that complex engineering data was framed elegantly while preserving strict legibility.
-                </p>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
+                    <div class="md:col-span-3">
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Presentation Design and Visual Strategy</p>
+                    </div>
+                    
+                    <div class="md:col-span-9 flex flex-col gap-12">
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">Stellar Risk AI needed to translate highly complex technical data into a clean presentation. The goal was to take heavy information and turn it into a clear financial story that would easily engage venture capital investors.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE SOLUTION ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">I started by mapping out the information with clear wireframes to organize the layout before touching the visuals. Once the structure was locked in I applied the final design polish ensuring their complex engineering data looked premium and was incredibly easy to read.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE OUTCOME ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">The final deck was completely ready for investors and aligned perfectly with the goals of the client. Because the information was organized so well from the beginning the presentation went straight to use with absolute zero revisions.</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- 3. THE BLUEPRINT TIMELINE -->
                 <div class="flex flex-col gap-12 mb-16">
-                    <!-- ROW 2: PROBLEM STATEMENT / MARKET ANALYSIS -->
                     <div class="flex flex-col gap-3">
                         <div class="flex flex-col lg:flex-row items-stretch gap-6">
                             <div class="w-full lg:w-[65%] flex flex-col gap-3">
@@ -1343,7 +1349,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mt-1">[ EVOLUTION_NODE_02 // PROBLEM_LOGIC_DEPLOYMENT ]</div>
                     </div>
 
-                    <!-- ROW 3: TECHNICAL HEATMAP / RISK DATA ENGINE -->
                     <div class="flex flex-col gap-3">
                         <div class="flex flex-col lg:flex-row items-stretch gap-6">
                             <div class="w-full lg:w-[65%] flex flex-col gap-3">
@@ -1360,7 +1365,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mt-1">[ EVOLUTION_NODE_03 // PRODUCT_INTERFACE_ENGINE ]</div>
                     </div>
 
-                    <!-- ROW 4: CLOSING FINANCIALS / THE FINANCIAL ASK -->
                     <div class="flex flex-col gap-3">
                         <div class="flex flex-col lg:flex-row items-stretch gap-6">
                             <div class="w-full lg:w-[65%] flex flex-col gap-3">
@@ -1377,13 +1381,6 @@
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mt-1">[ EVOLUTION_NODE_04 // CAPITAL_ALLOCATION_MATRIX ]</div>
                     </div>
                 </div>
-
-                <!-- 1PX DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
-
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    By establishing a highly disciplined, investor-ready presentation system, the multi-stage design process achieved absolute alignment with the client's goals. The final capital deck delivered a powerful technical advantage and went directly to production with zero revisions, proving the operational value of a wireframe-first layout methodology.
-                </p>
 
                 <!-- 4. THE HIGH-DENSITY LEDGER -->
                 <div class="flex flex-col gap-3">
@@ -1432,7 +1429,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 07/07 // CLIENT: SELECTED MARKS // DELIVERABLES: LOGOTYPE CONTEXT</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 07/07 // DELIVERABLES: LOGOTYPE CONTEXT</div>
                 </div>
 
                 <!-- 1. THE LOGOLOUNGE 14 AWARD CALLOUT (35% / 65% ASYMMETRICAL SPLIT) -->
@@ -1458,16 +1455,13 @@
                     </div>
                 </div>
 
-                <h1 class="cs-h1 mb-6 text-white">${p.title}</h1>
-                <p class="font-[Inter] font-light text-[#94A3B8] leading-loose max-w-3xl mb-16 text-[15px] sm:text-[18px]">
-                    A curated index of logotypes and identity marks developed across various commercial sectors. This collection explores geometric discipline, visual economy, and scalable vector architecture, anchored by the LogoLounge Book 14 juried winner.
-                </p>
-
-                <!-- 3. 1PX DIVIDER -->
-                <div class="border-b border-dashed border-white/10 w-full my-16"></div>
+                <div class="mb-12 mt-8">
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Selected Marks</div>
+                    <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
 
                 <!-- 3. THE SPECIMEN MATRIX (THE CORE CURATED ROW) -->
-                <div class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-20">
+                <div class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-20 border-t border-dashed border-white/10 pt-10">
                     ${gridItems}
                 </div>
             </div>
@@ -1476,21 +1470,17 @@
 
         // Global switcher logic
         window.switchOIAM = (variant) => {
-            // Update image sources dynamically
             const indices = ['01', '02', '03', '04', '05', '06', '07', '08'];
             indices.forEach(idx => {
                 const img = document.getElementById(`oiam-img-${idx}`);
                 if(img) img.src = `./images/oiam-${variant}-${idx}.jpg`;
             });
 
-            // Reset buttons
             const buttons = document.querySelectorAll('.oiam-btn');
             buttons.forEach(btn => {
-                // Keep the responsive button classes instead of resetting blindly
                 btn.className = 'oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-zinc-700 text-zinc-300 bg-zinc-800 opacity-70 hover:opacity-100 transition-all duration-300';
             });
 
-            // Highlight active button
             const activeBtn = document.getElementById(`btn-${variant}`);
             if(activeBtn) {
                 activeBtn.className = 'oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-[#b026ff] text-white bg-[#b026ff]/20 opacity-100 transition-all duration-300';
@@ -1505,7 +1495,6 @@
                 let startX;
                 let scrollLeft;
 
-                // Remove previous listeners if any to avoid stacking
                 const newSlider = slider.cloneNode(true);
                 slider.parentNode.replaceChild(newSlider, slider);
 
@@ -1527,7 +1516,7 @@
                     if(!isDown) return;
                     e.preventDefault();
                     const x = e.pageX - newSlider.offsetLeft;
-                    const walk = (x - startX) * 2; // speed multiplier
+                    const walk = (x - startX) * 2; 
                     newSlider.scrollLeft = scrollLeft - walk;
                 });
             });
