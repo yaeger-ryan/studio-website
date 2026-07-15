@@ -166,7 +166,7 @@
 
         .index-header {
             padding: 20px var(--pad-m); border-bottom: 1px solid var(--line); border-top: 1px solid var(--line);
-            background: var(--bg); position: sticky; top: 0; z-index: 5;
+            background: var(--bg); position: sticky; top: 0; z-index: 50;
             font-family: var(--font-mono); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.25em; color: var(--text-mute);
         }
 
@@ -488,40 +488,40 @@
         // --- 1. PROJECTS DATA ---
         const projects = [
             { 
-                title: "Premium Spice Launch and Digital Shelf System", cat: "PDP ART DIRECTION // DIGITAL SHELF", 
+                title: "Premium Spice Ecommerce Launch", cat: "PDP ART DIRECTION // DIGITAL SHELF", 
                 hero: "images/6866e388147fc63efb668e97_bbk-thumbnail-3.jpg", 
                 hoverGif: "images/oiam-spices.gif",
-                desc: "A bold, spice-forward visual identity and packaging system designed for high retail visibility."
+                desc: "One In a Mill was a brand new player entering a crowded luxury spice market needing to validate their premium price point."
             },
             { 
-                title: "Premium Balsamic Digital Shelf Design", cat: "PDP ARCHITECTURE // DESKTOP SYSTEM", 
+                title: "Heritage Balsamic Product Layout", cat: "PDP ARCHITECTURE // DESKTOP SYSTEM", 
                 hero: "images/giusti-organic-02.jpg", 
                 hoverGif: "images/giusti-balsamic.gif",
-                desc: "A premium digital shelf architecture designed to communicate the rich heritage and quality of organic balsamic vinegar."
+                desc: "Giusti needed a fresh ecommerce presence for a new organic product that felt modern without losing historic prestige."
             },
             { 
-                title: "Cold Plunge Digital Shelf Design", cat: "SYSTEM EXTENSION // PRODUCT ADAPTATION", 
+                title: "Cold Plunge Marketplace Assets", cat: "SYSTEM EXTENSION // PRODUCT ADAPTATION", 
                 hero: "images/6866e55e3b1db5d8cee152a2_ouster-watercare-thumb1.jpg", 
                 hoverGif: "images/ouster-cold-plunge.gif",
-                desc: "Ensuring clarity and trust for wellness products in a competitive digital marketplace."
+                desc: "Translating existing brand assets into a premium digital shelf experience that communicates complex technical details cleanly."
             },
             { 
-                title: "Premium Marine Kit Digital Shelf Design", cat: "PDP ARCHITECTURE // DISCOVERY GRAPHICS", 
+                title: "Marine Bundle Ecommerce Showcase", cat: "PDP ARCHITECTURE // DISCOVERY GRAPHICS", 
                 hero: "images/6866e3c0dfda964c847854a9_boat-juice-luxury-kit-thumb-1.jpg", 
                 hoverGif: "images/boat-juice-luxury-kit.gif",
-                desc: "High-end product bundle presentation designed to elevate the unboxing experience."
+                desc: "Organizing multiple items on screen so the collection looked like a high end curated box instead of a messy pile."
             },
             { 
                 title: "Global Paid Media System", cat: "HIGH-VOLUME CREATIVE // PAID MEDIA", 
                 hero: "images/6866e33ef9ae172e2739fddb_hww-thumbnail-work.jpg", 
                 hoverGif: "images/shout-towels.gif",
-                desc: "A cohesive and inclusive campaign bridging languages to build stronger community connections."
+                desc: "Fitting two completely different languages into tight display spaces without making the layouts look cluttered or off brand."
             },
             { 
                 title: "Investor Pitch Deck Design", cat: "INVESTOR SYSTEM // CAPITAL DECK", 
                 hero: "images/6864531a31693aaa43ca28b0_armor-all-dock-image.jpg", 
                 hoverGif: "images/stellar-risk-AI.gif",
-                desc: "Futuristic and reliable visual language designed for an advanced artificial intelligence platform."
+                desc: "Translating highly complex technical data into a clear financial story that easily engages venture capital investors."
             },
             { 
                 title: "Selected Marks", cat: "LOGOTYPE INDEX // VECTOR CONTEXT", 
@@ -638,7 +638,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- 1. TOP METADATA & SWITCHER -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white w-full md:w-auto">PROJECT NO. 01/07 // DELIVERABLES: PDP GALLERY</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white w-full md:w-auto">PROJECT NO. 01/07</div>
                     
                     <div class="flex flex-wrap gap-2 md:gap-3 font-mono text-[10px] md:text-[11px] tracking-widest w-full md:w-auto mt-2 md:mt-0">
                         <button onclick="switchOIAM('zaatar')" id="btn-zaatar" class="oiam-btn flex-1 md:flex-none text-center px-3 md:px-4 py-2 border border-[#b026ff] text-white bg-[#b026ff]/20 opacity-100 transition-all duration-300">ZA'ATAR</button>
@@ -666,14 +666,21 @@
 
                 <!-- 3. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
-                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // One In a Mill Spices</div>
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // ONE IN A MILL</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
                     <div class="md:col-span-3">
                         <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
-                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Art Direction, Product Mockups, and Digital Shelf Design</p>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 mb-8">Art Direction, Product Mockups, and Digital Shelf Design</p>
+                        
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ DELIVERABLES ]</h3>
+                        <ul class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 list-none m-0 flex flex-col gap-2">
+                            <li>Premium Product Mockups</li>
+                            <li>Reusable Layout Templates</li>
+                            <li>Product Detail Page Graphics</li>
+                        </ul>
                     </div>
                     
                     <div class="md:col-span-9 flex flex-col gap-12">
@@ -780,7 +787,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 02/07 // DELIVERABLES: DESKTOP SYSTEM</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 02/07</div>
                 </div>
 
                 <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
@@ -802,14 +809,21 @@
 
                 <!-- 2. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
-                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Giusti Organic Balsamic</div>
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // GIUSTI</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
                     <div class="md:col-span-3">
                         <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
-                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Ecommerce Design and Visual Concepting</p>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 mb-8">Ecommerce Design and Visual Concepting</p>
+                        
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ DELIVERABLES ]</h3>
+                        <ul class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 list-none m-0 flex flex-col gap-2">
+                            <li>Product Detail Page Layouts</li>
+                            <li>Amazon A Plus Content</li>
+                            <li>Digital Product Showcases</li>
+                        </ul>
                     </div>
                     
                     <div class="md:col-span-9 flex flex-col gap-12">
@@ -891,7 +905,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 03/07 // DELIVERABLES: RESPONSIVE A+</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 03/07</div>
                 </div>
 
                 <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
@@ -913,14 +927,21 @@
 
                 <!-- 2. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
-                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Ouster Cold Plunge</div>
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // OUSTER</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
                     <div class="md:col-span-3">
                         <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
-                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Ecommerce Design and Layout Strategy</p>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 mb-8">Ecommerce Design and Layout Strategy</p>
+                        
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ DELIVERABLES ]</h3>
+                        <ul class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 list-none m-0 flex flex-col gap-2">
+                            <li>Amazon A Plus Modules</li>
+                            <li>Product Listing Graphics</li>
+                            <li>Organized Technical Layouts</li>
+                        </ul>
                     </div>
                     
                     <div class="md:col-span-9 flex flex-col gap-12">
@@ -993,7 +1014,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 04/07 // DELIVERABLES: PDP SYSTEM</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 04/07</div>
                 </div>
 
                 <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
@@ -1015,14 +1036,21 @@
 
                 <!-- 2. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
-                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Boat Juice Luxury Kit</div>
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // BOAT JUICE</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
                     <div class="md:col-span-3">
                         <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
-                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Ecommerce Design and Layout Strategy</p>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 mb-8">Ecommerce Design and Layout Strategy</p>
+                        
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ DELIVERABLES ]</h3>
+                        <ul class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 list-none m-0 flex flex-col gap-2">
+                            <li>Discovery Graphics</li>
+                            <li>Sensory Feature Callouts</li>
+                            <li>Curated Bundle Layouts</li>
+                        </ul>
                     </div>
                     
                     <div class="md:col-span-9 flex flex-col gap-12">
@@ -1140,7 +1168,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 05/07 // DELIVERABLES: HIGH-VOLUME AD SYSTEM</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 05/07</div>
                 </div>
 
                 <!-- 1. HERO BILINGUAL SPLIT (50/50 SYMMETRICAL GRID) -->
@@ -1164,14 +1192,21 @@
 
                 <!-- 2. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
-                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Shout</div>
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // SHOUT</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
                     <div class="md:col-span-3">
                         <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
-                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Paid Media Design and Layout Strategy</p>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 mb-8">Paid Media Design and Layout Strategy</p>
+                        
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ DELIVERABLES ]</h3>
+                        <ul class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 list-none m-0 flex flex-col gap-2">
+                            <li>Scalable Ad Templates</li>
+                            <li>Dual Language Media Assets</li>
+                            <li>Variable Size Display Ads</li>
+                        </ul>
                     </div>
                     
                     <div class="md:col-span-9 flex flex-col gap-12">
@@ -1248,7 +1283,7 @@
                     <div class="border border-zinc-800 bg-[#111111] p-10 max-w-md w-full flex flex-col gap-6 items-center text-center shadow-2xl">
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-2">[ SECURE TERMINAL ]</div>
                         <h2 class="font-[Syne] text-3xl text-white uppercase font-bold tracking-tight mb-2">Project Under NDA</h2>
-                        <p class="font-[Inter] text-[#94A3B8] text-sm leading-relaxed mb-6 font-light">Access to the Stellar Risk AI case study requires an active authorization code.</p>
+                        <p class="font-[Inter] text-[#94A3B8] text-sm leading-relaxed mb-6 font-light">Access to the StellarRisk AI case study requires an active authorization code.</p>
                         
                         <input type="password" id="nda-pwd" placeholder="ENTER CODE" class="w-full bg-[#050505] border border-zinc-800 text-white font-mono p-4 text-center focus:border-[#b026ff] transition-colors outline-none tracking-widest text-lg" onkeypress="if(event.key === 'Enter') checkStellarPwd()">
                         
@@ -1283,7 +1318,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 06/07 // DELIVERABLES: INVESTOR SYSTEM</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 06/07</div>
                 </div>
 
                 <!-- 1. THE HERO OUTCOME SPLIT (65% / 35% ASYMMETRICAL GRID) -->
@@ -1305,14 +1340,21 @@
 
                 <!-- 2. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
-                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Stellar Risk AI</div>
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // STELLARRISK AI</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
                     <div class="md:col-span-3">
                         <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
-                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4">Presentation Design and Visual Strategy</p>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 mb-8">Presentation Design and Visual Strategy</p>
+                        
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ DELIVERABLES ]</h3>
+                        <ul class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 list-none m-0 flex flex-col gap-2">
+                            <li>Presentation Wireframes</li>
+                            <li>Investor Pitch Deck</li>
+                            <li>Custom Data Layouts</li>
+                        </ul>
                     </div>
                     
                     <div class="md:col-span-9 flex flex-col gap-12">
@@ -1429,7 +1471,7 @@
             <div class="w-full pb-16 fade-up delay-1">
                 <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
-                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 07/07 // DELIVERABLES: LOGOTYPE CONTEXT</div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 07/07</div>
                 </div>
 
                 <!-- 1. THE LOGOLOUNGE 14 AWARD CALLOUT (35% / 65% ASYMMETRICAL SPLIT) -->
@@ -1456,12 +1498,33 @@
                 </div>
 
                 <div class="mb-12 mt-8">
-                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // Selected Marks</div>
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // VARIOUS</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
+                
+                <!-- Role / Deliverables context for Selected Marks to maintain grid consistency -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
+                    <div class="md:col-span-3">
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 mb-8">Brand Identity and Vector Illustration</p>
+                        
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ DELIVERABLES ]</h3>
+                        <ul class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 list-none m-0 flex flex-col gap-2">
+                            <li>Scalable Vector Logotypes</li>
+                            <li>Brand Mark Architecture</li>
+                            <li>Geometric Form Structuring</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="md:col-span-9 flex flex-col justify-center">
+                        <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">
+                            A curated index of logotypes and identity marks developed across various commercial sectors. This collection explores geometric discipline, visual economy, and scalable vector architecture, anchored by the LogoLounge Book 14 juried winner.
+                        </p>
+                    </div>
                 </div>
 
                 <!-- 3. THE SPECIMEN MATRIX (THE CORE CURATED ROW) -->
-                <div class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-20 border-t border-dashed border-white/10 pt-10">
+                <div class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-20">
                     ${gridItems}
                 </div>
             </div>
