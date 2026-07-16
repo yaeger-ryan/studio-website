@@ -3,459 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 // MISSING ARTIFACT</title>
+    <title>404 // ETERNAL CANVAS</title>
     
-    <!-- Premium Google Fonts -->
+    <!-- Premium Google Fonts: Inter (Editorial Body), Space Mono (Technical UI) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-    
-    <!-- Adobe Fonts -->
-    <link rel="stylesheet" href="https://use.typekit.net/awp2eek.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS (No Preflight) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            corePlugins: {
-                preflight: false,
-            }
-        }
+        tailwind.config = { corePlugins: { preflight: false } }
     </script>
 
     <style>
-        /* --- 1. RESET & VARIABLES --- */
         :root {
-            --bg: #050505;
-            --line: rgba(255, 255, 255, 0.08);
-            --text-main: #ffffff;
-            --text-mute: #999;
-            --accent-solid: #b026ff;
-            --accent-grad: linear-gradient(135deg, #b026ff 0%, #7a1ba6 100%);
-            
-            --font-logo: 'maiola', 'Cormorant Garamond', 'Times New Roman', serif;
-            --font-disp: 'Syne', sans-serif;
-            --font-mono: 'Space Mono', monospace;
+            --bg-deep: #050505;
+            --bg-light: #161616;
+            --accent: #b026ff;
             --font-body: 'Inter', sans-serif;
-
-            --fs-button: clamp(12px, 1vw, 14px);
-            --ease-cinematic: cubic-bezier(0.19, 1, 0.22, 1);
+            --font-mono: 'Space Mono', monospace;
         }
 
-        ::selection { background: var(--accent-solid); color: #fff; text-shadow: none; }
-        ::-moz-selection { background: var(--accent-solid); color: #fff; text-shadow: none; }
-
-        * { box-sizing: border-box; outline: none; }
-        html, body { margin: 0; padding: 0; background: var(--bg); height: 100vh; width: 100vw; overflow: hidden; color: var(--text-main); font-family: var(--font-body); font-weight: 300; }
-
-        /* --- 2. LUXURY SHUTTER --- */
-        .monolith-shutter {
-            position: fixed; inset: 0; z-index: 9999;
-            pointer-events: none; display: flex; align-items: center; justify-content: center;
-        }
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         
-        .monolith-panel {
-            position: absolute; left: 0; width: 100vw; height: 50vh;
-            background: #050505; 
-            animation: shutterOpen 0.8s cubic-bezier(0.8, 0, 0.1, 1) forwards;
-            animation-delay: 0.4s;
-        }
-        .monolith-panel.top { top: 0; transform-origin: top; }
-        .monolith-panel.bottom { bottom: 0; transform-origin: bottom; }
-        
-        @keyframes shutterOpen {
-            0% { transform: scaleY(1); }
-            100% { transform: scaleY(0); }
+        html, body { 
+            margin: 0; padding: 0; background: var(--bg-deep); 
+            height: 100vh; width: 100vw; overflow: hidden; 
+            font-family: var(--font-body); background-color: var(--bg-deep);
+            /* Prevent pull-to-refresh and scrolling on mobile to allow tactile wiping */
+            touch-action: none; overscroll-behavior: none;
         }
 
-        /* --- 3. BACKGROUND ARCHITECTURE --- */
-        .ambient-orb {
-            position: fixed;
-            width: 70vw;
-            height: 70vw;
-            background: radial-gradient(circle, rgba(176, 38, 255, 0.05) 0%, transparent 60%);
-            top: 15%;
-            left: 15%;
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: orbDrift 20s ease-in-out infinite alternate;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        @keyframes orbDrift {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(5vw, 5vh) scale(1.1); }
+        /* The Cinematic Transition Wrapper */
+        #transition-wrap {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s ease;
         }
 
-        /* --- 4. AVANT-GARDE ANIMATIONS --- */
-        .tracking-line {
-            position: absolute; top: 0; left: 0; width: 2px; height: 0%;
-            background: var(--accent-solid);
-            animation: drawLine 1.5s var(--ease-cinematic) forwards;
-            animation-delay: 0.8s;
+        /* --- THE SHARP REALITY (BOTTOM LAYER) --- */
+        #base-layer {
+            position: absolute; inset: 0; z-index: 1;
+            background: radial-gradient(circle at center, var(--bg-light) 0%, var(--bg-deep) 80%);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
-        @keyframes drawLine { to { height: 100%; } }
 
-        .tracking-node {
-            position: absolute; left: -3.5px; top: 0; width: 9px; height: 9px;
-            background: var(--accent-solid);
-            box-shadow: 0 0 15px rgba(176,38,255,0.6);
+        #exit-link {
+            text-decoration: none; text-align: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; z-index: 10; padding: 40px;
+        }
+
+        .quote {
+            font-weight: 300;
+            font-size: clamp(24px, 3.5vw, 42px);
+            color: #666; /* Muted gray */
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin: 0 0 20px 0;
+            transition: color 0.6s ease, text-shadow 0.6s ease;
+        }
+
+        .meta-tag {
+            font-family: var(--font-mono);
+            font-size: 10px; font-weight: 700;
+            letter-spacing: 0.2em; text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.2);
+            transition: color 0.6s ease, transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        /* Hovering the sharp text illuminates the way home */
+        #exit-link:hover .quote {
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        #exit-link:hover .meta-tag {
+            color: var(--accent);
+            transform: translateY(4px);
+        }
+
+        /* --- THE FOG (TOP LAYER) --- */
+        #fog-canvas {
+            position: absolute; inset: 0; z-index: 5;
+            width: 100%; height: 100%;
+            /* Let pointer events pass through so the user can click the anchor link beneath the fog */
+            pointer-events: none; 
+        }
+
+        /* --- THE EXIT SEQUENCE --- */
+        body.exiting #transition-wrap {
+            transform: scale(1.03);
             opacity: 0;
-            animation: dropNode 2.5s var(--ease-cinematic) forwards;
-            animation-delay: 1.2s;
         }
-        @keyframes dropNode {
-            0% { opacity: 0; transform: translateY(0) scale(0); }
-            15% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 1; transform: translateY(120px) scale(1); }
+        body.exiting #fog-canvas {
+            opacity: 0; transition: opacity 0.8s ease;
         }
-
-        .text-mask { overflow: hidden; display: block; position: relative; }
-        .text-reveal-up {
-            display: block;
-            transform: translateY(105%);
-            animation: revealUp 1.2s var(--ease-cinematic) forwards;
-        }
-        @keyframes revealUp { to { transform: translateY(0); } }
-
-        .blur-in {
-            opacity: 0; filter: blur(25px); transform: scale(0.95);
-            animation: blurFade 1.6s var(--ease-cinematic) forwards;
-        }
-        @keyframes blurFade {
-            to { opacity: 1; filter: blur(0); transform: scale(1); }
-        }
-
-        .dash-divider {
-            width: 0%; border-bottom: 1px dashed var(--line);
-            animation: drawWidth 1.5s var(--ease-cinematic) forwards;
-        }
-        @keyframes drawWidth { to { width: 100%; max-width: 32rem; } }
-
-        /* --- 5. BUTTON --- */
-        .btn-return { 
-            padding: 24px 40px; border: 1px dashed var(--line); background: transparent; 
-            color: white; font-family: var(--font-mono); font-size: var(--fs-button); font-weight: 400; 
-            text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.4s var(--ease-cinematic);
-            text-decoration: none; display: inline-flex; align-items: center; gap: 12px;
-            position: relative; overflow: hidden;
-        }
-        
-        .btn-return::before {
-            content: ''; position: absolute; inset: 0; background: var(--accent-solid);
-            transform: translateX(-101%); transition: transform 0.4s var(--ease-cinematic); z-index: 0;
-        }
-        .btn-return:hover::before { transform: translateX(0); }
-        
-        .btn-return:hover { 
-            border-color: var(--accent-solid); 
-            box-shadow: 0 0 30px rgba(176, 38, 255, 0.25); color: white;
-            transform: translateX(5px);
-        }
-        .btn-return span, .btn-return svg { position: relative; z-index: 10; transition: transform 0.3s ease; }
-        .btn-return:hover svg { transform: translateX(-4px); }
-
-        /* --- 6. EASTER EGG STYLES --- */
-        
-        /* The Glitch Breakdown */
-        @keyframes systemCollapse {
-            0% { transform: translate(2px, 1px) rotate(0deg); filter: hue-rotate(0deg); }
-            10% { transform: translate(-3px, -2px) rotate(-1deg); filter: hue-rotate(90deg) contrast(150%); }
-            20% { transform: translate(4px, 0px) rotate(2deg); filter: hue-rotate(-90deg) invert(10%); }
-            30% { transform: translate(-2px, 3px) rotate(0deg); }
-            40% { transform: translate(3px, -2px) rotate(2deg); filter: hue-rotate(180deg) invert(20%); }
-            50% { transform: translate(-2px, 4px) rotate(-2deg); }
-            60% { transform: translate(-4px, 1px) rotate(0deg); filter: hue-rotate(270deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-2px, -2px) rotate(2deg); }
-            90% { transform: translate(4px, 4px) rotate(0deg); filter: hue-rotate(360deg) contrast(200%); }
-            100% { transform: translate(2px, -3px) rotate(-2deg); }
-        }
-        body.collapsing {
-            animation: systemCollapse 0.15s infinite;
-        }
-
-        /* Massive Kinetic Marquee */
-        .marquee-void {
-            position: absolute; top: -50%; left: -20%; width: 140%; height: 200%;
-            display: flex; flex-direction: column; justify-content: space-around;
-            opacity: 0.08; pointer-events: none;
-            transform: rotate(-15deg);
-        }
-        .marquee-row { display: flex; white-space: nowrap; animation: scrollLeft 30s linear infinite; }
-        .marquee-row:nth-child(even) { animation: scrollRight 35s linear infinite; }
-        .marquee-row h2 { 
-            font-family: var(--font-disp); font-size: clamp(100px, 12vw, 200px); 
-            font-weight: 800; text-transform: uppercase; color: transparent; 
-            -webkit-text-stroke: 2px white; margin: 0 2rem; 
-        }
-        @keyframes scrollLeft { to { transform: translateX(-50%); } }
-        @keyframes scrollRight { from { transform: translateX(-50%); } to { transform: translateX(0%); } }
-
-        /* 3D Gyrosphere */
-        .gyro-container {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            perspective: 1200px; width: clamp(250px, 30vw, 500px); height: clamp(250px, 30vw, 500px);
-            z-index: 20;
-        }
-        .gyro {
-            position: relative; width: 100%; height: 100%; transform-style: preserve-3d;
-            animation: floatGyro 6s ease-in-out infinite alternate;
-        }
-        .gyro-ring {
-            position: absolute; inset: 0; border: 1px solid rgba(176, 38, 255, 0.4); border-radius: 50%;
-            box-shadow: 0 0 30px rgba(176, 38, 255, 0.1), inset 0 0 30px rgba(176, 38, 255, 0.1);
-            display: flex; align-items: center; justify-content: center; transform-style: preserve-3d;
-        }
-        .gyro-ring::after {
-            content: ''; position: absolute; inset: 15px; border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 50%;
-        }
-        .ring-1 { animation: spinX 8s linear infinite; }
-        .ring-2 { animation: spinY 12s linear infinite; }
-        .ring-3 { animation: spinZ 16s linear infinite; border-color: rgba(255,255,255,0.2); }
-
-        @keyframes spinX { to { transform: rotateX(360deg) rotateY(45deg); } }
-        @keyframes spinY { to { transform: rotateY(360deg) rotateZ(45deg); } }
-        @keyframes spinZ { to { transform: rotateZ(360deg) rotateX(45deg); } }
-        @keyframes floatGyro { to { transform: translateY(-20px); } }
-
-        /* Hex Stream */
-        .hex-stream {
-            position: absolute; top: 0; bottom: 0; width: 80px; overflow: hidden;
-            font-family: var(--font-mono); font-size: 10px; color: var(--accent-solid);
-            line-height: 1.2; opacity: 0.5; z-index: 10; pointer-events: none;
-            word-wrap: break-word;
-        }
-        .hex-left { left: 20px; text-align: left; }
-        .hex-right { right: 20px; text-align: right; }
-
-        /* Overlay Text */
-        .director-overlay {
-            position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 50; pointer-events: none; mix-blend-mode: difference;
-        }
-        .director-overlay h1 {
-            font-family: var(--font-disp); font-size: clamp(60px, 15vw, 200px); font-weight: 900;
-            color: white; line-height: 0.8; letter-spacing: -0.05em; margin: 0;
-        }
-
     </style>
 </head>
 <body>
 
-    <!-- AMBIENT LIGHTING -->
-    <div class="ambient-orb"></div>
-    <div class="light-sweep"></div>
-
-    <!-- SHUTTER (INITIAL) -->
-    <div class="monolith-shutter">
-        <div class="monolith-panel top"></div>
-        <div class="monolith-panel bottom"></div>
-    </div>
-
-    <!-- EASTER EGG SHUTTER (REUSABLE) -->
-    <div id="easter-shutter" class="fixed inset-0 z-[10001] pointer-events-none flex flex-col hidden">
-        <div class="h-1/2 w-full bg-[var(--accent-solid)] transform -translate-y-full transition-transform duration-500 ease-in-out" id="es-top"></div>
-        <div class="h-1/2 w-full bg-[var(--accent-solid)] transform translate-y-full transition-transform duration-500 ease-in-out" id="es-bot"></div>
-    </div>
-
-    <!-- MAIN 404 CONTENT -->
-    <div id="main-content" class="h-screen w-full flex items-center justify-center relative z-10 px-6 sm:px-12 transition-opacity duration-500">
-        <div class="max-w-5xl w-full flex flex-col items-start pl-8 sm:pl-16 relative py-12">
-            
-            <!-- Architectural Timeline Line & Node -->
-            <div class="tracking-line"></div>
-            <div class="tracking-node"></div>
-
-            <div class="text-mask mb-6">
-                <div class="text-reveal-up font-mono text-[10px] sm:text-xs tracking-[0.2em] opacity-40 uppercase text-white" style="animation-delay: 1.0s;">
-                    [ SYSTEM EXCEPTION // ARCHITECTURE_NOT_FOUND ]
-                </div>
-            </div>
-            
-            <!-- THE TRIGGER: Click this 3 times -->
-            <h1 id="error-trigger" class="font-[Syne] text-[clamp(100px,18vw,250px)] font-extrabold leading-[0.85] text-white blur-in tracking-tighter mb-4 sm:mb-8 cursor-pointer select-none transition-transform" style="animation-delay: 1.1s;" title="MANUAL OVERRIDE: TYPE 'YAEGER' OR CLICK 3X">
-                404
-            </h1>
-            
-            <div class="text-mask mb-8">
-                <h2 class="text-reveal-up font-[Syne] text-[clamp(24px,4vw,48px)] font-bold text-white uppercase tracking-wider" style="animation-delay: 1.2s;">
-                    Missing Artifact
-                </h2>
-            </div>
-            
-            <div class="dash-divider mb-8" style="animation-delay: 1.3s;"></div>
-            
-            <div class="text-mask mb-12">
-                <p class="text-reveal-up font-[Inter] font-light text-[#94A3B8] leading-loose max-w-2xl text-[15px] sm:text-[18px]" style="animation-delay: 1.3s;">
-                    The requested digital architecture could not be located. This asset has either been moved, archived, or never existed within the current design framework. Please redirect your trajectory.
-                </p>
-            </div>
-            
-            <div class="blur-in flex items-center gap-6" style="animation-delay: 1.5s;">
-                <a href="/" class="btn-return group">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                    <span>Return to Index</span>
-                </a>
-            </div>
-
-            <div class="absolute bottom-0 right-0 font-mono text-[8px] tracking-widest text-[#333] select-none">
-                [ OVERRIDE_KEY: YAEGER ]
-            </div>
-
-        </div>
-    </div>
-
-    <!-- EASTER EGG DIMENSION (HIDDEN INITIALLY) -->
-    <div id="easter-dimension" class="fixed inset-0 z-[50] bg-black hidden">
+    <div id="transition-wrap">
         
-        <!-- Marquee Storm -->
-        <div class="marquee-void">
-            <div class="marquee-row">
-                <h2>YAEGER STUDIO</h2><h2>AVANT GARDE</h2><h2>2026</h2><h2>ARCHITECTURE</h2>
-                <h2>YAEGER STUDIO</h2><h2>AVANT GARDE</h2><h2>2026</h2><h2>ARCHITECTURE</h2>
-            </div>
-            <div class="marquee-row">
-                <h2>SYSTEM OVERRIDE</h2><h2>SINGULARITY</h2><h2>VECTOR INDEX</h2><h2>DIRECTOR CUT</h2>
-                <h2>SYSTEM OVERRIDE</h2><h2>SINGULARITY</h2><h2>VECTOR INDEX</h2><h2>DIRECTOR CUT</h2>
-            </div>
-            <div class="marquee-row">
-                <h2>YAEGER STUDIO</h2><h2>AVANT GARDE</h2><h2>2026</h2><h2>ARCHITECTURE</h2>
-                <h2>YAEGER STUDIO</h2><h2>AVANT GARDE</h2><h2>2026</h2><h2>ARCHITECTURE</h2>
-            </div>
-            <div class="marquee-row">
-                <h2>SYSTEM OVERRIDE</h2><h2>SINGULARITY</h2><h2>VECTOR INDEX</h2><h2>DIRECTOR CUT</h2>
-                <h2>SYSTEM OVERRIDE</h2><h2>SINGULARITY</h2><h2>VECTOR INDEX</h2><h2>DIRECTOR CUT</h2>
-            </div>
-            <div class="marquee-row">
-                <h2>YAEGER STUDIO</h2><h2>AVANT GARDE</h2><h2>2026</h2><h2>ARCHITECTURE</h2>
-                <h2>YAEGER STUDIO</h2><h2>AVANT GARDE</h2><h2>2026</h2><h2>ARCHITECTURE</h2>
-            </div>
+        <!-- BASE LAYER: The Sharp Reality -->
+        <div id="base-layer">
+            <a href="/" id="exit-link" title="Return to Reality">
+                <h1 class="quote" id="sharp-quote">A temporary mark on an eternal canvas.</h1>
+                <div class="meta-tag" id="sharp-meta">[ 404 // CLICK TO RETURN ]</div>
+            </a>
         </div>
 
-        <!-- Matrix Streams -->
-        <div id="hex-left" class="hex-stream hex-left"></div>
-        <div id="hex-right" class="hex-stream hex-right"></div>
-
-        <!-- 3D Gyrosphere -->
-        <div class="gyro-container">
-            <div class="gyro">
-                <div class="gyro-ring ring-1"></div>
-                <div class="gyro-ring ring-2"></div>
-                <div class="gyro-ring ring-3"></div>
-            </div>
-        </div>
-
-        <!-- Overlay Typography -->
-        <div class="director-overlay">
-            <h1>OVERRIDE</h1>
-            <div class="font-mono text-white text-xs sm:text-sm tracking-[0.5em] mt-4 uppercase text-center border-y border-dashed border-white/20 py-2 w-full max-w-lg">
-                [ WELCOME TO THE ARCHITECTURE ]
-            </div>
-        </div>
-
-        <!-- Abort Button -->
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 z-[100]">
-            <button onclick="window.location.reload()" class="font-mono text-[10px] tracking-[0.3em] text-zinc-500 hover:text-white border border-zinc-800 hover:border-white px-8 py-3 transition-colors uppercase bg-black">
-                [ ABORT_SEQUENCE ]
-            </button>
-        </div>
+        <!-- TOP LAYER: The Condensation -->
+        <canvas id="fog-canvas"></canvas>
 
     </div>
 
-    <!-- EASTER EGG SCRIPT LOGIC -->
     <script>
-        let clicks = 0;
-        let isTriggered = false;
-        let keyBuffer = '';
-        const secretCode = 'yaeger';
+        const canvas = document.getElementById('fog-canvas');
+        const ctx = canvas.getContext('2d', { alpha: true });
+        
+        // Offscreen buffer to hold the pure "Foggy State"
+        // We draw this back over the main canvas at a very low opacity every frame to simulate refogging.
+        const fogBuffer = document.createElement('canvas');
+        const fogCtx = fogBuffer.getContext('2d', { alpha: false });
 
-        const triggerEl = document.getElementById('error-trigger');
-        const shutter = document.getElementById('easter-shutter');
-        const shutterTop = document.getElementById('es-top');
-        const shutterBot = document.getElementById('es-bot');
-        const mainContent = document.getElementById('main-content');
-        const easterDimension = document.getElementById('easter-dimension');
+        // DOM Elements to match alignment
+        const quoteEl = document.getElementById('sharp-quote');
+        const metaEl = document.getElementById('sharp-meta');
 
-        // Click Trigger
-        triggerEl.addEventListener('click', () => {
-            if(isTriggered) return;
-            clicks++;
-            triggerEl.style.transform = `scale(${1 + (clicks * 0.05)})`;
-            triggerEl.style.color = clicks === 2 ? 'var(--accent-solid)' : 'white';
-            if(clicks >= 3) initiateOverride();
+        let w, h;
+        let lastX = -1000, lastY = -1000;
+        let isTouching = false;
+
+        // Ensure custom fonts are loaded before painting the fog text
+        document.fonts.ready.then(() => {
+            initEngine();
+            requestAnimationFrame(renderLoop);
         });
 
-        // Keyboard Trigger
-        window.addEventListener('keydown', (e) => {
-            if(isTriggered) return;
-            keyBuffer += e.key.toLowerCase();
-            if (keyBuffer.length > secretCode.length) {
-                keyBuffer = keyBuffer.slice(-secretCode.length);
+        function initEngine() {
+            resize();
+            window.addEventListener('resize', resize);
+            
+            // Desktop Wipe
+            window.addEventListener('mousemove', (e) => {
+                const currentX = e.clientX;
+                const currentY = e.clientY;
+                wipe(lastX, lastY, currentX, currentY);
+                lastX = currentX; lastY = currentY;
+            });
+
+            // Mobile/Tactile Wipe
+            window.addEventListener('touchstart', (e) => {
+                isTouching = true;
+                lastX = e.touches[0].clientX;
+                lastY = e.touches[0].clientY;
+            }, { passive: false });
+
+            window.addEventListener('touchmove', (e) => {
+                if (!isTouching) return;
+                e.preventDefault(); // Stop scrolling
+                const currentX = e.touches[0].clientX;
+                const currentY = e.touches[0].clientY;
+                wipe(lastX, lastY, currentX, currentY);
+                lastX = currentX; lastY = currentY;
+            }, { passive: false });
+
+            window.addEventListener('touchend', () => isTouching = false);
+        }
+
+        function resize() {
+            w = window.innerWidth;
+            h = window.innerHeight;
+            
+            // Retina display scaling for pristine graphics
+            const dpr = window.devicePixelRatio || 1;
+            
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            ctx.scale(dpr, dpr);
+            
+            fogBuffer.width = w * dpr;
+            fogBuffer.height = h * dpr;
+            fogCtx.scale(dpr, dpr);
+
+            drawFogState(fogCtx, w, h);
+            
+            // Instantly fill the main screen with solid fog on load/resize
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 1.0;
+            ctx.drawImage(fogBuffer, 0, 0, w, h);
+        }
+
+        function drawFogState(context, width, height) {
+            // 1. The cold, dark background
+            let grad = context.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.max(width, height));
+            grad.addColorStop(0, '#161616');
+            grad.addColorStop(1, '#050505');
+            context.fillStyle = grad;
+            context.fillRect(0, 0, width, height);
+
+            // Add microscopic noise/frost texture overlay
+            context.fillStyle = 'rgba(255, 255, 255, 0.015)';
+            context.fillRect(0, 0, width, height);
+
+            // 2. The Blurred Quote
+            const quoteStyle = window.getComputedStyle(quoteEl);
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.font = `300 ${quoteStyle.fontSize} 'Inter', sans-serif`;
+            context.fillStyle = '#444444'; // Slightly darker in the fog
+            context.filter = 'blur(12px)';   // Heavy frosted blur
+            
+            // Calculate exact position based on HTML layout
+            const quoteRect = quoteEl.getBoundingClientRect();
+            const quoteY = quoteRect.top + (quoteRect.height / 2);
+            context.fillText("A temporary mark on an eternal canvas.", width/2, quoteY);
+            
+            // 3. The Blurred Meta Tag
+            const metaStyle = window.getComputedStyle(metaEl);
+            context.font = `700 ${metaStyle.fontSize} 'Space Mono', monospace`;
+            context.fillStyle = 'rgba(255,255,255,0.15)';
+            context.filter = 'blur(8px)';
+            
+            const metaRect = metaEl.getBoundingClientRect();
+            const metaY = metaRect.top + (metaRect.height / 2);
+            // Apply letter spacing hack for canvas if supported
+            if(context.letterSpacing !== undefined) context.letterSpacing = "0.2em";
+            context.fillText("[ 404 // CLICK TO RETURN ]", width/2, metaY);
+            
+            context.filter = 'none'; // Reset
+        }
+
+        function wipe(x1, y1, x2, y2) {
+            // Ignore giant jumps (like cursor entering screen)
+            if (x1 === -1000 || Math.hypot(x2 - x1, y2 - y1) > 150) { 
+                return; 
             }
-            if (keyBuffer === secretCode) initiateOverride();
+            
+            // Destination-out punches a transparent hole into the canvas
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // Multi-pass stroking to create a soft, feathered organic brush edge
+            for (let i = 0; i < 6; i++) {
+                ctx.lineWidth = 100 - (i * 14); // Radiates outward
+                ctx.strokeStyle = `rgba(0, 0, 0, ${0.1 + (i * 0.15)})`; // Center is solid, edges are faint
+                ctx.beginPath();
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+                ctx.stroke();
+            }
+        }
+
+        function renderLoop() {
+            // Draw the offscreen fog buffer back over the main canvas constantly.
+            // A very low global alpha makes the transparent "wiped" areas slowly 
+            // accumulate fog until they are completely opaque again.
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.globalAlpha = 0.008; // Slower fade = colder, longer lasting marks
+            ctx.drawImage(fogBuffer, 0, 0, w, h);
+            
+            requestAnimationFrame(renderLoop);
+        }
+
+        const link = document.getElementById('exit-link');
+        
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Trigger the CSS animations
+            document.body.classList.add('exiting');
+            
+            // Allow animations to finish before firing the redirect
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1200);
         });
 
-        function initiateOverride() {
-            isTriggered = true;
-            
-            // 1. Violent Glitch Breakdown
-            document.body.classList.add('collapsing');
-            
-            // 2. Shutters Slam Shut
-            setTimeout(() => {
-                shutter.classList.remove('hidden');
-                // Force reflow
-                void shutter.offsetWidth;
-                shutterTop.classList.remove('-translate-y-full');
-                shutterBot.classList.remove('translate-y-full');
-                shutterTop.classList.add('translate-y-0');
-                shutterBot.classList.add('translate-y-0');
-            }, 1200);
-
-            // 3. Swap Dimensions & Re-open Shutters
-            setTimeout(() => {
-                document.body.classList.remove('collapsing');
-                mainContent.style.display = 'none';
-                easterDimension.classList.remove('hidden');
-                
-                // Open shutters
-                shutterTop.classList.remove('translate-y-0');
-                shutterBot.classList.remove('translate-y-0');
-                shutterTop.classList.add('-translate-y-full');
-                shutterBot.classList.add('translate-y-full');
-
-                // Start Matrix Stream
-                startHexStream();
-            }, 1900);
-
-            // 4. Cleanup Shutter DOM
-            setTimeout(() => {
-                shutter.classList.add('hidden');
-            }, 2500);
-        }
-
-        // Generates the falling hex code on the edges
-        function startHexStream() {
-            const left = document.getElementById('hex-left');
-            const right = document.getElementById('hex-right');
-            
-            setInterval(() => {
-                const generateLine = () => {
-                    let str = '';
-                    for(let i=0; i<4; i++) str += Math.random().toString(16).substr(2, 2).toUpperCase() + ' ';
-                    return str + '<br>';
-                };
-                
-                left.innerHTML = generateLine() + left.innerHTML.substring(0, 1000);
-                right.innerHTML = generateLine() + right.innerHTML.substring(0, 1000);
-            }, 80);
-        }
     </script>
-
 </body>
 </html>
