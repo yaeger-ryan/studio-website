@@ -124,7 +124,6 @@
         .fade-up { opacity: 0; transform: translateY(8px); animation: fadeUpAnim 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards; will-change: opacity, transform; }
         @keyframes fadeUpAnim { to { opacity: 1; transform: translateY(0); } }
 
-        /* Timed perfectly to follow the mechanical shutter */
         .delay-1 { animation-delay: 0.9s; }
         .delay-2 { animation-delay: 1.0s; }
         .delay-3 { animation-delay: 1.1s; }
@@ -166,7 +165,7 @@
 
         .index-header {
             padding: 20px var(--pad-m); border-bottom: 1px solid var(--line); border-top: 1px solid var(--line);
-            background: var(--bg); position: sticky; top: 0; z-index: 50;
+            background: var(--bg); position: sticky; top: 0; z-index: 50; /* Z-INDEX FIX */
             font-family: var(--font-mono); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.25em; color: var(--text-mute);
         }
 
@@ -185,7 +184,7 @@
         .project-hover-bg::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.66); }
         .project-wrapper:hover .project-hover-bg, .project-wrapper.active .project-hover-bg { opacity: 1; }
         
-        .p-title { font-family: var(--font-disp); font-weight: 800; font-size: clamp(16px, 4vw, 32px); font-size: clamp(16px, 6.5cqi, 32px); margin-bottom: 8px; color: white; transition: color 0.2s; letter-spacing: -0.01em; overflow-wrap: normal; word-break: normal; hyphens: none; }
+        .p-title { font-family: var(--font-disp); font-weight: 800; font-size: clamp(22px, 8.5cqi, 32px); margin-bottom: 8px; color: white; transition: color 0.2s; letter-spacing: -0.01em; overflow-wrap: normal; word-break: normal; hyphens: none; }
         .project-wrapper:hover .p-title { background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .p-cat { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; color: var(--text-mute); letter-spacing: 0.1em; font-weight: 700; }
 
@@ -194,8 +193,7 @@
         /* --- 6. MIDDLE PANEL --- */
         .panel-viewer {
             grid-column: 4 / 10; border-right: 1px solid var(--line); height: 100%; overflow-y: auto; background: transparent;
-            z-index: 5; position: relative; perspective: 1000px;
-            container-type: inline-size;
+            z-index: 5; position: relative; perspective: 1000px; container-type: inline-size;
         }
 
         .case-study {
@@ -205,21 +203,16 @@
         }
         .case-study.visible { opacity: 1; transform: translateY(0); }
 
-        /* Editorial Asymmetry & Breathing Room */
         .cs-content-block {
-            margin-left: 15%; 
-            max-width: 65%;
-            margin-top: 140px; 
-            margin-bottom: 160px;
+            margin-left: 15%; max-width: 65%; margin-top: 140px; margin-bottom: 160px;
         }
 
-        /* Data Stamps */
         .cs-meta { 
             font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; 
             color: rgba(255, 255, 255, 0.35); margin-bottom: 20px; text-transform: uppercase; font-weight: 400; 
         }
         
-        .cs-h1 { font-family: var(--font-disp); font-size: clamp(26px, 6vw, 85px); font-size: clamp(26px, 8.5cqi, 85px); line-height: 0.9; font-weight: 800; text-transform: uppercase; margin: 0 0 30px 0; color: white; letter-spacing: -0.02em; overflow-wrap: normal; word-break: normal; hyphens: none; }
+        .cs-h1 { font-family: var(--font-disp); font-size: clamp(32px, 8.5cqi, 85px); line-height: 0.9; font-weight: 800; text-transform: uppercase; margin: 0 0 30px 0; color: white; letter-spacing: -0.02em; overflow-wrap: normal; word-break: normal; hyphens: none; }
         .cs-p { font-family: var(--font-body); font-size: var(--fs-body); line-height: 2; font-weight: 300; color: #94A3B8; margin-bottom: 0; }
         .cs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .spacer-l { height: 80px; width: 100%; }
@@ -272,12 +265,10 @@
             animation: scroll-left 45s linear infinite;
         }
         
-        /* Agency Partners - Larger, bolder */
         .marquee-row.agency .marquee-content {
             font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); font-weight: 400; letter-spacing: 0.25em;
         }
 
-        /* Direct Clients - Smaller, reverse scroll */
         .marquee-row.direct .marquee-content {
             font-family: var(--font-mono); font-size: 11px; color: var(--text-mute); font-weight: 400; letter-spacing: 0.25em;
             animation: scroll-right 40s linear infinite;
@@ -289,7 +280,6 @@
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         @keyframes scroll-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
 
-        /* Copy Email Feedback */
         .copy-feedback { font-size: 11px; color: var(--accent-solid); margin-left: 10px; opacity: 0; transition: opacity 0.3s; font-weight: bold; font-family: var(--font-mono); }
         .copy-feedback.show { opacity: 1; }
 
@@ -332,7 +322,6 @@
         .legal-link { font-family: var(--font-mono); font-size: 11px; color: #94A3B8; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; cursor: pointer; width: fit-content; }
         .legal-link:hover { color: #fff; transform: translateX(5px); text-shadow: 0 0 10px var(--accent-solid); }
         
-        /* Typography overrides for legal content to match original size */
         .legal-content h2 { font-family: var(--font-disp); font-size: 20px; color: white; margin-top: 40px; margin-bottom: 15px; border-left: 3px solid var(--accent-solid); padding-left: 15px; font-weight: 800; }
         .legal-content ul { margin-bottom: 20px; padding-left: 20px; }
         .legal-content li { margin-bottom: 5px; color: #94A3B8; }
@@ -497,37 +486,37 @@
                 title: "Premium Spice Ecommerce Launch", cat: "PDP ART DIRECTION // DIGITAL SHELF", 
                 hero: "images/6866e388147fc63efb668e97_bbk-thumbnail-3.jpg", 
                 hoverGif: "images/oiam-spices.gif",
-                desc: "One In a Mill was a brand new player entering a crowded luxury spice market needing to validate their premium price point."
+                desc: "One In a Mill was a brand new player entering a crowded luxury spice market. They needed a way to stand out immediately, validate their premium price point, and build a digital presentation from scratch."
             },
             { 
                 title: "Heritage Balsamic Product Layout", cat: "PDP ARCHITECTURE // DESKTOP SYSTEM", 
                 hero: "images/giusti-organic-02.jpg", 
                 hoverGif: "images/giusti-balsamic.gif",
-                desc: "Giusti needed a fresh ecommerce presence for a new organic product that felt modern without losing historic prestige."
+                desc: "Giusti is a legacy Italian brand famous for its high end balsamic vinegar. When they decided to introduce a new organic product to their lineup, they needed a fresh ecommerce presence that felt modern without losing any of their rich historic prestige."
             },
             { 
                 title: "Cold Plunge Marketplace Assets", cat: "SYSTEM EXTENSION // PRODUCT ADAPTATION", 
                 hero: "images/6866e55e3b1db5d8cee152a2_ouster-watercare-thumb1.jpg", 
                 hoverGif: "images/ouster-cold-plunge.gif",
-                desc: "Translating existing brand assets into a premium digital shelf experience that communicates complex technical details cleanly."
+                desc: "Ouster needed to launch a specialized cold plunge water cleanser. They had existing brand assets but needed a way to translate them into a premium digital shelf experience that could communicate complex technical details without looking cluttered."
             },
             { 
                 title: "Marine Bundle Ecommerce Showcase", cat: "PDP ARCHITECTURE // DISCOVERY GRAPHICS", 
                 hero: "images/6866e3c0dfda964c847854a9_boat-juice-luxury-kit-thumb-1.jpg", 
                 hoverGif: "images/boat-juice-luxury-kit.gif",
-                desc: "Organizing multiple items on screen so the collection looked like a high end curated box instead of a messy pile."
+                desc: "Boat Juice needed to turn a large bundle of marine maintenance products into a premium lifestyle kit. The challenge was organizing multiple items on screen so the collection looked like a high end curated box instead of a messy pile of cleaning supplies."
             },
             { 
                 title: "Global Paid Media System", cat: "HIGH-VOLUME CREATIVE // PAID MEDIA", 
                 hero: "images/6866e33ef9ae172e2739fddb_hww-thumbnail-work.jpg", 
                 hoverGif: "images/shout-towels.gif",
-                desc: "Fitting two completely different languages into tight display spaces without making the layouts look cluttered or off brand."
+                desc: "Shout needed a massive amount of digital ads for their paid media channels in both English and French. The main hurdle was fitting two completely different languages into tight display spaces without making the layouts look cluttered or off brand."
             },
             { 
                 title: "Investor Pitch Deck Design", cat: "INVESTOR SYSTEM // CAPITAL DECK", 
                 hero: "images/6864531a31693aaa43ca28b0_armor-all-dock-image.jpg", 
                 hoverGif: "images/stellar-risk-AI.gif",
-                desc: "Translating highly complex technical data into a clear financial story that easily engages venture capital investors."
+                desc: "StellarRisk AI needed to translate highly complex technical data into a clean presentation. The goal was to take heavy information and turn it into a clear financial story that would easily engage venture capital investors."
             },
             { 
                 title: "Selected Marks", cat: "LOGOTYPE INDEX // VECTOR CONTEXT", 
@@ -639,7 +628,7 @@
             if (index === 5) return generateStellarTemplate(p);
             if (index === 6) return generateSelectedMarksTemplate(p);
 
-            return ``; // Fallback
+            const projectNum = String(index + 1).padStart(2, '0');
         }
 
         // --- CUSTOM OIAM COMPONENT ---
@@ -649,7 +638,6 @@
                 .no-scrollbar::-webkit-scrollbar { display: none; }
             </style>
             <div class="w-full pb-16 fade-up delay-1">
-                <!-- 1. TOP METADATA & SWITCHER -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
                     <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white w-full md:w-auto">PROJECT NO. 01/07</div>
                     
@@ -660,7 +648,6 @@
                     </div>
                 </div>
 
-                <!-- 2. CORE HERO COMPONENT (35/65 Split) -->
                 <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
                     <div class="w-full lg:w-[35%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-white aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
@@ -677,7 +664,6 @@
                     </div>
                 </div>
 
-                <!-- 3. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
                     <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // ONE IN A MILL</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
@@ -712,7 +698,6 @@
                     </div>
                 </div>
 
-                <!-- 4. MOBILE VIEWPORT GRID -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
                     <div class="flex flex-col gap-3">
                         <div class="overflow-hidden relative h-[500px] w-[250px] bg-black rounded-[2rem] border-[4px] border-zinc-800 mx-auto shadow-2xl flex flex-col">
@@ -753,33 +738,15 @@
                     </div>
                 </div>
 
-                <!-- 5. HORIZONTAL CAROUSEL -->
                 <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
-                    
-                    <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
-                        <div class="border border-white/10 aspect-square bg-[#0a0a0a] p-3">
-                            <img id="oiam-img-04" src="./images/oiam-zaatar-04.jpg" class="w-full h-full object-cover">
+                    ${['04', '05', '07', '08'].map(idx => `
+                        <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
+                            <div class="border border-zinc-800/50 aspect-square bg-[#0a0a0a] p-3">
+                                <img id="oiam-img-${idx}" src="./images/oiam-zaatar-${idx}.jpg" class="w-full h-full object-cover">
+                            </div>
+                            <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ ASSET_${idx} ]</div>
                         </div>
-                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ ASSET_04 ]</div>
-                    </div>
-                    <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
-                        <div class="border border-white/10 aspect-square bg-[#0a0a0a] p-3">
-                            <img id="oiam-img-05" src="./images/oiam-zaatar-05.jpg" class="w-full h-full object-cover">
-                        </div>
-                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ ASSET_05 ]</div>
-                    </div>
-                    <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
-                        <div class="border border-white/10 aspect-square bg-[#0a0a0a] p-3">
-                            <img id="oiam-img-07" src="./images/oiam-zaatar-07.jpg" class="w-full h-full object-cover">
-                        </div>
-                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ ASSET_07 ]</div>
-                    </div>
-                    <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
-                        <div class="border border-white/10 aspect-square bg-[#0a0a0a] p-3">
-                            <img id="oiam-img-08" src="./images/oiam-zaatar-08.jpg" class="w-full h-full object-cover">
-                        </div>
-                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ ASSET_08 ]</div>
-                    </div>
+                    `).join('')}
                 </div>
             </div>
             `;
@@ -798,12 +765,10 @@
                 }
             </style>
             <div class="w-full pb-16 fade-up delay-1">
-                <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
                     <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 02/07</div>
                 </div>
 
-                <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
                 <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
                     <div class="w-full lg:w-[35%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-white aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
@@ -811,7 +776,6 @@
                         </div>
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ COMPLIANCE // INDEX_01 ]</div>
                     </div>
-                    
                     <div class="w-full lg:w-[65%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-zinc-900 lg:max-h-[500px] h-full flex items-center justify-center p-6 lg:p-12 overflow-hidden">
                             <img src="./images/giusti-organic-02.jpg" alt="Hero Asset" class="w-full h-full object-contain max-h-[500px]">
@@ -820,7 +784,6 @@
                     </div>
                 </div>
 
-                <!-- 2. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
                     <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // GIUSTI</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
@@ -838,7 +801,6 @@
                             <li>Digital Product Showcases</li>
                         </ul>
                     </div>
-                    
                     <div class="md:col-span-9 flex flex-col gap-12">
                         <div>
                             <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
@@ -855,7 +817,6 @@
                     </div>
                 </div>
 
-                <!-- 3. DESKTOP VIEWPORT FRAME -->
                 <div class="flex flex-col gap-3 mb-20">
                     <div class="w-full h-[500px] border border-zinc-800/60 bg-black rounded-lg overflow-hidden relative shadow-2xl">
                         <img src="./images/giusti-organic-a+.jpg" alt="Interactive A+ Module" class="w-full h-auto absolute top-0 left-0 animate-desktop-scroll">
@@ -863,7 +824,6 @@
                     <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mt-2">[ DESKTOP VIEWPORT // INTERACTIVE A+ MODULE ]</div>
                 </div>
 
-                <!-- 4. HORIZONTAL CAROUSEL -->
                 <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
                     ${['03', '04', '05', '06', '07', '08'].map(idx => `
                         <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
@@ -875,7 +835,6 @@
                     `).join('')}
                 </div>
 
-                <!-- 5. CINEMATIC CAPTURE VIDEO -->
                 <div class="flex flex-col gap-3 pb-8">
                     <div class="border border-white/10 bg-black p-2 md:p-6">
                         <video autoplay loop muted playsinline class="w-full h-auto object-cover border border-zinc-800/50">
@@ -893,35 +852,18 @@
             return `
             <style>
                 .no-scrollbar::-webkit-scrollbar { display: none; }
-                @keyframes dieline-scroll {
-                    0% { transform: translateX(0); }
-                    100% { transform: translateX(-50%); }
-                }
-                .animate-dieline-scroll {
-                    animation: dieline-scroll 25s linear infinite;
-                }
-                @keyframes ouster-desktop-scroll {
-                    0%, 10% { transform: translateY(0%); }
-                    90%, 100% { transform: translateY(calc(-100% + 500px)); }
-                }
-                .animate-ouster-desktop-scroll {
-                    animation: ouster-desktop-scroll 22s ease-in-out infinite alternate;
-                }
-                @keyframes ouster-mobile-scroll {
-                    0%, 10% { transform: translateY(0%); }
-                    90%, 100% { transform: translateY(calc(-100% + 465px)); }
-                }
-                .animate-ouster-mobile-scroll {
-                    animation: ouster-mobile-scroll 22s ease-in-out infinite alternate;
-                }
+                @keyframes dieline-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+                .animate-dieline-scroll { animation: dieline-scroll 25s linear infinite; }
+                @keyframes ouster-desktop-scroll { 0%, 10% { transform: translateY(0%); } 90%, 100% { transform: translateY(calc(-100% + 500px)); } }
+                .animate-ouster-desktop-scroll { animation: ouster-desktop-scroll 22s ease-in-out infinite alternate; }
+                @keyframes ouster-mobile-scroll { 0%, 10% { transform: translateY(0%); } 90%, 100% { transform: translateY(calc(-100% + 465px)); } }
+                .animate-ouster-mobile-scroll { animation: ouster-mobile-scroll 22s ease-in-out infinite alternate; }
             </style>
             <div class="w-full pb-16 fade-up delay-1">
-                <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
                     <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 03/07</div>
                 </div>
 
-                <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
                 <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
                     <div class="w-full lg:w-[35%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-white aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
@@ -929,7 +871,6 @@
                         </div>
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ COMPLIANCE // INDEX_01 ]</div>
                     </div>
-                    
                     <div class="w-full lg:w-[65%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-[#111111] lg:max-h-[500px] h-full flex items-center justify-center p-6 lg:p-12 overflow-hidden">
                             <img src="./images/ouster-cold-plunge-02.jpg" alt="Hero Asset" class="w-full h-full object-contain max-h-[500px]">
@@ -938,7 +879,6 @@
                     </div>
                 </div>
 
-                <!-- 2. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
                     <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // OUSTER</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
@@ -956,7 +896,6 @@
                             <li>Organized Technical Layouts</li>
                         </ul>
                     </div>
-                    
                     <div class="md:col-span-9 flex flex-col gap-12">
                         <div>
                             <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
@@ -973,7 +912,6 @@
                     </div>
                 </div>
 
-                <!-- 3. TECHNICAL DIELINE DISPLAY (THE LABEL) -->
                 <div class="flex flex-col gap-3 mb-16">
                     <div class="w-full h-[250px] sm:h-[350px] overflow-hidden flex bg-[#0A0A0A] border-y border-zinc-800/60 relative">
                         <div class="flex h-full w-max animate-dieline-scroll">
@@ -986,7 +924,6 @@
                     <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ SYSTEM PACKAGING // TECHNICAL DIELINE PAN ]</div>
                 </div>
 
-                <!-- 4. DUAL-VIEWPORT RESPONSIVE A+ MODULE -->
                 <div class="flex flex-col lg:flex-row gap-10 mb-20 items-center lg:items-stretch">
                     <div class="w-full lg:w-[60%] flex flex-col gap-3">
                         <div class="w-full h-[500px] border border-zinc-800/60 bg-black rounded-lg overflow-hidden relative shadow-2xl">
@@ -1006,7 +943,6 @@
                     </div>
                 </div>
 
-                <!-- 5. HORIZONTAL ASSET CAROUSEL -->
                 <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
                     ${['03', '04', '05', '06', '07', '08', '09', '10', '11'].map(idx => `
                         <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
@@ -1025,12 +961,10 @@
         function generateBoatJuiceTemplate(p) {
             return `
             <div class="w-full pb-16 fade-up delay-1">
-                <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
                     <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 04/07</div>
                 </div>
 
-                <!-- 1. CORE HERO COMPONENT (35/65 Split) -->
                 <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
                     <div class="w-full lg:w-[35%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-white aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
@@ -1038,7 +972,6 @@
                         </div>
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ COMPLIANCE // INDEX_01 ]</div>
                     </div>
-                    
                     <div class="w-full lg:w-[65%] flex flex-col gap-3">
                         <div class="border border-white/10 bg-[#111111] lg:max-h-[500px] h-full flex items-center justify-center p-6 lg:p-12 overflow-hidden">
                             <img src="./images/boat-juice-luxury-04.jpg" alt="Hero Asset" class="w-full h-full object-contain max-h-[500px]">
@@ -1047,7 +980,6 @@
                     </div>
                 </div>
 
-                <!-- 2. PROJECT STORY BLOCK -->
                 <div class="mb-12 mt-8">
                     <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // BOAT JUICE</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
@@ -1065,7 +997,6 @@
                             <li>Curated Bundle Layouts</li>
                         </ul>
                     </div>
-                    
                     <div class="md:col-span-9 flex flex-col gap-12">
                         <div>
                             <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
@@ -1082,14 +1013,12 @@
                     </div>
                 </div>
 
-                <!-- 3. MOBILE VIEWPORT WIREFRAMES -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
                     <div class="flex flex-col gap-3">
                         <div class="overflow-hidden relative h-[500px] w-[250px] bg-black rounded-[2rem] border-[4px] border-zinc-800 mx-auto shadow-2xl flex flex-col">
                             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#050505] rounded-b-2xl z-20 border border-zinc-800 border-t-0"></div>
                             <div class="w-full h-[40px] bg-[#050505] relative z-10 shrink-0"></div>
                             <img src="./images/boat-juice-luxury-02.jpg" alt="Mobile Viewport A" class="w-full aspect-square object-cover relative z-10">
-                            
                             <div class="p-5 flex-1 flex flex-col relative z-10 bg-black pt-6">
                                 <div class="w-3/4 h-3 bg-zinc-800 rounded mb-2"></div>
                                 <div class="w-1/2 h-3 bg-zinc-800 rounded mb-6"></div>
@@ -1102,13 +1031,11 @@
                         </div>
                         <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-center mt-3 text-white">[ MOBILE VIEWPORT A ]</div>
                     </div>
-                    
                     <div class="flex flex-col gap-3">
                         <div class="overflow-hidden relative h-[500px] w-[250px] bg-black rounded-[2rem] border-[4px] border-zinc-800 mx-auto shadow-2xl flex flex-col">
                             <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#050505] rounded-b-2xl z-20 border border-zinc-800 border-t-0"></div>
                             <div class="w-full h-[40px] bg-[#050505] relative z-10 shrink-0"></div>
                             <img src="./images/boat-juice-luxury-03.jpg" alt="Mobile Viewport B" class="w-full aspect-square object-cover relative z-10">
-                            
                             <div class="p-5 flex-1 flex flex-col relative z-10 bg-black pt-6">
                                 <div class="w-3/4 h-3 bg-zinc-800 rounded mb-2"></div>
                                 <div class="w-1/2 h-3 bg-zinc-800 rounded mb-6"></div>
@@ -1123,7 +1050,6 @@
                     </div>
                 </div>
 
-                <!-- 4. HORIZONTAL CAROUSEL -->
                 <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
                     ${['05', '06', '07', '08', '09'].map(idx => `
                         <div class="flex-shrink-0 w-[85vw] md:w-[45%] lg:w-[35%] snap-center flex flex-col gap-3">
@@ -1143,21 +1069,38 @@
             const shoutAssets = [
                 "SHOUT-BILLBOARD-SHOP-NOW-TEXT_970X250_EN.jpg",
                 "SHOUT-BILLBOARD-SHOP-NOW-TEXT_970X250_FR.jpg",
-                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X600_FR_.jpg", "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_EN.jpg",
-                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_EN_.jpg", "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_FR.jpg",
-                "SHOUT-LEADERBOARD-SHOP-NOW-AVAILABLE-AT-LOGO_728X90_EN.jpg", "SHOUT-LEADERBOARD-SHOP-NOW-AVAILABLE-AT-LOGO_728X90_FR.jpg",
-                "SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_EN.jpg", "SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_FR.jpg",
-                "SHOUT-MEDIUM-RECTANGLE-AVAILABLE-AT-TEXT_300X250_EN.jpg", "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X250_EN_.jpg",
-                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X250_FR.jpg", "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_EN.jpg",
-                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_FR.jpg", "SHOUT-MOBILE-DETAIL-AND-SEARCH-RESULTS-ASSET-ONLY_414X125_EN.jpg",
-                "SHOUT-MOBILE-DETAIL-AND-SEARCH-RESULTS-ASSET-ONLY_414X125_FR.jpg", "SHOUT-MOBILE-LEADERBOARD-ASSET-ONLY_320X50_EN_.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-ASSET-ONLY_320X50_FR.jpg", "SHOUT-MOBILE-LEADERBOARD-AVAILABLE-AT-TEXT_320X50_EN.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-AVAILABLE-AT-TEXT_320X50_FR.jpg", "SHOUT-MOBILE-LEADERBOARD-TABLET-ASSET-ONLY_728X90_EN.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-TABLET-ASSET-ONLY_728X90_FR.jpg", "SHOUT-MOBILE-LEADERBOARD-TABLET-AVAILABLE-AT-TEXT_728X90_EN.jpg",
-                "SHOUT-MOBILE-LEADERBOARD-TABLET-AVAILABLE-AT-TEXT_728X90_FR.jpg", "SHOUT-MOBILE-MEDIUM-RECTANGLE-ASSET-ONLY_300X250_EN.jpg",
-                "SHOUT-MOBILE-MEDIUM-RECTANGLE-ASSET-ONLY_300X250_FR.jpg", "SHOUT-MOBILE-MEDIUM-RECTANGLE-AVAILABLE-AT-TEXT_300X250_FR.jpg",
-                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-AVAILABLE-AT-LOGO_160X600_EN.jpg", "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-AVAILABLE-AT-LOGO_160X600_FR.jpg",
-                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-BUTTON_160X600_EN.jpg", "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-BUTTON_160X600_FR.jpg"
+                "SHOUT-BILLBOARD-SHOP-NOW-TEXT-AVAILABLE-AT-TEXT_970X250_EN.jpg",
+                "SHOUT-BILLBOARD-SHOP-NOW-TEXT-AVAILABLE-AT-TEXT_970X250_FR.jpg",
+                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X600_FR_.jpg",
+                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_EN.jpg",
+                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_EN_.jpg",
+                "SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_FR.jpg",
+                "SHOUT-LEADERBOARD-SHOP-NOW-AVAILABLE-AT-LOGO_728X90_EN.jpg",
+                "SHOUT-LEADERBOARD-SHOP-NOW-AVAILABLE-AT-LOGO_728X90_FR.jpg",
+                "SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_EN.jpg",
+                "SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_FR.jpg",
+                "SHOUT-MEDIUM-RECTANGLE-AVAILABLE-AT-TEXT_300X250_EN.jpg",
+                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X250_EN_.jpg",
+                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-AVAILABLE-AT-LOGO_300X250_FR.jpg",
+                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_EN.jpg",
+                "SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_FR.jpg",
+                "SHOUT-MOBILE-DETAIL-AND-SEARCH-RESULTS-ASSET-ONLY_414X125_EN.jpg",
+                "SHOUT-MOBILE-DETAIL-AND-SEARCH-RESULTS-ASSET-ONLY_414X125_FR.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-ASSET-ONLY_320X50_EN_.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-ASSET-ONLY_320X50_FR.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-AVAILABLE-AT-TEXT_320X50_EN.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-AVAILABLE-AT-TEXT_320X50_FR.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-TABLET-ASSET-ONLY_728X90_EN.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-TABLET-ASSET-ONLY_728X90_FR.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-TABLET-AVAILABLE-AT-TEXT_728X90_EN.jpg",
+                "SHOUT-MOBILE-LEADERBOARD-TABLET-AVAILABLE-AT-TEXT_728X90_FR.jpg",
+                "SHOUT-MOBILE-MEDIUM-RECTANGLE-ASSET-ONLY_300X250_EN.jpg",
+                "SHOUT-MOBILE-MEDIUM-RECTANGLE-ASSET-ONLY_300X250_FR.jpg",
+                "SHOUT-MOBILE-MEDIUM-RECTANGLE-AVAILABLE-AT-TEXT_300X250_FR.jpg",
+                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-AVAILABLE-AT-LOGO_160X600_EN.jpg",
+                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-AVAILABLE-AT-LOGO_160X600_FR.jpg",
+                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-BUTTON_160X600_EN.jpg",
+                "SHOUT-WIDE-SKYSCRAPER-SHOP-NOW-BUTTON_160X600_FR.jpg"
             ];
 
             const gridItems = shoutAssets.map(asset => {
@@ -1179,23 +1122,21 @@
 
             return `
             <div class="w-full pb-16 fade-up delay-1">
-                <!-- TOP METADATA -->
                 <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
                     <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 05/07</div>
                 </div>
 
-                <!-- 1. HERO BILINGUAL SPLIT (50/50 SYMMETRICAL GRID) -->
                 <div class="mb-16 mt-8">
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%; align-items: stretch;">
                         <div class="flex flex-col gap-3">
-                            <div style="background-color: #111111; border: 1px solid rgba(113, 113, 122, 0.2); padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; min-height: 250px; md:min-height: 350px;">
+                            <div style="background-color: #111111; border: 1px solid rgba(113, 113, 122, 0.2); padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; min-height: 250px;">
                                 <img src="./images/SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_EN.jpg" style="max-width: 100%; max-height: 250px; width: auto; height: auto; object-fit: contain;" alt="EN Medium Rectangle" />
                             </div>
                             <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white pt-1">[ LOCALIZATION_NODE // MEDIUM_RECTANGLE_EN_300X250 ]</div>
                         </div>
                         
                         <div class="flex flex-col gap-3">
-                            <div style="background-color: #111111; border: 1px solid rgba(113, 113, 122, 0.2); padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; min-height: 250px; md:min-height: 350px;">
+                            <div style="background-color: #111111; border: 1px solid rgba(113, 113, 122, 0.2); padding: 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; min-height: 250px;">
                                 <img src="./images/SHOUT-MEDIUM-RECTANGLE-SHOP-NOW-BUTTON_300X250_FR.jpg" style="max-width: 100%; max-height: 250px; width: auto; height: auto; object-fit: contain;" alt="FR Medium Rectangle" />
                             </div>
                             <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white pt-1">[ LOCALIZATION_NODE // MEDIUM_RECTANGLE_FR_300X250 ]</div>
@@ -1204,11 +1145,309 @@
                 </div>
 
                 <div class="mb-12 mt-8">
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // SHOUT</div>
+                    <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
+                    <div class="md:col-span-3">
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 mb-8">Paid Media Design and Layout Strategy</p>
+                        
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ DELIVERABLES ]</h3>
+                        <ul class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 list-none m-0 flex flex-col gap-2">
+                            <li>Scalable Ad Templates</li>
+                            <li>Dual Language Media Assets</li>
+                            <li>Variable Size Display Ads</li>
+                        </ul>
+                    </div>
+                    <div class="md:col-span-9 flex flex-col gap-12">
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">Shout needed a massive amount of digital ads for their paid media channels in both English and French. The main hurdle was fitting two completely different languages into tight display spaces without making the layouts look cluttered or off brand.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE SOLUTION ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">I built a flexible layout system that easily adapts to different ad sizes. I designed the typography rules so that longer French words and localized buttons fit perfectly next to the product images keeping the brand looking sharp and uniform in any language.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE OUTCOME ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">The final delivery was an incredibly smooth handoff. Because the designs were built to handle changing text lengths from the very beginning the ad units required absolutely zero structural fixes and went live seamlessly across all their international markets.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-12 mb-16">
+                    <div class="flex flex-col gap-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-white/10 bg-[#0a0a0a] p-4">
+                            <div class="flex items-center justify-center border border-white/5 bg-[#121112] p-2 h-[120px]">
+                                <img src="./images/SHOUT-BILLBOARD-SHOP-NOW-TEXT_970X250_EN.jpg" alt="EN Billboard" class="w-full h-full object-contain">
+                            </div>
+                            <div class="flex items-center justify-center border border-white/5 bg-[#121112] p-2 h-[120px]">
+                                <img src="./images/SHOUT-BILLBOARD-SHOP-NOW-TEXT_970X250_FR.jpg" alt="FR Billboard" class="w-full h-full object-contain">
+                            </div>
+                        </div>
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ MATRIX_INDEX_01 // PROGRAMMATIC_BILLBOARD_970x250_PAIR ]</div>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-white/10 bg-[#0a0a0a] p-4">
+                            <div class="flex items-center justify-center border border-white/5 bg-[#121112] p-2 min-h-[300px] h-[450px]">
+                                <img src="./images/SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_EN.jpg" alt="EN Large Rectangle" class="max-w-full max-h-full object-contain">
+                            </div>
+                            <div class="flex items-center justify-center border border-white/5 bg-[#121112] p-2 min-h-[300px] h-[450px]">
+                                <img src="./images/SHOUT-LARGE-RECTANGLE-SHOP-NOW-BUTTON_300X600_FR.jpg" alt="FR Large Rectangle" class="max-w-full max-h-full object-contain">
+                            </div>
+                        </div>
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ MATRIX_INDEX_02 // DISPLAY_HALF_PAGE_300x600_PAIR ]</div>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border border-white/10 bg-[#0a0a0a] p-4">
+                            <div class="flex items-center justify-center border border-white/5 bg-[#121112] p-2 h-[80px]">
+                                <img src="./images/SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_EN.jpg" alt="EN Leaderboard" class="w-full h-full object-contain">
+                            </div>
+                            <div class="flex items-center justify-center border border-white/5 bg-[#121112] p-2 h-[80px]">
+                                <img src="./images/SHOUT-LEADERBOARD-SHOP-NOW-BUTTON_728X90_FR.jpg" alt="FR Leaderboard" class="w-full h-full object-contain">
+                            </div>
+                        </div>
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ MATRIX_INDEX_03 // HORIZONTAL_LEADERBOARD_728x90_PAIR ]</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
+                        ${gridItems}
+                    </div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ GLOBAL_ASSET_LEDGER // FULL_34_NODE_DEPLOYMENT ]</div>
+                </div>
+            </div>
+            `;
+        }
+
+        // --- CUSTOM STELLARRISK AI COMPONENT ---
+        function generateStellarTemplate(p) {
+            if (!window.stellarUnlocked) {
+                return `
+                <div class="w-full h-full min-h-[60vh] flex items-center justify-center fade-up delay-1">
+                    <div class="border border-zinc-800 bg-[#111111] p-10 max-w-md w-full flex flex-col gap-6 items-center text-center shadow-2xl">
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-2">[ SECURE TERMINAL ]</div>
+                        <h2 class="font-[Syne] text-3xl text-white uppercase font-bold tracking-tight mb-2">Project Under NDA</h2>
+                        <p class="font-[Inter] text-[#94A3B8] text-sm leading-relaxed mb-6 font-light">Access to the StellarRisk AI case study requires an active authorization code.</p>
+                        
+                        <input type="password" id="nda-pwd" placeholder="ENTER CODE" class="w-full bg-[#050505] border border-zinc-800 text-white font-mono p-4 text-center focus:border-[#b026ff] transition-colors outline-none tracking-widest text-lg" onkeypress="if(event.key === 'Enter') checkStellarPwd()">
+                        
+                        <button onclick="checkStellarPwd()" class="w-full bg-[#b026ff]/20 text-white border border-[#b026ff] p-4 font-mono uppercase tracking-widest hover:bg-[#b026ff] transition-all duration-300 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)]">Authenticate</button>
+                        
+                        <div id="nda-error" class="text-[#ff2626] font-mono text-[10px] tracking-widest mt-2 hidden border border-[#ff2626]/30 bg-[#ff2626]/10 py-2 px-4 w-full uppercase">Invalid Authorization Code</div>
+                    </div>
+                </div>
+                `;
+            }
+
+            const assets = [
+                "stellarrisk-finished-01.jpg",
+                "stellarrisk-finished-02.jpg",
+                "stellarrisk-finished-03.jpg",
+                "stellarrisk-finished-04.jpg",
+                "stellarrisk-wireframe-01.jpg",
+                "stellarrisk-wireframe-02.jpg",
+                "stellarrisk-wireframe-03.jpg",
+                "stellarrisk-wireframe-04.jpg"
+            ];
+
+            const carouselItems = assets.map((asset, idx) => {
+                const isWire = asset.includes("wireframe");
+                const num = (idx % 4) + 1;
+                const label = isWire ? `WIREFRAME_0${num}` : `FINISHED_0${num}`;
+                return `
+                    <div class="flex-shrink-0 w-[200px] h-[150px] flex items-center justify-center bg-zinc-900/40 p-2 shrink-0 border border-zinc-800/50 relative group select-none">
+                        <img src="./images/${asset}" class="max-w-full max-h-full object-contain pointer-events-none transition-transform duration-300 group-hover:scale-105" alt="${label}">
+                        <div class="absolute bottom-2 left-2 bg-black/85 px-1.5 py-0.5 border border-white/5 font-mono text-[9px] tracking-widest text-zinc-400 group-hover:text-white transition-colors duration-200">
+                            [ ${label} ]
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+            <div class="w-full pb-16 fade-up delay-1">
+                <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 06/07</div>
+                </div>
+
+                <div class="flex flex-col lg:flex-row items-stretch gap-6 mb-16 mt-8">
+                    <div class="w-full lg:w-[65%] flex flex-col gap-3">
+                        <div class="border border-zinc-800/50 bg-[#111111] lg:max-h-[500px] h-full flex items-center justify-center p-6 lg:p-12 overflow-hidden">
+                            <img src="./images/stellarrisk-finished-01.jpg" alt="Title Slide Finish" class="w-full h-full object-contain max-h-[500px]">
+                        </div>
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ SYSTEM EXECUTION // CORE_SLIDE_01_RENDER ]</div>
+                    </div>
+                    
+                    <div class="w-full lg:w-[35%] flex flex-col gap-3">
+                        <div class="border border-zinc-800/50 bg-[#111111] aspect-square lg:max-h-[500px] flex items-center justify-center p-6">
+                            <img src="./images/stellarrisk-wireframe-01.jpg" alt="Title Slide Wireframe" class="w-full h-full object-contain max-h-[500px]">
+                        </div>
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ ARCHITECTURE // SLIDE_01_LOGIC ]</div>
+                    </div>
+                </div>
+
+                <div class="mb-12 mt-8">
+                    <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // STELLARRISK AI</div>
+                    <h1 class="cs-h1 text-white">${p.title}</h1>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
+                    <div class="md:col-span-3">
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
+                        <p class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 mb-8">Presentation Design and Visual Strategy</p>
+                        
+                        <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ DELIVERABLES ]</h3>
+                        <ul class="font-[Inter] text-[#94A3B8] text-[13px] uppercase tracking-wider leading-relaxed border-l border-zinc-800 pl-4 list-none m-0 flex flex-col gap-2">
+                            <li>Presentation Wireframes</li>
+                            <li>Investor Pitch Deck</li>
+                            <li>Custom Data Layouts</li>
+                        </ul>
+                    </div>
+                    <div class="md:col-span-9 flex flex-col gap-12">
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE PROBLEM ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">StellarRisk AI needed to translate highly complex technical data into a clean presentation. The goal was to take heavy information and turn it into a clear financial story that would easily engage venture capital investors.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE SOLUTION ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">I started by mapping out the information with clear wireframes to organize the layout before touching the visuals. Once the structure was locked in I applied the final design polish ensuring their complex engineering data looked premium and was incredibly easy to read.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ THE OUTCOME ]</h3>
+                            <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">The final deck was completely ready for investors and aligned perfectly with the goals of the client. Because the information was organized so well from the beginning the presentation went straight to use with absolute zero revisions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-12 mb-16">
+                    <div class="flex flex-col gap-3">
+                        <div class="flex flex-col lg:flex-row items-stretch gap-6">
+                            <div class="w-full lg:w-[65%] flex flex-col gap-3">
+                                <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] h-full flex items-center justify-center p-4 overflow-hidden">
+                                    <img src="./images/stellarrisk-finished-02.jpg" alt="Problem Slide Finish" class="w-full h-full object-contain">
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-[35%] flex flex-col gap-3">
+                                <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] flex items-center justify-center p-4">
+                                    <img src="./images/stellarrisk-wireframe-02.jpg" alt="Problem Slide Wireframe" class="w-full h-full object-contain">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mt-1">[ EVOLUTION_NODE_02 // PROBLEM_LOGIC_DEPLOYMENT ]</div>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <div class="flex flex-col lg:flex-row items-stretch gap-6">
+                            <div class="w-full lg:w-[65%] flex flex-col gap-3">
+                                <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] h-full flex items-center justify-center p-4 overflow-hidden">
+                                    <img src="./images/stellarrisk-finished-03.jpg" alt="Product Slide Finish" class="w-full h-full object-contain">
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-[35%] flex flex-col gap-3">
+                                <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] flex items-center justify-center p-4">
+                                    <img src="./images/stellarrisk-wireframe-03.jpg" alt="Product Slide Wireframe" class="w-full h-full object-contain">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mt-1">[ EVOLUTION_NODE_03 // PRODUCT_INTERFACE_ENGINE ]</div>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        <div class="flex flex-col lg:flex-row items-stretch gap-6">
+                            <div class="w-full lg:w-[65%] flex flex-col gap-3">
+                                <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] h-full flex items-center justify-center p-4 overflow-hidden">
+                                    <img src="./images/stellarrisk-finished-04.jpg" alt="Capital Ask Slide Finish" class="w-full h-full object-contain">
+                                </div>
+                            </div>
+                            <div class="w-full lg:w-[35%] flex flex-col gap-3">
+                                <div class="border border-zinc-800/50 bg-[#111111] lg:h-[300px] flex items-center justify-center p-4">
+                                    <img src="./images/stellarrisk-wireframe-04.jpg" alt="Capital Ask Slide Wireframe" class="w-full h-auto object-contain">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mt-1">[ EVOLUTION_NODE_04 // CAPITAL_ALLOCATION_MATRIX ]</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <div class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 pb-6 technical-scrollbar mb-20">
+                        ${carouselItems}
+                    </div>
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">[ GLOBAL_ASSET_LEDGER // FULL_8_NODE_DEPLOYMENT ]</div>
+                </div>
+            </div>
+            `;
+        }
+
+        window.checkStellarPwd = () => {
+            const input = document.getElementById('nda-pwd').value;
+            if (btoa(input) === "MjYyNg==") {
+                window.stellarUnlocked = true;
+                handleProjectClick(5);
+            } else {
+                document.getElementById('nda-error').style.display = 'block';
+                document.getElementById('nda-pwd').value = '';
+            }
+        };
+
+        // --- CUSTOM SELECTED MARKS COMPONENT ---
+        function generateSelectedMarksTemplate(p) {
+            const marks = [
+                "selected-mark-01.png",
+                "selected-mark-02.png",
+                "selected-mark-03.png",
+                "selected-mark-04.png",
+                "selected-mark-05.png"
+            ];
+
+            const gridItems = marks.map((mark, idx) => `
+                <div class="aspect-square bg-[#111] border border-zinc-800/50 p-8 flex flex-col items-center justify-center relative group hover:border-zinc-500 transition-colors">
+                    <img src="./images/${mark}" class="max-w-[65%] max-h-[65%] w-auto h-auto object-contain transition-transform duration-300 group-hover:scale-105" alt="Selected Mark 0${idx + 1}">
+                    <div class="absolute bottom-3 left-3 bg-black/85 px-1.5 py-0.5 border border-white/5 font-mono text-[9px] tracking-widest text-zinc-400 group-hover:text-white transition-colors duration-200">
+                        [ INDEX_0${idx + 1} ]
+                    </div>
+                </div>
+            `).join('');
+
+            return `
+            <div class="w-full pb-16 fade-up delay-1">
+                <div class="flex flex-col border-b border-white/10 pb-6 mb-8 gap-4 mt-8">
+                    <div class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white">PROJECT NO. 07/07</div>
+                </div>
+
+                <div class="w-full grid grid-cols-1 md:grid-cols-12 gap-6 border-b border-zinc-800/60 pb-8 mb-8 items-stretch">
+                    <div class="md:col-span-4 w-full bg-[#111] border border-zinc-700/40 relative min-h-[350px]">
+                        <img src="./images/selected-mark-logolounge14-badge.jpg" class="absolute top-4 right-4 max-h-[60px] w-auto border-4 border-[#111] shadow-[0_0_20px_rgba(113,87,192,0.4)] z-10" alt="Official Badge">
+                        <img src="./images/selected-mark-logolounge14-winner.png" class="max-h-[300px] w-auto max-w-[80%] mx-auto object-contain absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" alt="Winner Mark">
+                        <div class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/85 px-1.5 py-0.5 border border-white/5 font-mono text-[9px] tracking-widest text-zinc-400 whitespace-nowrap">
+                            [ ACCOLADE_VERIFICATION // LOGOLOUNGE_BOOK_14_SELECTION ]
+                        </div>
+                    </div>
+                    
+                    <div class="md:col-span-8 flex flex-col justify-center pl-0 md:pl-4">
+                        <div class="text-xs uppercase tracking-[0.25em] text-zinc-400 font-mono mb-2 flex items-center gap-2">
+                            <span>●</span> OFFICIAL SELECTION // INTERNATIONAL IDENTITY COMPENDIUM
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-3 uppercase tracking-wider font-mono">
+                            LogoLounge Book 14 Juried Winner
+                        </h3>
+                        <p class="text-sm text-zinc-400 leading-relaxed font-sans max-w-xl">
+                            Selected from over 30,000 global submissions by an international panel of identity design experts. This identity system has been codified and published into LogoLounge Book 14, honoring exemplary geometric form, structural execution, and contemporary brand mark architecture.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mb-12 mt-8">
                     <div class="font-mono text-sm tracking-widest text-zinc-500 uppercase mb-3 border-l-2 border-[#b026ff] pl-3">CLIENT // VARIOUS</div>
                     <h1 class="cs-h1 text-white">${p.title}</h1>
                 </div>
-                
-                <!-- Role / Deliverables context for Selected Marks to maintain grid consistency -->
+
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-20 border-t border-dashed border-white/10 pt-10">
                     <div class="md:col-span-3">
                         <h3 class="font-mono text-[10px] tracking-[0.2em] opacity-40 uppercase text-white mb-4">[ MY ROLE ]</h3>
@@ -1221,7 +1460,6 @@
                             <li>Geometric Form Structuring</li>
                         </ul>
                     </div>
-                    
                     <div class="md:col-span-9 flex flex-col justify-center">
                         <p class="font-[Inter] font-light text-[#94A3B8] leading-loose text-[15px] sm:text-[18px]">
                             A curated index of logotypes and identity marks developed across various commercial sectors. This collection explores geometric discipline, visual economy, and scalable vector architecture, anchored by the LogoLounge Book 14 juried winner.
@@ -1229,7 +1467,6 @@
                     </div>
                 </div>
 
-                <!-- 3. THE SPECIMEN MATRIX (THE CORE CURATED ROW) -->
                 <div class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-20">
                     ${gridItems}
                 </div>
@@ -1237,7 +1474,6 @@
             `;
         }
 
-        // Global switcher logic
         window.switchOIAM = (variant) => {
             const indices = ['01', '02', '03', '04', '05', '06', '07', '08'];
             indices.forEach(idx => {
@@ -1256,7 +1492,6 @@
             }
         };
 
-        // Click-and-drag scroll support utility for brutalist carousel containers
         window.initDragToScroll = () => {
             const containers = document.querySelectorAll('.technical-scrollbar');
             containers.forEach(slider => {
@@ -1318,7 +1553,6 @@
             });
         }
 
-        // --- SERVICES VIEW LOGIC ---
         const serviceData = {
             packaging: { title: "Packaging & Label Systems", desc: "For consumer brands that need packaging built for clarity, consistency, and scale.", points: ["Label design for single products or full lines", "Packaging layouts dielines and premium mockups", "Print ready files for manufacturers", "Visual consistency across all your SKUs"] },
             amazon: { title: "Digital Shelf & Ecommerce Design", desc: "Designed for conversion, clarity, and brand recognition across your entire digital shelf.", points: ["Product detail page (PDP) image galleries", "Amazon A+ content and enhanced brand graphics", "Scalable digital shelf layouts", "Visual planning to boost conversion rates"] },
@@ -1352,7 +1586,6 @@
             else { viewerEl.innerHTML = serviceHTML; viewerEl.scrollTop = 0; }
         }
 
-        // --- FULL LEGAL LOGIC RE-INSTATED ---
         const legalData = {
             privacy: { 
                 title: "PRIVACY POLICY", 
@@ -1392,7 +1625,7 @@
             }
         }
         
-        // Initialize First Project (Delayed to sync with the shutter animation opening)
+        // Initialize First Project
         if(window.innerWidth > 1024) {
             setTimeout(() => handleProjectClick(0), 1200);
         } else {
