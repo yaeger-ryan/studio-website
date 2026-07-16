@@ -3,285 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 // ETERNAL CANVAS</title>
+    <title>404 // DIGITAL IRIDESCENCE</title>
     
-    <!-- Premium Google Fonts: Inter (Editorial Body), Space Mono (Technical UI) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
     <!-- Tailwind CSS (No Preflight) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { corePlugins: { preflight: false } }
     </script>
 
+    <!-- Three.js CDN for WebGL Rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <style>
         :root {
-            --bg-deep: #050505;
-            --bg-light: #161616;
-            --accent: #b026ff;
-            --font-body: 'Inter', sans-serif;
+            --font-disp: 'Syne', sans-serif;
             --font-mono: 'Space Mono', monospace;
+            --font-body: 'Inter', sans-serif;
         }
 
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; outline: none; user-select: none; }
         
         html, body { 
-            margin: 0; padding: 0; background: var(--bg-deep); 
-            height: 100vh; width: 100vw; overflow: hidden; 
-            font-family: var(--font-body); background-color: var(--bg-deep);
-            /* Prevent pull-to-refresh and scrolling on mobile to allow tactile wiping */
-            touch-action: none; overscroll-behavior: none;
+            margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; 
+            font-family: var(--font-body);
+            background: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000000 100%);
+            cursor: crosshair;
         }
 
-        /* The Cinematic Transition Wrapper */
-        #transition-wrap {
-            position: absolute; inset: 0; width: 100%; height: 100%;
-            transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s ease;
+        #webgl-canvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
         }
 
-        /* --- THE SHARP REALITY (BOTTOM LAYER) --- */
-        #base-layer {
-            position: absolute; inset: 0; z-index: 1;
-            background: radial-gradient(circle at center, var(--bg-light) 0%, var(--bg-deep) 80%);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        .ui-layer {
+            position: absolute; inset: 0; z-index: 10; pointer-events: none;
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: clamp(20px, 4vw, 50px);
         }
 
-        #exit-link {
-            text-decoration: none; text-align: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; z-index: 10; padding: 40px;
+        .meta-text { 
+            font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; 
+            letter-spacing: 0.25em; color: rgba(255, 255, 255, 0.4); 
         }
 
-        .quote {
-            font-weight: 300;
-            font-size: clamp(24px, 3.5vw, 42px);
-            color: #666; /* Muted gray */
-            letter-spacing: -0.02em;
-            line-height: 1.2;
-            margin: 0 0 20px 0;
-            transition: color 0.6s ease, text-shadow 0.6s ease;
+        .instruction {
+            position: absolute; bottom: 15%; left: 50%; transform: translateX(-50%);
+            font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.7); text-transform: uppercase;
+            background: rgba(0,0,0,0.5); padding: 10px 20px; border: 1px dashed rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px); transition: opacity 0.5s ease;
+        }
+        
+        .is-interacting .instruction { opacity: 0; }
+
+        /* The Collapse Flash Overlay */
+        #flash-overlay {
+            position: absolute; inset: 0; background: white; z-index: 9999;
+            opacity: 0; pointer-events: none; transition: opacity 0.15s ease-in;
         }
 
-        .meta-tag {
-            font-family: var(--font-mono);
-            font-size: 10px; font-weight: 700;
-            letter-spacing: 0.2em; text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.2);
-            transition: color 0.6s ease, transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        /* Hovering the sharp text illuminates the way home */
-        #exit-link:hover .quote {
-            color: #ffffff;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
-        #exit-link:hover .meta-tag {
-            color: var(--accent);
-            transform: translateY(4px);
-        }
-
-        /* --- THE FOG (TOP LAYER) --- */
-        #fog-canvas {
-            position: absolute; inset: 0; z-index: 5;
-            width: 100%; height: 100%;
-            /* Let pointer events pass through so the user can click the anchor link beneath the fog */
-            pointer-events: none; 
-        }
-
-        /* --- THE EXIT SEQUENCE --- */
-        body.exiting #transition-wrap {
-            transform: scale(1.03);
-            opacity: 0;
-        }
-        body.exiting #fog-canvas {
-            opacity: 0; transition: opacity 0.8s ease;
+        /* Progress Ring for Click-and-Hold */
+        #hold-progress {
+            position: fixed; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%;
+            pointer-events: none; z-index: 50; transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.1s linear, opacity 0.2s; opacity: 0;
         }
     </style>
 </head>
 <body>
 
-    <div id="transition-wrap">
-        
-        <!-- BASE LAYER: The Sharp Reality -->
-        <div id="base-layer">
-            <a href="/" id="exit-link" title="Return to Reality">
-                <h1 class="quote" id="sharp-quote">A temporary mark on an eternal canvas.</h1>
-                <div class="meta-tag" id="sharp-meta">[ 404 // CLICK TO RETURN ]</div>
-            </a>
+    <div class="ui-layer">
+        <div class="flex justify-between w-full">
+            <div class="meta-text">404 // SIGNAL ABSENT</div>
+            <div class="meta-text hidden md:block">MATERIAL: LENTICULAR MEMORY FOAM</div>
         </div>
-
-        <!-- TOP LAYER: The Condensation -->
-        <canvas id="fog-canvas"></canvas>
-
+        <div class="flex justify-between w-full items-end">
+            <div class="meta-text">YAEGER STUDIO<br>EST. 2019</div>
+            <div class="meta-text text-right">VOLUMETRIC DISPLACEMENT ACTIVE<br>AWAITING INPUT</div>
+        </div>
     </div>
 
+    <div class="instruction">[ DRAG TO DEFORM // HOLD TO INITIATE RETURN ]</div>
+    
+    <div id="hold-progress"></div>
+    <div id="flash-overlay"></div>
+
+    <canvas id="webgl-canvas"></canvas>
+
     <script>
-        const canvas = document.getElementById('fog-canvas');
-        const ctx = canvas.getContext('2d', { alpha: true });
+        const canvas = document.getElementById('webgl-canvas');
+        const flashOverlay = document.getElementById('flash-overlay');
+        const holdProgressEl = document.getElementById('hold-progress');
         
-        // Offscreen buffer to hold the pure "Foggy State"
-        // We draw this back over the main canvas at a very low opacity every frame to simulate refogging.
-        const fogBuffer = document.createElement('canvas');
-        const fogCtx = fogBuffer.getContext('2d', { alpha: false });
+        let scene, camera, renderer, mesh;
+        let geometry, posAttribute, originalPos, velocities, displacements;
+        
+        // Interaction variables
+        const mouse = new THREE.Vector2();
+        const raycaster = new THREE.Raycaster();
+        let targetIntersection = null;
+        let isHolding = false;
+        let holdTime = 0;
+        const maxHoldTime = 45; // ~0.75 seconds at 60fps for a responsive feel
+        
+        // Smoothing variables for the shader
+        let smoothedMouseX = 0;
+        let smoothedMouseY = 0;
 
-        // DOM Elements to match alignment
-        const quoteEl = document.getElementById('sharp-quote');
-        const metaEl = document.getElementById('sharp-meta');
+        init();
+        animate();
 
-        let w, h;
-        let lastX = -1000, lastY = -1000;
-        let isTouching = false;
+        function init() {
+            // 1. Scene Setup
+            scene = new THREE.Scene();
 
-        // Ensure custom fonts are loaded before painting the fog text
-        document.fonts.ready.then(() => {
-            initEngine();
-            requestAnimationFrame(renderLoop);
-        });
+            // 2. Camera Setup
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.z = 8;
 
-        function initEngine() {
-            resize();
-            window.addEventListener('resize', resize);
+            // 3. Renderer Setup
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            // High-density sphere (64x64 = 4096 vertices). High enough for smooth deformation, low enough for CPU physics calculation.
+            geometry = new THREE.SphereGeometry(2.5, 64, 64);
             
-            // Desktop Wipe
-            window.addEventListener('mousemove', (e) => {
-                const currentX = e.clientX;
-                const currentY = e.clientY;
-                wipe(lastX, lastY, currentX, currentY);
-                lastX = currentX; lastY = currentY;
+            posAttribute = geometry.attributes.position;
+            const count = posAttribute.count;
+            
+            // Store original coordinates and create physics arrays
+            originalPos = new Float32Array(count * 3);
+            for(let i=0; i<count * 3; i++) originalPos[i] = posAttribute.array[i];
+            
+            velocities = new Float32Array(count);
+            displacements = new Float32Array(count);
+
+            const shaderMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    u_time: { value: 0.0 },
+                    u_mouse: { value: new THREE.Vector2(0, 0) },
+                    u_collapse: { value: 0.0 }
+                },
+                vertexShader: `
+                    varying vec3 vNormal;
+                    varying vec3 vViewPosition;
+                    varying vec2 vUv;
+                    uniform float u_time;
+                    uniform float u_collapse;
+
+                    void main() {
+                        vUv = uv;
+                        // Retrieve the normal dynamically updated by CPU physics
+                        vNormal = normalize(normalMatrix * normal);
+                        
+                        // Gentle procedural undulation (breathing effect) when idle
+                        vec3 pos = position;
+                        float noise = sin(pos.x * 2.0 + u_time) * cos(pos.y * 2.0 + u_time) * 0.05;
+                        pos += normal * noise;
+
+                        // Collapse logic (sucks the shape into a single point)
+                        pos = mix(pos, vec3(0.0), u_collapse);
+
+                        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                        vViewPosition = -mvPosition.xyz;
+                        gl_Position = projectionMatrix * mvPosition;
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vNormal;
+                    varying vec3 vViewPosition;
+                    varying vec2 vUv;
+                    uniform vec2 u_mouse;
+
+                    void main() {
+                        vec3 N = normalize(vNormal);
+                        vec3 V = normalize(vViewPosition);
+                        
+                        // 1. The Micro-Ridges (Lenticular Texture)
+                        // High frequency sine wave across the UV x-axis
+                        float ridge = sin(vUv.x * 1200.0) * 0.5 + 0.5;
+                        
+                        // 2. Lenticular View Calculation
+                        // Modulate the dot product by the mouse position to shift colors
+                        float viewDot = max(dot(N, V), 0.0);
+                        float shift = viewDot + (u_mouse.x * 0.3) + (u_mouse.y * 0.3) + (ridge * 0.08);
+                        
+                        // Ensure shift loops smoothly between 0.0 and 1.0
+                        float t = fract(shift);
+
+                        // 3. The Custom Color Ramp (Champagne -> Copper -> Pink -> Cyan -> Violet)
+                        vec3 color;
+                        if (t < 0.2) {
+                            color = mix(vec3(0.9, 0.85, 0.7), vec3(0.8, 0.4, 0.2), t / 0.2);
+                        } else if (t < 0.4) {
+                            color = mix(vec3(0.8, 0.4, 0.2), vec3(1.0, 0.1, 0.5), (t - 0.2) / 0.2);
+                        } else if (t < 0.6) {
+                            color = mix(vec3(1.0, 0.1, 0.5), vec3(0.0, 0.8, 1.0), (t - 0.4) / 0.2);
+                        } else if (t < 0.8) {
+                            color = mix(vec3(0.0, 0.8, 1.0), vec3(0.4, 0.0, 0.8), (t - 0.6) / 0.2);
+                        } else {
+                            color = mix(vec3(0.4, 0.0, 0.8), vec3(0.9, 0.85, 0.7), (t - 0.8) / 0.2);
+                        }
+
+                        // 4. Lighting & Specular Punch
+                        // Deepen the colors for a more premium metallic look
+                        color = pow(color, vec3(1.3)); 
+                        
+                        // Soft diffuse shading
+                        color *= (viewDot * 0.8 + 0.2); 
+                        
+                        // Fake rim light / specular highlight hitting the ridges
+                        vec3 H = normalize(V + vec3(1.0, 1.0, 1.0));
+                        float spec = pow(max(dot(N, H), 0.0), 32.0);
+                        color += spec * 0.6 * ridge;
+
+                        gl_FragColor = vec4(color, 1.0);
+                    }
+                `
             });
 
-            // Mobile/Tactile Wipe
-            window.addEventListener('touchstart', (e) => {
-                isTouching = true;
-                lastX = e.touches[0].clientX;
-                lastY = e.touches[0].clientY;
-            }, { passive: false });
+            mesh = new THREE.Mesh(geometry, shaderMaterial);
+            scene.add(mesh);
 
-            window.addEventListener('touchmove', (e) => {
-                if (!isTouching) return;
-                e.preventDefault(); // Stop scrolling
-                const currentX = e.touches[0].clientX;
-                const currentY = e.touches[0].clientY;
-                wipe(lastX, lastY, currentX, currentY);
-                lastX = currentX; lastY = currentY;
-            }, { passive: false });
-
-            window.addEventListener('touchend', () => isTouching = false);
+            window.addEventListener('resize', onWindowResize);
+            
+            // Mouse/Touch Move for Raycasting
+            window.addEventListener('pointermove', onPointerMove);
+            
+            // Hold Mechanics
+            window.addEventListener('pointerdown', (e) => {
+                isHolding = true;
+                updatePointerProgressUI(e.clientX, e.clientY);
+                holdProgressEl.style.opacity = '1';
+                onPointerMove(e); // Ensure instant contact
+            });
+            
+            window.addEventListener('pointerup', () => {
+                isHolding = false;
+                holdProgressEl.style.opacity = '0';
+            });
+            window.addEventListener('pointerleave', () => {
+                isHolding = false;
+                holdProgressEl.style.opacity = '0';
+            });
         }
 
-        function resize() {
-            w = window.innerWidth;
-            h = window.innerHeight;
-            
-            // Retina display scaling for pristine graphics
-            const dpr = window.devicePixelRatio || 1;
-            
-            canvas.width = w * dpr;
-            canvas.height = h * dpr;
-            canvas.style.width = w + 'px';
-            canvas.style.height = h + 'px';
-            ctx.scale(dpr, dpr);
-            
-            fogBuffer.width = w * dpr;
-            fogBuffer.height = h * dpr;
-            fogCtx.scale(dpr, dpr);
-
-            drawFogState(fogCtx, w, h);
-            
-            // Instantly fill the main screen with solid fog on load/resize
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.globalAlpha = 1.0;
-            ctx.drawImage(fogBuffer, 0, 0, w, h);
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        function drawFogState(context, width, height) {
-            // 1. The cold, dark background
-            let grad = context.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.max(width, height));
-            grad.addColorStop(0, '#161616');
-            grad.addColorStop(1, '#050505');
-            context.fillStyle = grad;
-            context.fillRect(0, 0, width, height);
+        function onPointerMove(event) {
+            document.body.classList.add('is-interacting');
+            
+            // Normalized Device Coordinates (-1 to +1)
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-            // Add microscopic noise/frost texture overlay
-            context.fillStyle = 'rgba(255, 255, 255, 0.015)';
-            context.fillRect(0, 0, width, height);
-
-            // 2. The Blurred Quote
-            const quoteStyle = window.getComputedStyle(quoteEl);
-            context.textAlign = 'center';
-            context.textBaseline = 'middle';
-            context.font = `300 ${quoteStyle.fontSize} 'Inter', sans-serif`;
-            context.fillStyle = '#444444'; // Slightly darker in the fog
-            context.filter = 'blur(12px)';   // Heavy frosted blur
-            
-            // Calculate exact position based on HTML layout
-            const quoteRect = quoteEl.getBoundingClientRect();
-            const quoteY = quoteRect.top + (quoteRect.height / 2);
-            context.fillText("A temporary mark on an eternal canvas.", width/2, quoteY);
-            
-            // 3. The Blurred Meta Tag
-            const metaStyle = window.getComputedStyle(metaEl);
-            context.font = `700 ${metaStyle.fontSize} 'Space Mono', monospace`;
-            context.fillStyle = 'rgba(255,255,255,0.15)';
-            context.filter = 'blur(8px)';
-            
-            const metaRect = metaEl.getBoundingClientRect();
-            const metaY = metaRect.top + (metaRect.height / 2);
-            // Apply letter spacing hack for canvas if supported
-            if(context.letterSpacing !== undefined) context.letterSpacing = "0.2em";
-            context.fillText("[ 404 // CLICK TO RETURN ]", width/2, metaY);
-            
-            context.filter = 'none'; // Reset
-        }
-
-        function wipe(x1, y1, x2, y2) {
-            // Ignore giant jumps (like cursor entering screen)
-            if (x1 === -1000 || Math.hypot(x2 - x1, y2 - y1) > 150) { 
-                return; 
+            if(isHolding) {
+                updatePointerProgressUI(event.clientX, event.clientY);
             }
-            
-            // Destination-out punches a transparent hole into the canvas
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
 
-            // Multi-pass stroking to create a soft, feathered organic brush edge
-            for (let i = 0; i < 6; i++) {
-                ctx.lineWidth = 100 - (i * 14); // Radiates outward
-                ctx.strokeStyle = `rgba(0, 0, 0, ${0.1 + (i * 0.15)})`; // Center is solid, edges are faint
-                ctx.beginPath();
-                ctx.moveTo(x1, y1);
-                ctx.lineTo(x2, y2);
-                ctx.stroke();
+            // Raycast to find intersection point on the mesh
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObject(mesh);
+
+            if (intersects.length > 0) {
+                // Store the local point of impact
+                targetIntersection = intersects[0].point; 
+            } else {
+                targetIntersection = null;
             }
         }
 
-        function renderLoop() {
-            // Draw the offscreen fog buffer back over the main canvas constantly.
-            // A very low global alpha makes the transparent "wiped" areas slowly 
-            // accumulate fog until they are completely opaque again.
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.globalAlpha = 0.008; // Slower fade = colder, longer lasting marks
-            ctx.drawImage(fogBuffer, 0, 0, w, h);
-            
-            requestAnimationFrame(renderLoop);
+        function updatePointerProgressUI(x, y) {
+            holdProgressEl.style.left = `${x}px`;
+            holdProgressEl.style.top = `${y}px`;
         }
 
-        const link = document.getElementById('exit-link');
-        
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Trigger the CSS animations
-            document.body.classList.add('exiting');
-            
-            // Allow animations to finish before firing the redirect
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 1200);
-        });
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = performance.now() * 0.001;
 
+            // 1. Update Shader Uniforms
+            mesh.material.uniforms.u_time.value = time;
+            
+            // Smooth the mouse values for the iridescent shift so it doesn't jitter
+            smoothedMouseX += (mouse.x - smoothedMouseX) * 0.05;
+            smoothedMouseY += (mouse.y - smoothedMouseY) * 0.05;
+            mesh.material.uniforms.u_mouse.value.set(smoothedMouseX, smoothedMouseY);
+
+            // 2. Handle Click-and-Hold Collapse Logic
+            if (isHolding && targetIntersection) {
+                holdTime++;
+                // Update UI Ring
+                const scale = (holdTime / maxHoldTime) * 1.5;
+                holdProgressEl.style.transform = `translate(-50%, -50%) scale(${scale})`;
+                holdProgressEl.style.borderWidth = `${3 * (holdTime / maxHoldTime)}px`;
+            } else {
+                // Rapid decay if let go early
+                holdTime = Math.max(0, holdTime - 2);
+            }
+
+            // Calculate exponential collapse curve
+            const collapseEased = Math.pow(holdTime / maxHoldTime, 3.0);
+            mesh.material.uniforms.u_collapse.value = collapseEased;
+
+            // Trigger Exit
+            if (holdTime >= maxHoldTime) {
+                isHolding = false;
+                flashOverlay.style.opacity = '1';
+                setTimeout(() => {
+                    window.location.href = '/'; // Return to index
+                }, 200);
+            }
+
+            // 3. CPU Soft-Body Physics (Viscous Spring Engine)
+            const count = posAttribute.count;
+            const normals = geometry.attributes.normal.array;
+            
+            // Physics Tuning Constants
+            const deformationRadius = 1.2; 
+            const maxPush = -0.4;  // How deep the finger pushes
+            const stiffness = 0.08; // Spring strength
+            const damping = 0.88;   // Viscosity (closer to 1.0 = slower, heavier memory foam ease)
+
+            let needsVertexUpdate = false;
+
+            for (let i = 0; i < count; i++) {
+                let targetDisplacement = 0;
+
+                // If hovering over shape, calculate pushing force based on radius
+                if (targetIntersection && holdTime < maxHoldTime) {
+                    const ox = originalPos[i * 3];
+                    const oy = originalPos[i * 3 + 1];
+                    const oz = originalPos[i * 3 + 2];
+                    
+                    // Distance from vertex to raycast impact point
+                    const dx = ox - targetIntersection.x;
+                    const dy = oy - targetIntersection.y;
+                    const dz = oz - targetIntersection.z;
+                    const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+                    if (dist < deformationRadius) {
+                        // Soft falloff curve for smooth indentations
+                        const influence = Math.pow(1.0 - (dist / deformationRadius), 2.0);
+                        targetDisplacement = maxPush * influence;
+                    }
+                }
+
+                // Spring Physics Math (Hooke's Law + Damping)
+                const force = (targetDisplacement - displacements[i]) * stiffness;
+                velocities[i] = (velocities[i] + force) * damping;
+                displacements[i] += velocities[i];
+
+                // Optimization: Only update positions if currently moving significantly
+                if (Math.abs(velocities[i]) > 0.0001 || Math.abs(displacements[i]) > 0.0001) {
+                    posAttribute.setXYZ(i,
+                        originalPos[i * 3]     + normals[i * 3]     * displacements[i],
+                        originalPos[i * 3 + 1] + normals[i * 3 + 1] * displacements[i],
+                        originalPos[i * 3 + 2] + normals[i * 3 + 2] * displacements[i]
+                    );
+                    needsVertexUpdate = true;
+                }
+            }
+
+            // 4. Apply Updates to Mesh
+            if (needsVertexUpdate) {
+                posAttribute.needsUpdate = true;
+                // CRITICAL: Recomputing normals ensures the fragment shader calculates the 
+                // lighting and iridescence correctly inside the indented "squished" areas.
+                geometry.computeVertexNormals(); 
+            }
+
+            // Slowly rotate the entire mesh for ambient presentation
+            mesh.rotation.y += 0.001;
+            mesh.rotation.x += 0.0005;
+
+            renderer.render(scene, camera);
+        }
     </script>
 </body>
 </html>
